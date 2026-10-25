@@ -1130,6 +1130,58 @@ body[data-tab="check"].res-open main{padding-bottom:calc(var(--bar-h) + 28px + e
 /* dark mode: dim the light map tiles instead of loading a second tile set */
 :root[data-theme="dark"] .fd-map .leaflet-tile-pane{filter:invert(.92) hue-rotate(180deg) brightness(.95) contrast(.9)}
 
+/* ================= v7 ================= */
+/* language picker before the check */
+html.ls-open{overflow:hidden}
+.lang-sheet{position:fixed;inset:0;z-index:300;display:grid;place-items:end center;padding:16px;background:rgba(23,18,26,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .26s ease}
+.lang-sheet.in{opacity:1}
+.ls-card{position:relative;width:min(560px,100%);max-height:calc(100dvh - 32px);overflow:auto;background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:28px 20px 20px;box-shadow:0 30px 70px -20px rgba(40,10,30,.45);
+  transform:translateY(40px) scale(.98);transition:transform .38s cubic-bezier(.2,.9,.2,1)}
+.lang-sheet.in .ls-card{transform:none}
+@media (min-width:720px){.lang-sheet{place-items:center}}
+.ls-mark{display:block;margin:0 auto 6px;color:var(--accent)}
+.ls-card h2{margin:0 0 18px;text-align:center;font-family:var(--display);font-size:1.5rem}
+.ls-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (min-width:520px){.ls-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ls-grid button{min-height:52px;padding:10px;border-radius:16px;border:1.5px solid var(--line-2);background:var(--surface);color:var(--ink);font-size:1.02rem;font-weight:650;cursor:pointer;transition:border-color .2s,background-color .2s,transform .15s}
+.ls-grid button:hover,.ls-grid button:focus-visible{border-color:var(--accent);background:var(--accent-soft)}
+.ls-grid button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
+.ls-grid button:active{transform:scale(.96)}
+.ls-x{position:absolute;top:12px;inset-inline-end:12px;width:44px;height:44px;border:0;border-radius:50%;background:var(--tint);color:var(--ink);font-size:1.4rem;cursor:pointer}
+/* language switch: soft cross-fade */
+::view-transition-old(root),::view-transition-new(root){animation-duration:.32s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
+@keyframes langIn{from{opacity:.25;filter:blur(2px)}to{opacity:1;filter:none}}
+/* cursor glow */
+.glow{position:fixed;left:0;top:0;z-index:1500;width:0;height:0;pointer-events:none;opacity:0;transition:opacity .3s}
+.glow.on{opacity:1}
+.glow::before{content:"";position:absolute;left:-22px;top:-22px;width:44px;height:44px;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,74,124,.55) 0,rgba(232,74,124,.22) 45%,rgba(232,74,124,0) 70%);mix-blend-mode:multiply;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.glow::after{content:"";position:absolute;left:-5px;top:-5px;width:10px;height:10px;border-radius:50%;background:rgba(200,55,107,.7);transition:transform .25s cubic-bezier(.2,.8,.2,1),opacity .25s}
+:root[data-theme="dark"] .glow::before{background:radial-gradient(circle,rgba(255,126,166,.45) 0,rgba(255,126,166,.16) 45%,rgba(255,126,166,0) 70%);mix-blend-mode:screen}
+:root[data-theme="dark"] .glow::after{background:rgba(255,126,166,.8)}
+.glow.hot::before{transform:scale(1.9)}
+.glow.hot::after{transform:scale(.5);opacity:.6}
+.glow.press::before{animation:glowPress .4s cubic-bezier(.2,.8,.2,1)}
+@keyframes glowPress{40%{transform:scale(1.25)}}
+@media (prefers-reduced-motion:reduce),(hover:none){.glow{display:none}}
+@media print{.glow,.lang-sheet{display:none!important}}
+
+/* ---------- hero: say what the check is before anything else ---------- */
+.hero-chip{display:inline-flex;align-items:center;gap:8px;margin:4px 0 12px;padding:6px 14px;border-radius:999px;background:var(--accent-soft);color:var(--accent-2);font-weight:700;font-size:.9rem}
+.hero-trust{display:flex;gap:9px;align-items:flex-start;max-width:44ch;margin:14px 0 0;color:var(--mid);font-size:.92rem;line-height:1.45}
+.hero-trust svg{flex:none;margin-top:2px;color:var(--teal)}
+.hero2 .help-line{min-height:2.2em}
+
+/* ---------- one photo beside each tab's title ---------- */
+.page-top .wrap:has(.pt-pic){display:grid;gap:22px;align-items:center}
+.pt-pic{margin:0;max-width:440px}
+.pt-pic img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r-l);box-shadow:var(--shadow)}
+.pt-pic figcaption{margin-top:8px;font-size:.8rem;color:var(--muted)}
+@media (min-width:900px){.page-top .wrap:has(.pt-pic){grid-template-columns:minmax(0,1fr) minmax(260px,400px);column-gap:48px}}
+@media (max-width:899px){.pt-pic{max-width:100%}.pt-pic img{aspect-ratio:16/9}}
+@media print{.pt-pic{display:none}}
+
 /* required styles */
 
 .leaflet-pane,
@@ -1851,8 +1903,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="hero2-copy">
         <p class="help-lang" aria-hidden="true"><span id="helpLangName">English</span> <span class="help-count" id="helpCount">1 / 16</span>
           <button class="pause" type="button" id="helpPause" aria-pressed="false"><span data-t="helpPause">Pause</span></button></p>
+        <p class="hero-chip"><svg width="14" height="17" viewBox="0 0 40 48" aria-hidden="true"><path d="M20 3C13 13 7 20 7 28a13 13 0 0 0 26 0C33 20 27 13 20 3Z" fill="currentColor"/></svg><span data-t="badge">Free · Private · 4 minutes</span></p>
         <h1 class="help-line" id="helpLineSr"><span class="sr-only">It's okay to ask for help.</span><span class="help-say" id="helpSay" aria-hidden="true">It's okay to ask for help.</span></h1>
-        <p class="hero2-sub" data-t="whyH">Heavy periods get treated. The cause often goes unchecked.</p>
+        <p class="hero2-sub" data-t="lede">Answer a few questions about your periods, your bleeding, and your family. You'll get a summary to show your doctor, including which tests to ask for.</p>
         <div class="cta-row">
           <button class="btn btn--big" id="start" type="button">
             <span class="btn-main"><span data-t="start">Start the check</span>
@@ -1860,6 +1913,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <span class="btn-sub" data-t="ctaSub">10 questions, adapted from a screen doctors use</span>
           </button>
         </div>
+        <p class="hero-trust"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5" stroke="currentColor" stroke-width="1.9"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" stroke="currentColor" stroke-width="1.9"/></svg><span data-t="startNote"></span></p>
         <p class="help-urgent"><b>!</b><span data-t="helpUrgent"></span></p>
         <div class="orbit" hidden><div class="orbit-ring" id="orbitRing"></div></div>
       </div>
@@ -2028,13 +2082,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <!-- ============================ CLINIC (English, clinician-facing) ============================ -->
 <div role="tabpanel" id="p-clinic" class="clinic-scope" aria-labelledby="t-clinic" hidden lang="en" dir="ltr">
-  <section class="page-top"><div class="wrap">
+  <section class="page-top"><div class="wrap"><div class="pt-text">
     <p class="enonly" data-enonly><span data-t="enOnly"></span></p>
     <p class="kicker">For clinics and school nurses</p>
     <h1 class="display">Iron deficiency estimate from a CBC</h1>
     <p class="by mono">Logistic regression · CDC NHANES 2017 to March 2020</p>
     <p class="page-lede">For non-pregnant girls and women aged 12 to 49. A high score means order a ferritin test. It is not a diagnosis.</p>
     <p class="note note--guide">In September 2026 the American Society of Hematology suggested a higher ferritin cutoff for diagnosing iron deficiency: 30 ng/mL or less for adults and for people who menstruate, and 50 ng/mL or less with heavy menstrual bleeding. This model learned the older WHO cutoff of below 15 ng/mL, so it will miss some people the new guideline counts as iron deficient. Use it to decide who needs a ferritin test, and read the ferritin result against current guidance.</p>
+  </div>
+    <figure class="pt-pic"><img data-src-from="table" alt="Two team members at the foundation's awareness table" lang="en"><figcaption lang="en">Awareness table</figcaption></figure>
   </div></section>
 
   <section class="section"><div class="wrap">
@@ -2119,11 +2175,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <!-- ============================ HOW IT WORKS ============================ -->
 <div role="tabpanel" id="p-how" aria-labelledby="t-how" hidden lang="en" dir="ltr">
-  <section class="page-top"><div class="wrap">
+  <section class="page-top"><div class="wrap"><div class="pt-text">
     <p class="enonly" data-enonly><span data-t="enOnly"></span></p>
     <p class="kicker">How it works</p>
     <h1 class="display">From your answers to the right blood test</h1>
     <p class="page-lede">HerTruth asks about your bleeding history, applies a published screening rule, and gives you a summary your doctor can act on. Nothing is sent anywhere.</p>
+  </div>
+    <figure class="pt-pic"><img data-src-from="un_session" alt="Nilakshya Rajora seated at a youth participation session at the United Nations" lang="en"><figcaption lang="en">At the United Nations</figcaption></figure>
   </div></section>
 
   <section class="section"><div class="wrap">
@@ -2206,10 +2264,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <!-- ============================ QUESTIONS ============================ -->
 <div role="tabpanel" id="p-faq" aria-labelledby="t-faq" hidden>
-  <section class="page-top"><div class="wrap">
+  <section class="page-top"><div class="wrap"><div class="pt-text">
     <p class="kicker" data-t="fqK">Questions</p>
     <h1 class="display" data-t="fqH">Straight answers</h1>
     <p class="page-lede" data-t="fqLede"></p>
+  </div>
+    <figure class="pt-pic"><img data-src-from="table2" alt="A team member talking with a visitor at the foundation's booth" lang="en"><figcaption lang="en">Awareness booth</figcaption></figure>
   </div></section>
 
   <section class="section section--tint"><div class="wrap signs">
@@ -2316,10 +2376,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <!-- ============================ FIND CARE (live map, only after a search) ============================ -->
 <div role="tabpanel" id="p-find" aria-labelledby="t-find" hidden>
-  <section class="page-top"><div class="wrap">
+  <section class="page-top"><div class="wrap"><div class="pt-text">
     <p class="kicker" data-t="ghH">Where to get help</p>
     <h1 class="display" data-t="fdH">Find care near you</h1>
     <p class="page-lede" data-t="fdP"></p>
+  </div>
+    <figure class="pt-pic"><img data-src-from="signup2" alt="Visitors talking with team members at the foundation's booth" lang="en"><figcaption lang="en">Community booth</figcaption></figure>
   </div></section>
   <section class="section"><div class="wrap finder">
     <p class="help-urgent"><b>!</b><span data-t="fdEr"></span></p>
@@ -2355,11 +2417,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <!-- ============================ ABOUT ============================ -->
 <div role="tabpanel" id="p-about" aria-labelledby="t-about" hidden lang="en" dir="ltr">
-  <section class="page-top"><div class="wrap">
+  <section class="page-top"><div class="wrap"><div class="pt-text">
     <p class="enonly" data-enonly><span data-t="enOnly"></span></p>
     <p class="kicker">About</p>
     <h1 class="display">A check built by students, for the people quizzes miss</h1>
     <p class="page-lede">HerTruth was founded by Nilakshya Rajora and Dev Amin, in partnership with The Factor Foundation, a youth-led 501(c)(3) nonprofit in New Jersey. It is our entry in the 2026 Congressional App Challenge.</p>
+  </div>
+    <figure class="pt-pic"><img data-src-from="ball" alt="Two team members with a volleyball at the fundraiser" lang="en"><figcaption lang="en">Volleyball fundraiser</figcaption></figure>
   </div></section>
 
   <section class="section"><div class="wrap about-grid">
@@ -2372,6 +2436,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <div class="about-facts">
       <div class="af"><span class="af-k">Founded</span><span class="af-v">August 2025</span></div>
       <div class="af"><span class="af-k">Founders</span><span class="af-v">Nilakshya Rajora &amp; Dev Amin</span></div>
+      <div class="af"><span class="af-k">Team</span><span class="af-v">Nilakshya Rajora, Dev Amin &amp; Vaibhav Appalaneni</span></div>
       <div class="af"><span class="af-k">Partner</span><span class="af-v">The Factor Foundation</span></div>
       <div class="af"><span class="af-k">Based in</span><span class="af-v">New Jersey</span></div>
       <div class="af"><span class="af-k">Languages</span><span class="af-v">16</span></div>
@@ -3000,11 +3065,10 @@ const help = (() => {
     say.classList.add("out");
     setTimeout(() => { paint(); say.classList.remove("out"); say.classList.add("pre"); void say.offsetWidth; say.classList.remove("pre"); }, 450);
   };
-  const run = () => { clearInterval(timer); if (!paused) timer = setInterval(() => { if (!document.hidden) step(); }, reduce ? 4200 : 2900); };
+  const run = () => { clearInterval(timer); if (!paused) timer = setInterval(() => { if (!document.hidden) step(); }, 3000); };
   const btn = $("#helpPause");
   btn.onclick = () => { paused = !paused; btn.setAttribute("aria-pressed", paused ? "true" : "false"); btn.firstElementChild.dataset.t = paused ? "helpPlay" : "helpPause"; btn.firstElementChild.textContent = t(btn.firstElementChild.dataset.t); run(); };
   const band = $("#help");
-  band.addEventListener("pointerenter", () => clearInterval(timer)); band.addEventListener("pointerleave", run);
   band.addEventListener("focusin", () => clearInterval(timer)); band.addEventListener("focusout", run);
   const start = () => { const k = HELP.findIndex(h => h[0] === L); idx = k < 0 ? 0 : k; turn = idx; paint(); run(); };
   start(); return {start};
@@ -3278,6 +3342,68 @@ document.addEventListener("click", e => { if (e.target.closest("#restart, .js-st
       say("fdLoading");
       navigator.geolocation.getCurrentPosition(pos => start(pos.coords.latitude, pos.coords.longitude), () => say("fdLocNo"), {timeout: 15000, maximumAge: 300000});
     };
+  } }
+
+/* ================= v7: pick a language before the check =================
+   The first time someone starts the check in a visit, they choose the language first. Picking one switches the whole
+   app and starts the check in it. Uses the native language names already in HELP and the translated "Language" label. */
+{ let picked = false;
+  const sheet = document.createElement("div");
+  sheet.className = "lang-sheet noprint"; sheet.hidden = true;
+  sheet.setAttribute("role", "dialog"); sheet.setAttribute("aria-modal", "true"); sheet.setAttribute("aria-labelledby", "lsH");
+  sheet.innerHTML = `<div class="ls-card"><button type="button" class="ls-x" aria-label="Close">&times;</button>
+    <svg class="ls-mark" width="44" height="44" aria-hidden="true"><use href="#mark"/></svg>
+    <h2 id="lsH"></h2><div class="ls-grid" role="group" aria-labelledby="lsH">${HELP.map(([c, n, , d]) => `<button type="button" data-ls="${c}" lang="${c}"${d ? ' dir="rtl"' : ""}>${n}</button>`).join("")}</div></div>`;
+  document.body.appendChild(sheet);
+  let go = null;
+  const close = () => { sheet.classList.remove("in"); setTimeout(() => { sheet.hidden = true; }, reduce ? 0 : 260); document.documentElement.classList.remove("ls-open"); };
+  const open = btn => {
+    go = btn; $("#lsH").textContent = t("langLabel");
+    sheet.querySelectorAll("[data-ls]").forEach(b => b.setAttribute("aria-pressed", b.dataset.ls === L ? "true" : "false"));
+    sheet.hidden = false; document.documentElement.classList.add("ls-open");
+    requestAnimationFrame(() => sheet.classList.add("in"));
+    (sheet.querySelector('[aria-pressed="true"]') || sheet.querySelector("[data-ls]")).focus({preventScroll: true});
+  };
+  document.addEventListener("click", e => {
+    const b = e.target.closest("#start, .js-start, #sgGo"); if (!b || picked || b.closest(".lang-sheet")) return;
+    e.preventDefault(); e.stopImmediatePropagation(); open(b);
+  }, true);
+  sheet.addEventListener("click", e => {
+    if (e.target === sheet || e.target.closest(".ls-x")){ close(); return; }
+    const b = e.target.closest("[data-ls]"); if (!b) return;
+    picked = true;
+    const real = document.querySelector(`.langs button[data-lang="${b.dataset.ls}"]`);
+    if (real && b.dataset.ls !== L) real.click();
+    close(); if (go) setTimeout(() => go.click(), reduce ? 0 : 120);
+  });
+  sheet.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+}
+
+/* ================= v7: smooth language switching =================
+   Changing the language cross-fades the whole page (View Transitions where supported, a short fade otherwise). */
+document.addEventListener("click", e => {
+  const b = e.target.closest(".langs button[data-lang]"); if (!b || b.__vt || reduce) return;
+  e.stopImmediatePropagation();
+  const run = () => { b.__vt = true; b.click(); b.__vt = false; };
+  if (document.startViewTransition) document.startViewTransition(run);
+  else { const m = document.querySelector("main"); m.classList.remove("lang-in"); run(); void m.offsetWidth; m.classList.add("lang-in"); }
+}, true);
+
+/* ================= v7: a soft glow that follows the mouse =================
+   Mouse and trackpad only, off with reduced motion. A translucent rose light: it tints light surfaces and glows on dark
+   ones (the blend mode follows the theme), and swells over anything you can press. Decorative only. */
+{ if (matchMedia("(hover: hover) and (pointer: fine)").matches && !reduce){
+    const g = document.createElement("div"); g.className = "glow"; g.setAttribute("aria-hidden", "true"); document.body.appendChild(g);
+    let x = -200, y = -200, cx = x, cy = y, raf = 0;
+    const tick = () => { cx += (x - cx) * .22; cy += (y - cy) * .22; g.style.transform = `translate3d(${cx.toFixed(1)}px,${cy.toFixed(1)}px,0)`;
+      raf = Math.abs(x - cx) + Math.abs(y - cy) > .4 ? requestAnimationFrame(tick) : 0; };
+    addEventListener("pointermove", e => { if (e.pointerType !== "mouse") return;
+      if (!g.classList.contains("on")){ cx = x = e.clientX; cy = y = e.clientY; g.classList.add("on"); }
+      x = e.clientX; y = e.clientY;
+      g.classList.toggle("hot", !!(e.target.closest && e.target.closest("a, button, [role=tab], summary, input, label, .sign, .flip, img[role=button]")));
+      if (!raf) raf = requestAnimationFrame(tick); }, {passive: true});
+    addEventListener("pointerdown", () => { g.classList.remove("press"); void g.offsetWidth; g.classList.add("press"); }, {passive: true});
+    document.documentElement.addEventListener("mouseleave", () => g.classList.remove("on"));
   } }
 
 /* per-language refresh for widgets */

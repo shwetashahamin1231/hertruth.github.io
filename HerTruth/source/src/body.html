@@ -52,8 +52,9 @@
       <div class="hero2-copy">
         <p class="help-lang" aria-hidden="true"><span id="helpLangName">English</span> <span class="help-count" id="helpCount">1 / 16</span>
           <button class="pause" type="button" id="helpPause" aria-pressed="false"><span data-t="helpPause">Pause</span></button></p>
+        <p class="hero-chip"><svg width="14" height="17" viewBox="0 0 40 48" aria-hidden="true"><path d="M20 3C13 13 7 20 7 28a13 13 0 0 0 26 0C33 20 27 13 20 3Z" fill="currentColor"/></svg><span data-t="badge">Free · Private · 4 minutes</span></p>
         <h1 class="help-line" id="helpLineSr"><span class="sr-only">It's okay to ask for help.</span><span class="help-say" id="helpSay" aria-hidden="true">It's okay to ask for help.</span></h1>
-        <p class="hero2-sub" data-t="whyH">Heavy periods get treated. The cause often goes unchecked.</p>
+        <p class="hero2-sub" data-t="lede">Answer a few questions about your periods, your bleeding, and your family. You'll get a summary to show your doctor, including which tests to ask for.</p>
         <div class="cta-row">
           <button class="btn btn--big" id="start" type="button">
             <span class="btn-main"><span data-t="start">Start the check</span>
@@ -61,6 +62,7 @@
             <span class="btn-sub" data-t="ctaSub">10 questions, adapted from a screen doctors use</span>
           </button>
         </div>
+        <p class="hero-trust"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5" stroke="currentColor" stroke-width="1.9"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" stroke="currentColor" stroke-width="1.9"/></svg><span data-t="startNote"></span></p>
         <p class="help-urgent"><b>!</b><span data-t="helpUrgent"></span></p>
         <div class="orbit" hidden><div class="orbit-ring" id="orbitRing"></div></div>
       </div>
@@ -229,13 +231,15 @@
 
 <!-- ============================ CLINIC (English, clinician-facing) ============================ -->
 <div role="tabpanel" id="p-clinic" class="clinic-scope" aria-labelledby="t-clinic" hidden lang="en" dir="ltr">
-  <section class="page-top"><div class="wrap">
+  <section class="page-top"><div class="wrap"><div class="pt-text">
     <p class="enonly" data-enonly><span data-t="enOnly"></span></p>
     <p class="kicker">For clinics and school nurses</p>
     <h1 class="display">Iron deficiency estimate from a CBC</h1>
     <p class="by mono">Logistic regression · CDC NHANES 2017 to March 2020</p>
     <p class="page-lede">For non-pregnant girls and women aged 12 to 49. A high score means order a ferritin test. It is not a diagnosis.</p>
     <p class="note note--guide">In September 2026 the American Society of Hematology suggested a higher ferritin cutoff for diagnosing iron deficiency: 30 ng/mL or less for adults and for people who menstruate, and 50 ng/mL or less with heavy menstrual bleeding. This model learned the older WHO cutoff of below 15 ng/mL, so it will miss some people the new guideline counts as iron deficient. Use it to decide who needs a ferritin test, and read the ferritin result against current guidance.</p>
+  </div>
+    <figure class="pt-pic"><img data-src-from="table" alt="Two team members at the foundation's awareness table" lang="en"><figcaption lang="en">Awareness table</figcaption></figure>
   </div></section>
 
   <section class="section"><div class="wrap">
@@ -320,11 +324,13 @@
 
 <!-- ============================ HOW IT WORKS ============================ -->
 <div role="tabpanel" id="p-how" aria-labelledby="t-how" hidden lang="en" dir="ltr">
-  <section class="page-top"><div class="wrap">
+  <section class="page-top"><div class="wrap"><div class="pt-text">
     <p class="enonly" data-enonly><span data-t="enOnly"></span></p>
     <p class="kicker">How it works</p>
     <h1 class="display">From your answers to the right blood test</h1>
     <p class="page-lede">HerTruth asks about your bleeding history, applies a published screening rule, and gives you a summary your doctor can act on. Nothing is sent anywhere.</p>
+  </div>
+    <figure class="pt-pic"><img data-src-from="un_session" alt="Nilakshya Rajora seated at a youth participation session at the United Nations" lang="en"><figcaption lang="en">At the United Nations</figcaption></figure>
   </div></section>
 
   <section class="section"><div class="wrap">
@@ -407,10 +413,12 @@
 
 <!-- ============================ QUESTIONS ============================ -->
 <div role="tabpanel" id="p-faq" aria-labelledby="t-faq" hidden>
-  <section class="page-top"><div class="wrap">
+  <section class="page-top"><div class="wrap"><div class="pt-text">
     <p class="kicker" data-t="fqK">Questions</p>
     <h1 class="display" data-t="fqH">Straight answers</h1>
     <p class="page-lede" data-t="fqLede"></p>
+  </div>
+    <figure class="pt-pic"><img data-src-from="table2" alt="A team member talking with a visitor at the foundation's booth" lang="en"><figcaption lang="en">Awareness booth</figcaption></figure>
   </div></section>
 
   <section class="section section--tint"><div class="wrap signs">
@@ -517,10 +525,12 @@
 
 <!-- ============================ FIND CARE (live map, only after a search) ============================ -->
 <div role="tabpanel" id="p-find" aria-labelledby="t-find" hidden>
-  <section class="page-top"><div class="wrap">
+  <section class="page-top"><div class="wrap"><div class="pt-text">
     <p class="kicker" data-t="ghH">Where to get help</p>
     <h1 class="display" data-t="fdH">Find care near you</h1>
     <p class="page-lede" data-t="fdP"></p>
+  </div>
+    <figure class="pt-pic"><img data-src-from="signup2" alt="Visitors talking with team members at the foundation's booth" lang="en"><figcaption lang="en">Community booth</figcaption></figure>
   </div></section>
   <section class="section"><div class="wrap finder">
     <p class="help-urgent"><b>!</b><span data-t="fdEr"></span></p>
@@ -556,11 +566,13 @@
 
 <!-- ============================ ABOUT ============================ -->
 <div role="tabpanel" id="p-about" aria-labelledby="t-about" hidden lang="en" dir="ltr">
-  <section class="page-top"><div class="wrap">
+  <section class="page-top"><div class="wrap"><div class="pt-text">
     <p class="enonly" data-enonly><span data-t="enOnly"></span></p>
     <p class="kicker">About</p>
     <h1 class="display">A check built by students, for the people quizzes miss</h1>
     <p class="page-lede">HerTruth was founded by Nilakshya Rajora and Dev Amin, in partnership with The Factor Foundation, a youth-led 501(c)(3) nonprofit in New Jersey. It is our entry in the 2026 Congressional App Challenge.</p>
+  </div>
+    <figure class="pt-pic"><img data-src-from="ball" alt="Two team members with a volleyball at the fundraiser" lang="en"><figcaption lang="en">Volleyball fundraiser</figcaption></figure>
   </div></section>
 
   <section class="section"><div class="wrap about-grid">
@@ -573,6 +585,7 @@
     <div class="about-facts">
       <div class="af"><span class="af-k">Founded</span><span class="af-v">August 2025</span></div>
       <div class="af"><span class="af-k">Founders</span><span class="af-v">Nilakshya Rajora &amp; Dev Amin</span></div>
+      <div class="af"><span class="af-k">Team</span><span class="af-v">Nilakshya Rajora, Dev Amin &amp; Vaibhav Appalaneni</span></div>
       <div class="af"><span class="af-k">Partner</span><span class="af-v">The Factor Foundation</span></div>
       <div class="af"><span class="af-k">Based in</span><span class="af-v">New Jersey</span></div>
       <div class="af"><span class="af-k">Languages</span><span class="af-v">16</span></div>

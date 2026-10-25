@@ -88,11 +88,10 @@ const help = (() => {
     say.classList.add("out");
     setTimeout(() => { paint(); say.classList.remove("out"); say.classList.add("pre"); void say.offsetWidth; say.classList.remove("pre"); }, 450);
   };
-  const run = () => { clearInterval(timer); if (!paused) timer = setInterval(() => { if (!document.hidden) step(); }, reduce ? 4200 : 2900); };
+  const run = () => { clearInterval(timer); if (!paused) timer = setInterval(() => { if (!document.hidden) step(); }, 3000); };
   const btn = $("#helpPause");
   btn.onclick = () => { paused = !paused; btn.setAttribute("aria-pressed", paused ? "true" : "false"); btn.firstElementChild.dataset.t = paused ? "helpPlay" : "helpPause"; btn.firstElementChild.textContent = t(btn.firstElementChild.dataset.t); run(); };
   const band = $("#help");
-  band.addEventListener("pointerenter", () => clearInterval(timer)); band.addEventListener("pointerleave", run);
   band.addEventListener("focusin", () => clearInterval(timer)); band.addEventListener("focusout", run);
   const start = () => { const k = HELP.findIndex(h => h[0] === L); idx = k < 0 ? 0 : k; turn = idx; paint(); run(); };
   start(); return {start};
@@ -366,6 +365,68 @@ document.addEventListener("click", e => { if (e.target.closest("#restart, .js-st
       say("fdLoading");
       navigator.geolocation.getCurrentPosition(pos => start(pos.coords.latitude, pos.coords.longitude), () => say("fdLocNo"), {timeout: 15000, maximumAge: 300000});
     };
+  } }
+
+/* ================= v7: pick a language before the check =================
+   The first time someone starts the check in a visit, they choose the language first. Picking one switches the whole
+   app and starts the check in it. Uses the native language names already in HELP and the translated "Language" label. */
+{ let picked = false;
+  const sheet = document.createElement("div");
+  sheet.className = "lang-sheet noprint"; sheet.hidden = true;
+  sheet.setAttribute("role", "dialog"); sheet.setAttribute("aria-modal", "true"); sheet.setAttribute("aria-labelledby", "lsH");
+  sheet.innerHTML = `<div class="ls-card"><button type="button" class="ls-x" aria-label="Close">&times;</button>
+    <svg class="ls-mark" width="44" height="44" aria-hidden="true"><use href="#mark"/></svg>
+    <h2 id="lsH"></h2><div class="ls-grid" role="group" aria-labelledby="lsH">${HELP.map(([c, n, , d]) => `<button type="button" data-ls="${c}" lang="${c}"${d ? ' dir="rtl"' : ""}>${n}</button>`).join("")}</div></div>`;
+  document.body.appendChild(sheet);
+  let go = null;
+  const close = () => { sheet.classList.remove("in"); setTimeout(() => { sheet.hidden = true; }, reduce ? 0 : 260); document.documentElement.classList.remove("ls-open"); };
+  const open = btn => {
+    go = btn; $("#lsH").textContent = t("langLabel");
+    sheet.querySelectorAll("[data-ls]").forEach(b => b.setAttribute("aria-pressed", b.dataset.ls === L ? "true" : "false"));
+    sheet.hidden = false; document.documentElement.classList.add("ls-open");
+    requestAnimationFrame(() => sheet.classList.add("in"));
+    (sheet.querySelector('[aria-pressed="true"]') || sheet.querySelector("[data-ls]")).focus({preventScroll: true});
+  };
+  document.addEventListener("click", e => {
+    const b = e.target.closest("#start, .js-start, #sgGo"); if (!b || picked || b.closest(".lang-sheet")) return;
+    e.preventDefault(); e.stopImmediatePropagation(); open(b);
+  }, true);
+  sheet.addEventListener("click", e => {
+    if (e.target === sheet || e.target.closest(".ls-x")){ close(); return; }
+    const b = e.target.closest("[data-ls]"); if (!b) return;
+    picked = true;
+    const real = document.querySelector(`.langs button[data-lang="${b.dataset.ls}"]`);
+    if (real && b.dataset.ls !== L) real.click();
+    close(); if (go) setTimeout(() => go.click(), reduce ? 0 : 120);
+  });
+  sheet.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+}
+
+/* ================= v7: smooth language switching =================
+   Changing the language cross-fades the whole page (View Transitions where supported, a short fade otherwise). */
+document.addEventListener("click", e => {
+  const b = e.target.closest(".langs button[data-lang]"); if (!b || b.__vt || reduce) return;
+  e.stopImmediatePropagation();
+  const run = () => { b.__vt = true; b.click(); b.__vt = false; };
+  if (document.startViewTransition) document.startViewTransition(run);
+  else { const m = document.querySelector("main"); m.classList.remove("lang-in"); run(); void m.offsetWidth; m.classList.add("lang-in"); }
+}, true);
+
+/* ================= v7: a soft glow that follows the mouse =================
+   Mouse and trackpad only, off with reduced motion. A translucent rose light: it tints light surfaces and glows on dark
+   ones (the blend mode follows the theme), and swells over anything you can press. Decorative only. */
+{ if (matchMedia("(hover: hover) and (pointer: fine)").matches && !reduce){
+    const g = document.createElement("div"); g.className = "glow"; g.setAttribute("aria-hidden", "true"); document.body.appendChild(g);
+    let x = -200, y = -200, cx = x, cy = y, raf = 0;
+    const tick = () => { cx += (x - cx) * .22; cy += (y - cy) * .22; g.style.transform = `translate3d(${cx.toFixed(1)}px,${cy.toFixed(1)}px,0)`;
+      raf = Math.abs(x - cx) + Math.abs(y - cy) > .4 ? requestAnimationFrame(tick) : 0; };
+    addEventListener("pointermove", e => { if (e.pointerType !== "mouse") return;
+      if (!g.classList.contains("on")){ cx = x = e.clientX; cy = y = e.clientY; g.classList.add("on"); }
+      x = e.clientX; y = e.clientY;
+      g.classList.toggle("hot", !!(e.target.closest && e.target.closest("a, button, [role=tab], summary, input, label, .sign, .flip, img[role=button]")));
+      if (!raf) raf = requestAnimationFrame(tick); }, {passive: true});
+    addEventListener("pointerdown", () => { g.classList.remove("press"); void g.offsetWidth; g.classList.add("press"); }, {passive: true});
+    document.documentElement.addEventListener("mouseleave", () => g.classList.remove("on"));
   } }
 
 /* per-language refresh for widgets */
