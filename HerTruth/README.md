@@ -4,7 +4,7 @@ A free, private check for heavy periods and bleeding disorders, in 16 languages.
 in partnership with The Factor Foundation. Congressional App Challenge 2026.
 
 The check is the published Philipp screening tool (not AI). The clinic tool is a logistic regression trained on CDC NHANES
-2017 to March 2020. Answers never leave the device. "Find care near you" contacts OpenStreetMap only when someone searches.
+2017 to March 2020. Answers never leave the device. "Find help" contacts OpenStreetMap and Google Maps only when someone searches.
 HerTruth is not a medical device and does not diagnose anything.
 
 ## What is in this folder
@@ -31,8 +31,9 @@ three always ship the same page. Translations are checked with `python3 check_i1
 
 ## Third-party code
 
-- Leaflet 1.9.4, BSD-2 license (`source/vendor/leaflet/LICENSE`), built into the page for the care map
-- Map data and tiles © OpenStreetMap contributors (ODbL), loaded only when someone searches
+- Find help: places from OpenStreetMap's Nominatim search (data © OpenStreetMap contributors, ODbL); the map is an
+  embedded Google Map. Both load only when someone searches. Optional: set `GMAPS_KEY` in `source/src/wire.js` to a
+  Google Maps Embed API key restricted to your domain, and the map shows Google's own pins for each search.
 - Expo and React Native (MIT) in `expo/`
 
 ## Verified on October 25, 2026

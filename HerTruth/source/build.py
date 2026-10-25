@@ -11,11 +11,8 @@ body = (R / "src/body.html").read_text()
 css = (R / "src/style.css").read_text()
 extra_css = (R / "src/extra.css").read_text()
 theme_css = (R / "src/theme.css").read_text()
-# Leaflet (map library, BSD-2) is built into the page so nothing loads from a CDN. It only draws a map, and only on
-# "Find care near you" after someone searches; map tiles and places then come from OpenStreetMap.
-LEAF = R / "vendor/leaflet"   # copied from leaflet@1.9.4 (BSD-2, see vendor/leaflet/LICENSE)
-leaflet_css = (LEAF / "leaflet.css").read_text()
-leaflet_js = (LEAF / "leaflet.js").read_text()
+# "Find help" shows an embedded Google Maps search (an iframe), loaded only after someone searches or allows their
+# location. No map library is built into the page any more.
 # v4: no embedded or downloaded fonts. The page uses each device's own system fonts (SF Pro on iPhone,
 # Roboto on Android, Segoe UI on Windows), which also cover every script we ship, so nothing is fetched.
 MARK_SVG = ("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><circle cx='20' cy='20' r='19' fill='%23FFFBFC'/>"
@@ -163,12 +160,11 @@ head = f'''<!DOCTYPE html>
 {css}
 {extra_css}
 {theme_css}
-{leaflet_css}
 </style>
 </head>
 <body data-tab="home">
 '''
-out = head + body + "\n<script>" + leaflet_js + "</script>\n<script>" + js + "</script>\n</body>\n</html>\n"
+out = head + body + "\n<script>" + js + "</script>\n</body>\n</html>\n"
 # Rebrand: the tested app's own strings (quiz, results, footer) still say BleedCheck; the product is now HerTruth.
 out = out.replace("BleedCheck", "HerTruth")
 (R / "build").mkdir(exist_ok=True)

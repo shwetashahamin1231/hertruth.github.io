@@ -101,48 +101,15 @@ const help = (() => {
 /* photos used in more than one place are embedded once and copied here, so the file does not grow */
 document.querySelectorAll("img[data-src-from]").forEach(i => { const s = document.querySelector(`img[data-name="${i.dataset.srcFrom}"]`); if (s) i.src = s.src; });
 
-/* ================= v4: guided start (once per visit) =================
-   1. a question about the issue, switching languages  2. pick your language
-   3. the problem and how HerTruth helps, in that language  4. start the check, or read more first */
-{ const g = $("#guide");
-  let seen = false; try { seen = sessionStorage.getItem("htGuide") === "1"; } catch(e){}
-  if (g && seen) g.remove();
-  else if (g){
-    const root = document.documentElement, ask = $("#guideAsk"), askLang = $("#guideAskLang"), pick = $("#guidePickLab");
-    const ASK = HELP.filter(h => T[h[0]] && T[h[0]].ringQ);
-    let k = 0, timer = null;
-    const rotate = () => { const [code, name, , dir] = ASK[k++ % ASK.length];
-      ask.textContent = T[code].ringQ; ask.lang = code; ask.dir = dir || "ltr"; askLang.textContent = name;
-      pick.textContent = T[code].langLabel || T.en.langLabel; pick.lang = code;
-      if (!reduce){ ask.classList.remove("in"); void ask.offsetWidth; ask.classList.add("in"); } };
-    const run = () => { clearInterval(timer); rotate(); timer = setInterval(rotate, reduce ? 3500 : 1900); };
-    const box = $("#guideLangs");
-    box.innerHTML = HELP.map(([c, n, , d]) => `<button type="button" data-guide-lang="${c}" lang="${c}"${d ? ' dir="rtl"' : ""}>${n}</button>`).join("");
-    const step = n => { $("#guide1").hidden = n !== 1; $("#guide2").hidden = n !== 2; g.scrollTop = 0;
-      if (n === 1){ run(); const on = box.querySelector(`[data-guide-lang="${L}"]`) || box.firstElementChild; on.focus({preventScroll: true}); }
-      else { clearInterval(timer); $("#guideStart").focus({preventScroll: true}); } };
-    const close = () => { clearInterval(timer); try { sessionStorage.setItem("htGuide", "1"); } catch(e){}
-      g.classList.add("out"); root.classList.remove("guide-open"); setTimeout(() => g.remove(), 420); };
-    box.addEventListener("click", e => { const b = e.target.closest("[data-guide-lang]"); if (!b) return;
-      const real = document.querySelector(`.langs button[data-lang="${b.dataset.guideLang}"]`); if (real) real.click();
-      step(2); });
-    $("#guideStart").onclick = () => { close(); $("#start").click(); };
-    $("#guideMore").onclick = () => { close(); selectTab("t-home"); setTimeout(() => { const w = document.querySelector(".why"); if (w) w.scrollIntoView({block: "start"}); }, 60); };
-    $("#guideBack").onclick = () => step(1);
-    $("#guideX").onclick = close;
-    g.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
-    g.hidden = false; root.classList.add("guide-open"); step(1);
-  } }
-
 /* ================= v4: tap a photo to see it full screen ================= */
 { const lb = $("#lightbox"), img = $("#lbImg"), cap = $("#lbCap"); let list = [], at = 0, back = null;
   const show = n => { at = (n + list.length) % list.length; const i = list[at], f = i.closest("figure"), c = f && f.querySelector("figcaption");
     img.src = i.src; img.alt = i.alt; cap.textContent = c ? c.textContent : i.alt;
     $("#lbPrev").hidden = $("#lbNext").hidden = list.length < 2; };
-  const open = i => { const group = i.closest(".strip, .gallery6"); list = group ? [...group.querySelectorAll("img")] : [i];
+  const open = i => { const group = i.closest(".team-photos, .events"); list = group ? [...group.querySelectorAll("img")] : [i];
     back = i; show(list.indexOf(i)); lb.hidden = false; document.documentElement.classList.add("lb-open"); $("#lbX").focus(); };
   const shut = () => { lb.hidden = true; img.removeAttribute("src"); document.documentElement.classList.remove("lb-open"); if (back) back.focus(); };
-  document.querySelectorAll(".strip img, .gallery6 img, .pt-photo img, .photo-band img").forEach(i => {
+  document.querySelectorAll(".team-photos img, .events img").forEach(i => {
     i.tabIndex = 0; i.setAttribute("role", "button");
     i.addEventListener("click", () => open(i));
     i.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); open(i); } });
@@ -223,11 +190,13 @@ const resBrief = () => {
     const more = document.createElement("div"); more.className = "res-more noprint";
     more.innerHTML = `<button type="button" class="btn btn--big" id="resMore"><span class="btn-main"><span>${t("resMore")}</span>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6.5 18.5 12 13 17.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>`;
+    more.insertAdjacentHTML("beforeend", `<button type="button" class="btn btn--quiet res-find" id="resFindTop"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.9"/></svg><span>${t("fdH")}</span></button>`);
     $("#resCard").after(more);
     const next = document.createElement("div"); next.className = "res-next";
     next.innerHTML = `<h3>${t("resNextH")}</h3><p>${t("resNextP")}</p><button type="button" class="btn" id="resFind"><span>${t("fdH")}</span></button>`;
     $("#resCard").appendChild(next);
     $("#resFind").onclick = () => selectTab("t-find");
+    $("#resFindTop").onclick = () => selectTab("t-find");
     $("#resMore").onclick = e => {
       const open = () => { resOpen = true; resBrief(); toPanel(); };
       if (reduce){ open(); return; }
@@ -245,16 +214,20 @@ window.__bcResBrief = resBrief;   /* called after every result render, see the c
 /* a new check, or leaving the check, starts with the short result again */
 document.addEventListener("click", e => { if (e.target.closest("#restart, .js-start, #start, #checkX")){ resOpen = false; document.body.classList.remove("res-open"); } }, true);
 
-/* ================= v5: find care near you =================
-   Nothing here runs until someone searches. Then the search text (or the phone's location, if they allow it) goes to
-   OpenStreetMap: Nominatim turns it into a point, Overpass lists hospitals and clinics around it, and the map tiles
-   come from tile.openstreetmap.org. Check answers are never part of it. */
+/* ================= v6: find help near you =================
+   Nothing loads until someone searches or taps "Use my location". Then:
+   - OpenStreetMap finds the place (Nominatim) and lists nearby hospitals, clinics and doctors (Overpass);
+   - Google Maps shows the map. "Show on map" pins the chosen place on it.
+   Only the place (typed, or the phone's location if they allow it) is sent. Check answers are never part of it.
+   GMAPS_KEY: optional Google Maps Embed API key, restricted to your domain in Google Cloud. With a key, the map pins
+   every Google search result for the chosen kind of professional; without one, the classic embed shows the area. */
+const GMAPS_KEY = "";
 { const form = $("#fdForm");
   if (form){
-    let map = null, layer = null;
-    const LF = window.L;   /* Leaflet. Inside the app, plain L is the current language code */
+    let at = null, list = [], kind = "hemophilia treatment center";
     const say = (k, raw) => { $("#fdStatus").textContent = raw != null ? raw : (k ? t(k) : ""); };
     const esc = v => String(v).replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"})[c]);
+    const enc = encodeURIComponent;
     /* opening_hours: handles the common forms ("24/7", "Mo-Fr 08:00-17:00; Sa 09:00-12:00; Su off"); anything else is "not listed" */
     const DAY = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
     const openNow = (spec, now = new Date()) => {
@@ -276,57 +249,170 @@ document.addEventListener("click", e => { if (e.target.closest("#restart, .js-st
     };
     const km = (a, b, c, e) => { const R = 6371, rad = x => x * Math.PI / 180, dl = rad(c - a), dn = rad(e - b);
       const h = Math.sin(dl / 2) ** 2 + Math.cos(rad(a)) * Math.cos(rad(c)) * Math.sin(dn / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); };
-    const kind = g => g.emergency === "yes" ? t("fdER") : /hospital/.test(g.amenity || g.healthcare || "") ? t("fdHosp") : /doctor/.test(g.amenity || g.healthcare || "") ? t("fdDoc") : t("fdClinic");
+    const kind_ = g => g.emergency === "yes" ? t("fdER") : /hospital/.test(g.amenity || g.healthcare || "") ? t("fdHosp") : /doctor/.test(g.amenity || g.healthcare || "") ? t("fdDoc") : t("fdClinic");
     const SPEC = /haemato|hemato|h(a)?emophilia|bleeding|blood disorder/i;
-    const places = async (lat, lon, radius) => {
-      const q = `[out:json][timeout:25];(nwr["amenity"~"^(hospital|clinic|doctors)$"](around:${radius},${lat},${lon});nwr["healthcare"~"^(hospital|clinic|centre|doctor)$"](around:${radius},${lat},${lon}););out center tags 120;`;
-      /* public Overpass servers can be slow: 20 seconds each, then a second mirror */
-      let r = null;
-      for (const host of ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"]){
-        const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 20000);
-        try { r = await fetch(host, {method: "POST", signal: ctl.signal, headers: {"Content-Type": "application/x-www-form-urlencoded"}, body: "data=" + encodeURIComponent(q)}); }
-        catch(e){ r = null; } finally { clearTimeout(timer); }
-        if (r && r.ok) break;
-      }
-      if (!r || !r.ok) throw new Error("overpass unavailable");
-      const seen = new Set();
-      return (await r.json()).elements.map(el => ({g: el.tags || {}, lat: el.lat ?? (el.center && el.center.lat), lon: el.lon ?? (el.center && el.center.lon)}))
-        .filter(p => p.g.name && p.lat != null && !seen.has(p.g.name + Math.round(p.lat * 500)) && seen.add(p.g.name + Math.round(p.lat * 500)));
+    /* places come from OpenStreetMap's Nominatim search, one term at a time inside a box around the person
+       (Nominatim allows about one request per second, so the terms run in turn). */
+    const TERMS = {
+      "hemophilia treatment center": ["hemophilia", "hematology", "hospital"],
+      "hematologist": ["hematology", "hematologist", "oncology", "hospital"],
+      "gynecologist": ["gynecology", "obstetrics", "women's health", "hospital"],
+      "pediatrician OR family doctor": ["pediatrician", "family medicine", "doctors", "clinic"],
+      "urgent care": ["urgent care", "hospital", "clinic"],
     };
-    const show = async (lat, lon) => {
-      say("fdLoading");
-      let list = await places(lat, lon, 15000); if (list.length < 5) list = await places(lat, lon, 40000);
-      list.forEach(p => { p.d = km(lat, lon, p.lat, p.lon); p.open = openNow(p.g.opening_hours); p.spec = SPEC.test((p.g["healthcare:speciality"] || "") + " " + p.g.name); });
-      list.sort((a, b) => (b.spec - a.spec) || (a.d - b.d)); list = list.slice(0, 40);
-      const mapEl = $("#fdMap"); mapEl.hidden = false;
-      if (!map){ map = LF.map(mapEl, {scrollWheelZoom: false});
-        LF.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'}).addTo(map); }
-      if (layer) layer.remove(); layer = LF.layerGroup().addTo(map);
-      LF.circleMarker([lat, lon], {radius: 7, color: "#5B4BB7", fillColor: "#5B4BB7", fillOpacity: 1, weight: 2}).addTo(layer);
-      const pts = [[lat, lon]];
-      list.forEach((p, k) => { pts.push([p.lat, p.lon]);
-        const col = p.open === true ? "#1F7A45" : p.open === false ? "#B4232C" : "#C8376B";
-        LF.circleMarker([p.lat, p.lon], {radius: 8, color: "#fff", weight: 2, fillColor: col, fillOpacity: 1}).bindPopup(`<b>${esc(p.g.name)}</b><br>${esc(kind(p.g))}`).addTo(layer)
-          .on("click", () => { const li = document.getElementById("fd" + k); if (li) li.scrollIntoView({block: "nearest", behavior: "smooth"}); }); });
-      map.fitBounds(pts, {padding: [24, 24], maxZoom: 14}); setTimeout(() => map.invalidateSize(), 50);
-      $("#fdList").innerHTML = list.map((p, k) => {
+    const cache = {};
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+    const places = async (lat, lon, k) => {
+      const key = `${lat.toFixed(3)},${lon.toFixed(3)},${k}`; if (cache[key]) return cache[key];
+      const d = .22, box = [lon - d * 1.3, lat + d, lon + d * 1.3, lat - d].map(v => v.toFixed(4)).join(",");
+      const seen = new Map(); let ok = false;
+      for (const [n, term] of TERMS[k].entries()){
+        if (n) await wait(1100);
+        try {
+          const r = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&extratags=1&limit=40&bounded=1&viewbox=${box}&q=${enc(term)}`, {headers: {"Accept-Language": L}});
+          if (!r.ok) continue; ok = true;
+          for (const x of await r.json()){
+            if (!x.name || /^(hospital|clinic|doctors?|medical (center|centre)|urgent care)$/i.test(x.name.trim())) continue;
+            const id = x.osm_type + x.osm_id; if (seen.has(id)) continue;
+            const g = Object.assign({}, x.extratags || {}, {name: x.name});
+            if (x.category === "amenity" || x.category === "healthcare") g[x.category] = x.type;
+            seen.set(id, {g, lat: +x.lat, lon: +x.lon, term, fit: term !== "hospital" && term !== "clinic" && term !== "doctors"});
+          }
+        } catch(e){}
+      }
+      if (!ok) throw new Error("nominatim unavailable");
+      return cache[key] = [...seen.values()];
+    };
+    /* what each "who to look for" chip matches in OpenStreetMap tags and names */
+    const MATCH = {
+      "hemophilia treatment center": /h(a)?emophilia|h(a)?ematolog|bleeding|blood disorder|thrombosis|hemostasis|haemostasis/i,
+      "hematologist": /h(a)?ematolog|oncolog|blood/i,
+      "gynecologist": /gyn|obstet|ob\/gyn|women|maternity/i,
+      "pediatrician OR family doctor": /p(a)?ediatric|children|family|general|primary|community health/i,
+      "urgent care": /urgent|emergency|walk.?in|immediate/i,
+    };
+    const fits = p => MATCH[kind].test([p.g["healthcare:speciality"], p.g.name, p.g.description, p.g.healthcare, p.g.emergency === "yes" && kind === "urgent care" ? "emergency" : ""].join(" "));
+    /* The key-free Google embed draws no markers, so the pins are ours: the map is held still (no dragging inside
+       it) at a known centre and zoom, and each place is placed with the same Web Mercator math Google uses.
+       + and - change the zoom; "Open in Google Maps" gives the full interactive map. With GMAPS_KEY, Google's
+       own search map (with its own pins) is used instead. */
+    let view = null, shownPins = [], sel = -1;
+    const W = z => 256 * Math.pow(2, z);
+    const px = (lat, lon, z) => { const s = Math.sin(lat * Math.PI / 180);
+      return [(lon + 180) / 360 * W(z), (0.5 - Math.log((1 + s) / (1 - s)) / (4 * Math.PI)) * W(z)]; };
+    const frame = src => {
+      const box = $("#fdMap"); let f = box.querySelector("iframe");
+      if (!f){ f = document.createElement("iframe"); f.referrerPolicy = "no-referrer-when-downgrade"; box.appendChild(f);
+        const ph = $("#fdPh"); if (ph) ph.remove();
+        box.insertAdjacentHTML("beforeend", `<div class="fd-pins" id="fdPins" aria-hidden="true"></div><div class="fd-zoom"><button type="button" class="fd-z" data-z="1" aria-label="Zoom in">+</button><button type="button" class="fd-z" data-z="-1" aria-label="Zoom out">&minus;</button></div>`);
+        box.querySelectorAll(".fd-z").forEach(b => b.onclick = () => { if (!view) return; view.z = Math.max(8, Math.min(17, view.z + +b.dataset.z)); show(); }); }
+      f.title = t("fdH"); if (f.src !== src) f.src = src; box.classList.add("on", GMAPS_KEY ? "live" : "still");
+    };
+    const pinsDraw = () => {
+      const box = $("#fdMap"), lay = $("#fdPins"); if (!lay || !view || GMAPS_KEY) return;
+      const w = box.clientWidth, h = box.clientHeight, [cx, cy] = px(view.lat, view.lon, view.z);
+      const me = at ? px(at.lat, at.lon, view.z) : null;
+      lay.innerHTML = (me ? `<i class="fd-me" style="left:${(me[0] - cx + w / 2).toFixed(1)}px;top:${(me[1] - cy + h / 2).toFixed(1)}px"></i>` : "") +
+        shownPins.map((p, k) => { const [x, y] = px(p.lat, p.lon, view.z), l = x - cx + w / 2, tp = y - cy + h / 2;
+          if (l < -20 || l > w + 20 || tp < -20 || tp > h + 20) return "";
+          return `<b class="fd-pt${p.fit ? " fit" : ""}${k === sel ? " on" : ""}" style="left:${l.toFixed(1)}px;top:${tp.toFixed(1)}px">${k + 1}</b>`; }).join("");
+    };
+    const show = () => {
+      if (!view) return;
+      const c = `${view.lat.toFixed(5)},${view.lon.toFixed(5)}`;
+      frame(GMAPS_KEY ? `https://www.google.com/maps/embed/v1/search?key=${GMAPS_KEY}&q=${enc(kind)}&center=${c}&zoom=${view.z}`
+                      : `https://maps.google.com/maps?ll=${c}&z=${view.z}&output=embed`);
+      pinsDraw();
+    };
+    /* zoom to fit the person and the closest results */
+    const fit = pts => {
+      const box = $("#fdMap"), w = box.clientWidth || 340, h = box.clientHeight || 420;
+      const lats = pts.map(p => p.lat), lons = pts.map(p => p.lon);
+      const lat = (Math.max(...lats) + Math.min(...lats)) / 2, lon = (Math.max(...lons) + Math.min(...lons)) / 2;
+      let z = 15; while (z > 8){ const a = px(Math.max(...lats), Math.min(...lons), z), b = px(Math.min(...lats), Math.max(...lons), z);
+        if (b[0] - a[0] < w - 60 && b[1] - a[1] < h - 60) break; z--; }
+      view = {lat, lon, z}; show();
+    };
+    const area = () => {
+      if (!view) { view = {lat: at.lat, lon: at.lon, z: 12}; show(); }
+      const o = $("#fdOpenG"); o.hidden = false; o.href = `https://www.google.com/maps/search/${enc(kind)}/@${at.lat.toFixed(5)},${at.lon.toFixed(5)},12z`;
+    };
+    const pin = p => { sel = shownPins.indexOf(p); view = {lat: p.lat, lon: p.lon, z: Math.max(view ? view.z : 14, 14)}; show(); };
+    addEventListener("resize", () => pinsDraw(), {passive: true});
+    const paint = () => {
+      list.sort((a, b) => a.d - b.d);
+      list.forEach(p => { p.fit = p.fit || fits(p); });
+      const shown = [...list].sort((a, b) => (b.fit - a.fit) || (b.spec - a.spec) || (a.d - b.d)).slice(0, 25);
+      shownPins = shown; sel = -1;
+      if (shown.length && at) fit([at, ...shown.slice(0, 8)]); else pinsDraw();
+      $("#fdList").innerHTML = shown.map((p, k) => {
         const st = p.open === true ? ["open", t("fdOpen")] : p.open === false ? ["closed", t("fdClosed")] : ["unk", t("fdHours")];
         const dist = `${nf(Math.round(p.d * 10) / 10)} km · ${nf(Math.round(p.d * 6.214) / 10)} mi`;
         const tel = p.g.phone || p.g["contact:phone"];
-        return `<li class="fd-item" id="fd${k}"><div class="fd-top"><b>${esc(p.g.name)}</b><span class="fd-badge ${st[0]}">${st[1]}</span></div>
-          <p class="fd-meta">${p.spec ? `<span class="fd-specb">${esc(t("fdSpec"))}</span> ` : ""}${esc(kind(p.g))} · ${dist}</p>
-          ${p.g.opening_hours ? `<p class="fd-hours" lang="en">${esc(p.g.opening_hours)}</p>` : ""}
-          <p class="fd-links"><a href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lon}" target="_blank" rel="noopener noreferrer">${t("fdDir")} &#8599;</a>${tel ? ` <a href="tel:${esc(tel.split(/[;,]/)[0].replace(/[^\d+]/g, ""))}">${t("fdCall")}</a>` : ""}</p></li>`; }).join("");
+        return `<li class="fd-item${p.fit ? " fit" : ""}" data-k="${list.indexOf(p)}"><div class="fd-top"><b><span class="fd-n">${k + 1}</span>${esc(p.g.name)}</b><span class="fd-badge ${st[0]}">${st[1]}</span></div>
+          <p class="fd-meta">${esc(kind_(p.g))} · ${dist}</p>
+          <p class="fd-links"><button type="button" class="link fd-pin"><span>${t("fdShow")}</span></button>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lon}" target="_blank" rel="noopener noreferrer">${t("fdDir")} &#8599;</a>${tel ? ` <a href="tel:${esc(tel.split(/[;,]/)[0].replace(/[^\d+]/g, ""))}">${t("fdCall")}</a>` : ""}</p></li>`; }).join("");
+      $("#fdList").querySelectorAll(".fd-pin").forEach(b => b.onclick = () => {
+        const li = b.closest(".fd-item"); pin(list[+li.dataset.k]);
+        $("#fdList").querySelectorAll(".fd-item").forEach(x => x.classList.toggle("on", x === li));
+        $("#fdMap").scrollIntoView({block: "center", behavior: reduce ? "auto" : "smooth"}); });
       say(list.length ? null : "fdNone", list.length ? "" : null);
     };
-    form.addEventListener("submit", async e => { e.preventDefault(); const q = $("#fdQ").value.trim(); if (!q) return;
+    const go = async () => {
+      if (!at) return; const {lat, lon} = at, k = kind;
+      say("fdLoading"); $("#fdList").innerHTML = "";
+      try {
+        const got = await places(lat, lon, k); if (k !== kind) return;
+        list = got.map(p => Object.assign(p, {d: km(lat, lon, p.lat, p.lon), open: openNow(p.g.opening_hours),
+          spec: SPEC.test((p.g["healthcare:speciality"] || "") + " " + p.g.name)})).filter(p => p.d < 40);
+        paint();
+      } catch(err){ console.warn("find help:", err); list = []; say("fdErr"); }
+    };
+    const start = (lat, lon) => { at = {lat, lon}; view = null; area(); go(); };
+    document.querySelectorAll(".fd-type").forEach(b => b.onclick = () => {
+      kind = b.dataset.q;
+      document.querySelectorAll(".fd-type").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+      if (at){ area(); go(); } else $("#fdQ").focus();
+    });
+    form.addEventListener("submit", async e => { e.preventDefault(); const q = $("#fdQ").value.trim(); if (!q){ $("#fdQ").focus(); return; }
       try { say("fdLoading");
-        const r = await fetch("https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=" + encodeURIComponent(q), {headers: {"Accept-Language": L}});
+        const r = await fetch("https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=" + enc(q), {headers: {"Accept-Language": L}});
         const j = await r.json(); if (!j.length){ say("fdNone"); $("#fdList").innerHTML = ""; return; }
-        await show(+j[0].lat, +j[0].lon);
-      } catch(err){ console.warn("find care:", err); say("fdErr"); } });
-    $("#fdLoc").onclick = () => { if (!navigator.geolocation){ say("fdErr"); return; } say("fdLoading");
-      navigator.geolocation.getCurrentPosition(pos => show(pos.coords.latitude, pos.coords.longitude).catch(() => say("fdErr")), () => say("fdErr"), {timeout: 15000}); };
+        start(+j[0].lat, +j[0].lon);
+      } catch(err){ console.warn("find help:", err); say("fdErr"); } });
+    $("#fdLoc").onclick = () => {
+      if (!navigator.geolocation){ say("fdLocNo"); return; }
+      say("fdLoading");
+      navigator.geolocation.getCurrentPosition(pos => start(pos.coords.latitude, pos.coords.longitude), () => say("fdLocNo"), {timeout: 15000, maximumAge: 300000});
+    };
+  } }
+
+/* ================= v6: a drop that follows the cursor =================
+   Mouse and trackpad only (never on touch screens), and off when reduced motion is on. It trails the pointer,
+   grows over anything you can press, and squeezes when you click. Purely decorative: aria-hidden, no pointer events. */
+{ const fine = matchMedia("(hover: hover) and (pointer: fine)");
+  if (fine.matches && !reduce){
+    const d = document.createElement("div"); d.className = "cursor-drop"; d.setAttribute("aria-hidden", "true");
+    d.innerHTML = '<svg viewBox="0 0 40 48" width="22" height="26"><path d="M20 3C13 13 7 20 7 28a13 13 0 0 0 26 0C33 20 27 13 20 3Z"/></svg><span class="cd-ring"></span>';
+    document.body.appendChild(d);
+    let x = -100, y = -100, cx = x, cy = y, lastX = x, raf = 0, shown = false;
+    const tick = () => {
+      cx += (x - cx) * .2; cy += (y - cy) * .2;
+      const vx = cx - lastX; lastX = cx;
+      d.style.transform = `translate3d(${cx.toFixed(1)}px,${cy.toFixed(1)}px,0) rotate(${Math.max(-25, Math.min(25, vx * 2)).toFixed(1)}deg)`;
+      raf = Math.abs(x - cx) + Math.abs(y - cy) > .3 ? requestAnimationFrame(tick) : 0;
+    };
+    addEventListener("pointermove", e => {
+      if (e.pointerType !== "mouse"){ return; }
+      x = e.clientX; y = e.clientY;
+      if (!shown){ shown = true; cx = x; cy = y; d.classList.add("on"); }
+      const hot = e.target.closest && e.target.closest("a, button, [role=tab], summary, input, label, .sign, .flip, img[role=button]");
+      d.classList.toggle("hot", !!hot);
+      if (!raf) raf = requestAnimationFrame(tick);
+    }, {passive: true});
+    addEventListener("pointerdown", () => { d.classList.remove("press"); void d.offsetWidth; d.classList.add("press"); }, {passive: true});
+    document.documentElement.addEventListener("mouseleave", () => { shown = false; d.classList.remove("on"); });
   } }
 
 /* per-language refresh for widgets */
