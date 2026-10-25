@@ -296,7 +296,7 @@
  "resNextH": "Cosa fare adesso",
  "resNextP": "Mostra questo riepilogo a un medico e chiedi gli esami elencati sopra. Se ti serve un ambulatorio, cercane uno vicino a te.",
  "fdH": "Trova assistenza vicino a te",
- "fdP": "Scrivi un CAP o una città, oppure tocca Usa la mia posizione. Per trovare i luoghi, quello che scrivi, o la tua posizione se la consenti, viene inviato a OpenStreetMap, e la mappa è mostrata da Google Maps. Le tue risposte non vengono mai inviate.",
+ "fdP": "Scrivi un CAP o una città, oppure tocca Usa la mia posizione. Per trovare i luoghi e mostrare la mappa, quello che scrivi, o la tua posizione se la consenti, viene inviato a OpenStreetMap. Le tue risposte non vengono mai inviate.",
  "fdIn": "CAP o città",
  "fdBtn": "Cerca",
  "fdLoc": "Usa la mia posizione",
@@ -322,7 +322,7 @@
  "fdT_prim": "Pediatri e medici di famiglia",
  "fdT_urg": "Cure urgenti",
  "fdOpenG": "Apri in Google Maps",
- "fdNoteG": "I luoghi sulla mappa sono risultati di ricerca di Google Maps, non consigli di HerTruth. Orari e dettagli possono essere sbagliati, quindi chiama prima di andare. I centri per il trattamento dell'emofilia diagnosticano e curano anche la malattia di von Willebrand.",
+ "fdNoteG": "I luoghi vengono da OpenStreetMap e non sono consigli di HerTruth. Orari e dettagli possono essere sbagliati, quindi chiama prima di andare. I centri per il trattamento dell'emofilia diagnosticano e curano anche la malattia di von Willebrand.",
  "fdLocNo": "La posizione è disattivata o non è stata consentita. Scrivi invece un CAP o una città.",
  "fdShow": "Mostra sulla mappa"
 }

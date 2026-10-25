@@ -296,7 +296,7 @@
  "resNextH": "Việc cần làm tiếp theo",
  "resNextP": "Đưa bản tóm tắt này cho bác sĩ và đề nghị làm các xét nghiệm ở trên. Nếu cần phòng khám, hãy tìm một nơi gần bạn.",
  "fdH": "Tìm nơi khám gần bạn",
- "fdP": "Nhập mã ZIP hoặc thành phố, hoặc nhấn Dùng vị trí của tôi. Để tìm địa điểm, những gì bạn nhập, hoặc vị trí của bạn nếu bạn cho phép, được gửi tới OpenStreetMap, và bản đồ do Google Maps hiển thị. Câu trả lời bài kiểm tra của bạn không bao giờ được gửi đi.",
+ "fdP": "Nhập mã ZIP hoặc thành phố, hoặc nhấn Dùng vị trí của tôi. Để tìm địa điểm và hiện bản đồ, những gì bạn nhập, hoặc vị trí của bạn nếu bạn cho phép, được gửi tới OpenStreetMap. Câu trả lời bài kiểm tra của bạn không bao giờ được gửi đi.",
  "fdIn": "Mã ZIP, mã bưu chính hoặc thành phố",
  "fdBtn": "Tìm",
  "fdLoc": "Dùng vị trí của tôi",
@@ -322,7 +322,7 @@
  "fdT_prim": "Bác sĩ nhi khoa và bác sĩ gia đình",
  "fdT_urg": "Chăm sóc khẩn cấp",
  "fdOpenG": "Mở trong Google Maps",
- "fdNoteG": "Các địa điểm trên bản đồ là kết quả tìm kiếm của Google Maps, không phải lời giới thiệu của HerTruth. Giờ mở cửa và thông tin có thể sai, vì vậy hãy gọi trước khi đến. Trung tâm điều trị bệnh máu khó đông cũng chẩn đoán và điều trị bệnh von Willebrand.",
+ "fdNoteG": "Các địa điểm lấy từ OpenStreetMap và không phải lời giới thiệu của HerTruth. Giờ mở cửa và thông tin có thể sai, vì vậy hãy gọi trước khi đến. Trung tâm điều trị bệnh máu khó đông cũng chẩn đoán và điều trị bệnh von Willebrand.",
  "fdLocNo": "Vị trí đang tắt hoặc không được cho phép. Hãy nhập mã ZIP hoặc thành phố.",
  "fdShow": "Xem trên bản đồ"
 }

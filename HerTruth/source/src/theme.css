@@ -466,3 +466,9 @@ body[data-tab="check"].res-open main{padding-bottom:calc(var(--bar-h) + 28px + e
 .fd-z{width:44px;height:44px;border-radius:12px;border:0;background:#fff;color:#2A1A24;font-size:1.4rem;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer}
 .fd-map.live .fd-zoom,.fd-map.live .fd-pins{display:none}
 .fd-n{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-inline-end:8px;border-radius:999px;background:var(--accent);color:var(--on-accent);font-size:.72rem;vertical-align:2px}
+.leaflet-marker-icon .fd-pt{position:static;transform:none}
+.leaflet-marker-icon .fd-pt.fit{background:#C8376B}
+.fd-map .leaflet-container{width:100%;height:100%;font:inherit}
+.leaflet-popup-content{font:600 .9rem/1.35 var(--body)}
+/* dark mode: dim the light map tiles instead of loading a second tile set */
+:root[data-theme="dark"] .fd-map .leaflet-tile-pane{filter:invert(.92) hue-rotate(180deg) brightness(.95) contrast(.9)}

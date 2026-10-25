@@ -296,7 +296,7 @@
  "resNextH": "Ano ang susunod na gagawin",
  "resNextP": "Ipakita ang buod na ito sa doktor at hingin ang mga test na nakalista sa itaas. Kung kailangan mo ng klinika, maghanap ng malapit sa iyo.",
  "fdH": "Maghanap ng pangangalaga malapit sa iyo",
- "fdP": "I-type ang ZIP code o lungsod, o pindutin ang Gamitin ang lokasyon ko. Para makahanap ng mga lugar, ang tina-type mo, o ang lokasyon mo kung papayagan mo, ay ipinapadala sa OpenStreetMap, at ang mapa ay ipinapakita ng Google Maps. Hindi kailanman ipinapadala ang mga sagot mo sa pagsusuri.",
+ "fdP": "I-type ang ZIP code o lungsod, o pindutin ang Gamitin ang lokasyon ko. Para makahanap ng mga lugar at maipakita ang mapa, ang tina-type mo, o ang lokasyon mo kung papayagan mo, ay ipinapadala sa OpenStreetMap. Hindi kailanman ipinapadala ang mga sagot mo sa pagsusuri.",
  "fdIn": "ZIP o postal code, o lungsod",
  "fdBtn": "Hanapin",
  "fdLoc": "Gamitin ang lokasyon ko",
@@ -322,7 +322,7 @@
  "fdT_prim": "Mga pediatrician at family doctor",
  "fdT_urg": "Urgent care",
  "fdOpenG": "Buksan sa Google Maps",
- "fdNoteG": "Ang mga lugar sa mapa ay resulta ng paghahanap sa Google Maps, hindi rekomendasyon ng HerTruth. Maaaring mali ang oras at detalye, kaya tumawag muna bago pumunta. Nag-diagnose at gumagamot din ng von Willebrand disease ang mga sentro ng paggamot sa hemophilia.",
+ "fdNoteG": "Galing sa OpenStreetMap ang mga lugar at hindi ito rekomendasyon ng HerTruth. Maaaring mali ang oras at detalye, kaya tumawag muna bago pumunta. Nag-diagnose at gumagamot din ng von Willebrand disease ang mga sentro ng paggamot sa hemophilia.",
  "fdLocNo": "Naka-off ang lokasyon o hindi pinayagan. I-type na lang ang ZIP code o lungsod.",
  "fdShow": "Ipakita sa mapa"
 }

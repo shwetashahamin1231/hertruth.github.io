@@ -232,7 +232,7 @@ ADD_EN = {
  "resNextH":"What to do next",
  "resNextP":"Show this summary to a doctor and ask for the tests listed above. If you need a clinic, find one near you.",
  "fdH":"Find care near you",
- "fdP":"Type a ZIP code or a city, or tap Use my location. To find places, what you type, or your location if you allow it, is sent to OpenStreetMap, and the map is shown by Google Maps. Your check answers are never sent.",
+ "fdP":"Type a ZIP code or a city, or tap Use my location. To find places and draw the map, what you type, or your location if you allow it, is sent to OpenStreetMap. Your check answers are never sent.",
  "fdIn":"ZIP or postal code, or city",
  "fdBtn":"Search",
  "fdLoc":"Use my location",
@@ -312,7 +312,7 @@ ADD_EN = {
  "fdT_prim":"Pediatricians and family doctors",
  "fdT_urg":"Urgent care",
  "fdOpenG":"Open in Google Maps",
- "fdNoteG":"Places on the map are Google Maps search results, not recommendations from HerTruth. Hours and details can be wrong, so call before you go. Hemophilia treatment centers diagnose and treat von Willebrand disease too.",
+ "fdNoteG":"Places come from OpenStreetMap and are not recommendations from HerTruth. Hours and details can be wrong, so call before you go. Hemophilia treatment centers also diagnose and treat von Willebrand disease.",
  "fdLocNo":"Location is off or was not allowed. Type a ZIP code or city instead.",
  "fdShow":"Show on map"
 }

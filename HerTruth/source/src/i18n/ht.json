@@ -296,7 +296,7 @@
  "resNextH": "Sa pou w fè kounye a",
  "resNextP": "Montre yon doktè rezime sa a epi mande tès ki ekri anwo yo. Si w bezwen yon klinik, chèche youn toupre w.",
  "fdH": "Jwenn swen toupre w",
- "fdP": "Tape yon kòd postal oswa yon vil, oswa peze Sèvi ak pozisyon mwen. Pou jwenn kote yo, sa ou tape, oswa pozisyon ou si ou pèmèt li, voye bay OpenStreetMap, epi se Google Maps ki montre kat la. Repons tès ou yo pa janm voye.",
+ "fdP": "Tape yon kòd postal oswa yon vil, oswa peze Sèvi ak pozisyon mwen. Pou jwenn kote yo epi montre kat la, sa ou tape, oswa pozisyon ou si ou pèmèt li, voye bay OpenStreetMap. Repons tès ou yo pa janm voye.",
  "fdIn": "Kòd postal oswa vil",
  "fdBtn": "Chèche",
  "fdLoc": "Sèvi ak kote m ye",
@@ -322,7 +322,7 @@
  "fdT_prim": "Pedyat ak doktè fanmi",
  "fdT_urg": "Swen ijan",
  "fdOpenG": "Louvri nan Google Maps",
- "fdNoteG": "Kote ki sou kat la se rezilta rechèch Google Maps, se pa rekòmandasyon HerTruth. Lè ak detay yo ka pa bon, kidonk rele anvan ou ale. Sant tretman emofili yo dyagnostike epi trete maladi von Willebrand tou.",
+ "fdNoteG": "Kote yo soti nan OpenStreetMap, se pa rekòmandasyon HerTruth. Lè ak detay yo ka pa bon, kidonk rele anvan ou ale. Sant tretman emofili yo dyagnostike epi trete maladi von Willebrand tou.",
  "fdLocNo": "Pozisyon an fèmen oswa yo pa t pèmèt li. Tape yon kòd postal oswa yon vil pito.",
  "fdShow": "Montre sou kat la"
 }

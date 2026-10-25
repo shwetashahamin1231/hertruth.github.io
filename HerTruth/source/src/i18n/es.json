@@ -100,7 +100,7 @@
  "resNextH": "Qué hacer ahora",
  "resNextP": "Muestra este resumen a un médico y pide las pruebas de arriba. Si necesitas una clínica, busca una cerca de ti.",
  "fdH": "Busca atención cerca de ti",
- "fdP": "Escribe un código postal o una ciudad, o toca Usar mi ubicación. Para buscar lugares, lo que escribes, o tu ubicación si la permites, se envía a OpenStreetMap, y el mapa lo muestra Google Maps. Tus respuestas nunca se envían.",
+ "fdP": "Escribe un código postal o una ciudad, o toca Usar mi ubicación. Para buscar lugares y mostrar el mapa, lo que escribes, o tu ubicación si la permites, se envía a OpenStreetMap. Tus respuestas nunca se envían.",
  "fdIn": "Código postal o ciudad",
  "fdBtn": "Buscar",
  "fdLoc": "Usar mi ubicación",
@@ -126,7 +126,7 @@
  "fdT_prim": "Pediatras y médicos de familia",
  "fdT_urg": "Atención de urgencia",
  "fdOpenG": "Abrir en Google Maps",
- "fdNoteG": "Los lugares del mapa son resultados de búsqueda de Google Maps, no recomendaciones de HerTruth. Los horarios y datos pueden estar mal, así que llama antes de ir. Los centros de tratamiento de hemofilia también diagnostican y tratan la enfermedad de von Willebrand.",
+ "fdNoteG": "Los lugares vienen de OpenStreetMap y no son recomendaciones de HerTruth. Los horarios y datos pueden estar mal, así que llama antes de ir. Los centros de tratamiento de hemofilia también diagnostican y tratan la enfermedad de von Willebrand.",
  "fdLocNo": "La ubicación está desactivada o no se permitió. Escribe un código postal o una ciudad.",
  "fdShow": "Ver en el mapa"
 }

@@ -296,7 +296,7 @@
  "resNextH": "Que faire maintenant",
  "resNextP": "Montre ce résumé à un médecin et demande les examens indiqués plus haut. Si tu as besoin d'une clinique, trouves-en une près de chez toi.",
  "fdH": "Trouver des soins près de chez toi",
- "fdP": "Tape un code postal ou une ville, ou touche Utiliser ma position. Pour trouver des lieux, ce que tu tapes, ou ta position si tu l'autorises, est envoyé à OpenStreetMap, et la carte est affichée par Google Maps. Tes réponses ne sont jamais envoyées.",
+ "fdP": "Tape un code postal ou une ville, ou touche Utiliser ma position. Pour trouver des lieux et afficher la carte, ce que tu tapes, ou ta position si tu l'autorises, est envoyé à OpenStreetMap. Tes réponses ne sont jamais envoyées.",
  "fdIn": "Code postal ou ville",
  "fdBtn": "Rechercher",
  "fdLoc": "Utiliser ma position",
@@ -322,7 +322,7 @@
  "fdT_prim": "Pédiatres et médecins de famille",
  "fdT_urg": "Soins urgents",
  "fdOpenG": "Ouvrir dans Google Maps",
- "fdNoteG": "Les lieux sur la carte sont des résultats de recherche Google Maps, pas des recommandations de HerTruth. Les horaires et détails peuvent être faux, alors appelle avant d'y aller. Les centres de traitement de l'hémophilie diagnostiquent et soignent aussi la maladie de von Willebrand.",
+ "fdNoteG": "Les lieux viennent d'OpenStreetMap et ne sont pas des recommandations de HerTruth. Les horaires et détails peuvent être faux, alors appelle avant d'y aller. Les centres de traitement de l'hémophilie diagnostiquent et soignent aussi la maladie de von Willebrand.",
  "fdLocNo": "La localisation est désactivée ou n'a pas été autorisée. Tape plutôt un code postal ou une ville.",
  "fdShow": "Voir sur la carte"
 }

@@ -215,13 +215,9 @@ window.__bcResBrief = resBrief;   /* called after every result render, see the c
 document.addEventListener("click", e => { if (e.target.closest("#restart, .js-start, #start, #checkX")){ resOpen = false; document.body.classList.remove("res-open"); } }, true);
 
 /* ================= v6: find help near you =================
-   Nothing loads until someone searches or taps "Use my location". Then:
-   - OpenStreetMap finds the place (Nominatim) and lists nearby hospitals, clinics and doctors (Overpass);
-   - Google Maps shows the map. "Show on map" pins the chosen place on it.
-   Only the place (typed, or the phone's location if they allow it) is sent. Check answers are never part of it.
-   GMAPS_KEY: optional Google Maps Embed API key, restricted to your domain in Google Cloud. With a key, the map pins
-   every Google search result for the chosen kind of professional; without one, the classic embed shows the area. */
-const GMAPS_KEY = "";
+   Nothing loads until someone searches or taps "Use my location". Then OpenStreetMap's Nominatim finds the place and
+   nearby hospitals, clinics and doctors, and Leaflet draws them on OpenStreetMap's map tiles. Only the place
+   (typed, or the phone's location if they allow it) is sent. Check answers are never part of it. */
 { const form = $("#fdForm");
   if (form){
     let at = null, list = [], kind = "hemophilia treatment center";
@@ -292,59 +288,43 @@ const GMAPS_KEY = "";
       "urgent care": /urgent|emergency|walk.?in|immediate/i,
     };
     const fits = p => MATCH[kind].test([p.g["healthcare:speciality"], p.g.name, p.g.description, p.g.healthcare, p.g.emergency === "yes" && kind === "urgent care" ? "emergency" : ""].join(" "));
-    /* The key-free Google embed draws no markers, so the pins are ours: the map is held still (no dragging inside
-       it) at a known centre and zoom, and each place is placed with the same Web Mercator math Google uses.
-       + and - change the zoom; "Open in Google Maps" gives the full interactive map. With GMAPS_KEY, Google's
-       own search map (with its own pins) is used instead. */
-    let view = null, shownPins = [], sel = -1;
-    const W = z => 256 * Math.pow(2, z);
-    const px = (lat, lon, z) => { const s = Math.sin(lat * Math.PI / 180);
-      return [(lon + 180) / 360 * W(z), (0.5 - Math.log((1 + s) / (1 - s)) / (4 * Math.PI)) * W(z)]; };
-    const frame = src => {
-      const box = $("#fdMap"); let f = box.querySelector("iframe");
-      if (!f){ f = document.createElement("iframe"); f.referrerPolicy = "no-referrer-when-downgrade"; box.appendChild(f);
-        const ph = $("#fdPh"); if (ph) ph.remove();
-        box.insertAdjacentHTML("beforeend", `<div class="fd-pins" id="fdPins" aria-hidden="true"></div><div class="fd-zoom"><button type="button" class="fd-z" data-z="1" aria-label="Zoom in">+</button><button type="button" class="fd-z" data-z="-1" aria-label="Zoom out">&minus;</button></div>`);
-        box.querySelectorAll(".fd-z").forEach(b => b.onclick = () => { if (!view) return; view.z = Math.max(8, Math.min(17, view.z + +b.dataset.z)); show(); }); }
-      f.title = t("fdH"); if (f.src !== src) f.src = src; box.classList.add("on", GMAPS_KEY ? "live" : "still");
+    /* the map: Leaflet with OpenStreetMap tiles. Pins are numbered to match the list. */
+    let map = null, layer = null, shownPins = [];
+    const LF = window.L;   /* Leaflet. Inside the app, plain L is the current language code */
+    const ensure = () => {
+      const box = $("#fdMap"); const ph = $("#fdPh"); if (ph) ph.remove(); box.classList.add("on");
+      if (map) return;
+      map = LF.map(box, {scrollWheelZoom: false, zoomControl: true, attributionControl: true});
+      /* OpenStreetMap's standard tiles: free, no key, attribution required (https://operations.osmfoundation.org/policies/tiles/) */
+      LF.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, referrerPolicy: "strict-origin-when-cross-origin",
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'}).addTo(map);
+      layer = LF.layerGroup().addTo(map);
+      addEventListener("resize", () => map.invalidateSize());
     };
-    const pinsDraw = () => {
-      const box = $("#fdMap"), lay = $("#fdPins"); if (!lay || !view || GMAPS_KEY) return;
-      const w = box.clientWidth, h = box.clientHeight, [cx, cy] = px(view.lat, view.lon, view.z);
-      const me = at ? px(at.lat, at.lon, view.z) : null;
-      lay.innerHTML = (me ? `<i class="fd-me" style="left:${(me[0] - cx + w / 2).toFixed(1)}px;top:${(me[1] - cy + h / 2).toFixed(1)}px"></i>` : "") +
-        shownPins.map((p, k) => { const [x, y] = px(p.lat, p.lon, view.z), l = x - cx + w / 2, tp = y - cy + h / 2;
-          if (l < -20 || l > w + 20 || tp < -20 || tp > h + 20) return "";
-          return `<b class="fd-pt${p.fit ? " fit" : ""}${k === sel ? " on" : ""}" style="left:${l.toFixed(1)}px;top:${tp.toFixed(1)}px">${k + 1}</b>`; }).join("");
-    };
-    const show = () => {
-      if (!view) return;
-      const c = `${view.lat.toFixed(5)},${view.lon.toFixed(5)}`;
-      frame(GMAPS_KEY ? `https://www.google.com/maps/embed/v1/search?key=${GMAPS_KEY}&q=${enc(kind)}&center=${c}&zoom=${view.z}`
-                      : `https://maps.google.com/maps?ll=${c}&z=${view.z}&output=embed`);
-      pinsDraw();
-    };
-    /* zoom to fit the person and the closest results */
-    const fit = pts => {
-      const box = $("#fdMap"), w = box.clientWidth || 340, h = box.clientHeight || 420;
-      const lats = pts.map(p => p.lat), lons = pts.map(p => p.lon);
-      const lat = (Math.max(...lats) + Math.min(...lats)) / 2, lon = (Math.max(...lons) + Math.min(...lons)) / 2;
-      let z = 15; while (z > 8){ const a = px(Math.max(...lats), Math.min(...lons), z), b = px(Math.min(...lats), Math.max(...lons), z);
-        if (b[0] - a[0] < w - 60 && b[1] - a[1] < h - 60) break; z--; }
-      view = {lat, lon, z}; show();
-    };
+    const icon = (n, fit) => LF.divIcon({className: "", html: `<b class="fd-pt${fit ? " fit" : ""}">${n}</b>`, iconSize: [28, 34], iconAnchor: [14, 34], popupAnchor: [0, -30]});
     const area = () => {
-      if (!view) { view = {lat: at.lat, lon: at.lon, z: 12}; show(); }
+      ensure(); map.setView([at.lat, at.lon], 12); setTimeout(() => map.invalidateSize(), 60);
+      layer.clearLayers();
+      LF.circleMarker([at.lat, at.lon], {radius: 8, color: "#fff", weight: 3, fillColor: "#2F6FE4", fillOpacity: 1}).addTo(layer);
       const o = $("#fdOpenG"); o.hidden = false; o.href = `https://www.google.com/maps/search/${enc(kind)}/@${at.lat.toFixed(5)},${at.lon.toFixed(5)},12z`;
     };
-    const pin = p => { sel = shownPins.indexOf(p); view = {lat: p.lat, lon: p.lon, z: Math.max(view ? view.z : 14, 14)}; show(); };
-    addEventListener("resize", () => pinsDraw(), {passive: true});
+    const pinAll = () => {
+      if (!map) return; layer.clearLayers();
+      LF.circleMarker([at.lat, at.lon], {radius: 8, color: "#fff", weight: 3, fillColor: "#2F6FE4", fillOpacity: 1}).addTo(layer);
+      const pts = [[at.lat, at.lon]];
+      shownPins.forEach((p, k) => {
+        p.marker = LF.marker([p.lat, p.lon], {icon: icon(k + 1, p.fit), keyboard: false}).bindPopup(`<b>${esc(p.g.name)}</b><br>${esc(kind_(p.g))}`).addTo(layer)
+          .on("click", () => { const li = $("#fdList").children[k]; if (li){ $("#fdList").querySelectorAll(".fd-item").forEach(x => x.classList.toggle("on", x === li)); li.scrollIntoView({block: "nearest", behavior: reduce ? "auto" : "smooth"}); } });
+        if (k < 10) pts.push([p.lat, p.lon]);
+      });
+      map.fitBounds(pts, {padding: [28, 28], maxZoom: 15}); setTimeout(() => map.invalidateSize(), 60);
+    };
+    const pin = p => { if (!map) return; map.setView([p.lat, p.lon], 16); p.marker && p.marker.openPopup(); };
     const paint = () => {
       list.sort((a, b) => a.d - b.d);
       list.forEach(p => { p.fit = p.fit || fits(p); });
       const shown = [...list].sort((a, b) => (b.fit - a.fit) || (b.spec - a.spec) || (a.d - b.d)).slice(0, 25);
-      shownPins = shown; sel = -1;
-      if (shown.length && at) fit([at, ...shown.slice(0, 8)]); else pinsDraw();
+      shownPins = shown; pinAll();
       $("#fdList").innerHTML = shown.map((p, k) => {
         const st = p.open === true ? ["open", t("fdOpen")] : p.open === false ? ["closed", t("fdClosed")] : ["unk", t("fdHours")];
         const dist = `${nf(Math.round(p.d * 10) / 10)} km · ${nf(Math.round(p.d * 6.214) / 10)} mi`;
@@ -369,7 +349,7 @@ const GMAPS_KEY = "";
         paint();
       } catch(err){ console.warn("find help:", err); list = []; say("fdErr"); }
     };
-    const start = (lat, lon) => { at = {lat, lon}; view = null; area(); go(); };
+    const start = (lat, lon) => { at = {lat, lon}; area(); go(); };
     document.querySelectorAll(".fd-type").forEach(b => b.onclick = () => {
       kind = b.dataset.q;
       document.querySelectorAll(".fd-type").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
