@@ -450,18 +450,6 @@ body[data-tab="check"].res-open main{padding-bottom:calc(var(--bar-h) + 28px + e
 .res-more{display:grid;gap:10px}
 .res-find{display:inline-flex;align-items:center;justify-content:center;gap:8px}
 
-/* a drop that follows the mouse */
-.cursor-drop{position:fixed;left:0;top:0;z-index:2000;pointer-events:none;width:0;height:0;opacity:0;transition:opacity .25s}
-.cursor-drop.on{opacity:1}
-.cursor-drop svg{position:absolute;left:12px;top:10px;fill:#C8376B;filter:drop-shadow(0 3px 6px rgba(200,55,107,.35));transform-origin:50% 100%;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
-.cursor-drop .cd-ring{position:absolute;left:-18px;top:-18px;width:36px;height:36px;border-radius:50%;border:2px solid rgba(200,55,107,.45);transform:scale(.4);opacity:0;transition:transform .3s cubic-bezier(.2,.8,.2,1),opacity .3s}
-.cursor-drop.hot svg{transform:scale(1.35) translateY(-3px)}
-.cursor-drop.hot .cd-ring{transform:scale(1);opacity:1}
-.cursor-drop.press svg{animation:cdPress .35s cubic-bezier(.2,.8,.2,1)}
-@keyframes cdPress{40%{transform:scale(1.5,.8)}}
-:root[data-theme="dark"] .cursor-drop svg{fill:#FF7EA6}
-@media (prefers-reduced-motion:reduce),(hover:none){.cursor-drop{display:none}}
-@media print{.cursor-drop{display:none}}
 .fd-item.fit{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
 .fd-item.on{background:var(--accent-soft)}
 .fd-links{flex-wrap:wrap;align-items:center}

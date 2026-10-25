@@ -388,33 +388,6 @@ const GMAPS_KEY = "";
     };
   } }
 
-/* ================= v6: a drop that follows the cursor =================
-   Mouse and trackpad only (never on touch screens), and off when reduced motion is on. It trails the pointer,
-   grows over anything you can press, and squeezes when you click. Purely decorative: aria-hidden, no pointer events. */
-{ const fine = matchMedia("(hover: hover) and (pointer: fine)");
-  if (fine.matches && !reduce){
-    const d = document.createElement("div"); d.className = "cursor-drop"; d.setAttribute("aria-hidden", "true");
-    d.innerHTML = '<svg viewBox="0 0 40 48" width="22" height="26"><path d="M20 3C13 13 7 20 7 28a13 13 0 0 0 26 0C33 20 27 13 20 3Z"/></svg><span class="cd-ring"></span>';
-    document.body.appendChild(d);
-    let x = -100, y = -100, cx = x, cy = y, lastX = x, raf = 0, shown = false;
-    const tick = () => {
-      cx += (x - cx) * .2; cy += (y - cy) * .2;
-      const vx = cx - lastX; lastX = cx;
-      d.style.transform = `translate3d(${cx.toFixed(1)}px,${cy.toFixed(1)}px,0) rotate(${Math.max(-25, Math.min(25, vx * 2)).toFixed(1)}deg)`;
-      raf = Math.abs(x - cx) + Math.abs(y - cy) > .3 ? requestAnimationFrame(tick) : 0;
-    };
-    addEventListener("pointermove", e => {
-      if (e.pointerType !== "mouse"){ return; }
-      x = e.clientX; y = e.clientY;
-      if (!shown){ shown = true; cx = x; cy = y; d.classList.add("on"); }
-      const hot = e.target.closest && e.target.closest("a, button, [role=tab], summary, input, label, .sign, .flip, img[role=button]");
-      d.classList.toggle("hot", !!hot);
-      if (!raf) raf = requestAnimationFrame(tick);
-    }, {passive: true});
-    addEventListener("pointerdown", () => { d.classList.remove("press"); void d.offsetWidth; d.classList.add("press"); }, {passive: true});
-    document.documentElement.addEventListener("mouseleave", () => { shown = false; d.classList.remove("on"); });
-  } }
-
 /* per-language refresh for widgets */
 window.__bcStatic = () => {
   document.querySelectorAll("[data-aria]").forEach(e => e.setAttribute("aria-label", t(e.dataset.aria)));
