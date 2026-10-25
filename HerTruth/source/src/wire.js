@@ -359,7 +359,9 @@ document.addEventListener("click", e => { if (e.target.closest("#restart, .js-st
         const r = await fetch("https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=" + enc(q), {headers: {"Accept-Language": L}});
         const j = await r.json(); if (!j.length){ say("fdNone"); $("#fdList").innerHTML = ""; return; }
         start(+j[0].lat, +j[0].lon);
-      } catch(err){ console.warn("find help:", err); say("fdErr"); } });
+      } catch(err){ console.warn("find help:", err); say("fdErr");
+        /* the map service is blocked or offline here: still offer the same search in Google Maps */
+        const o = $("#fdOpenG"); o.hidden = false; o.href = "https://www.google.com/maps/search/" + enc(kind + " near " + q); } });
     $("#fdLoc").onclick = () => {
       if (!navigator.geolocation){ say("fdLocNo"); return; }
       say("fdLoading");

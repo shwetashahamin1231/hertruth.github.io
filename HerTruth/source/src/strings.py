@@ -44,7 +44,7 @@ NEW = {
  "bs2h":"Your answers stay private","bs2p":"The check runs inside this page. There is no server and no account. Close the page and your answers are gone.",
  "bs3h":"A first version","bs3p":"The Spanish and Hindi text are first drafts. Native-speaking clinicians will review them before public launch.",
  "whoTag":"Who built this","whoH":"Made by students who staff the booths",
- "whoP1":"HerTruth was started by Nilakshya Rajora and Dev Amin, in partnership with The Factor Foundation, a youth-led nonprofit in New Jersey that works on bleeding disorder awareness.",
+ "whoP1":"HerTruth was started by Nilakshya Rajora, Dev Amin and Vaibhav Appalaneni, in partnership with The Factor Foundation, a youth-led nonprofit in New Jersey that works on bleeding disorder awareness.",
  "whoP2":"It is built for the girls and women that English-only quizzes miss, and for the school nurses who see them first.",
  "whoBtn":"Meet the team","shareBtn":"Copy the link","shareDone":"Link copied",
  "chkEyebrow":"Bleeding disorder check","chkH1":"Take the check","chkBy":"Adapted from the Philipp screening tool",
@@ -104,7 +104,7 @@ NEW = {
  "bs2h":"Tus respuestas son privadas","bs2p":"La prueba funciona dentro de esta página. No hay servidor ni cuenta. Cierra la página y tus respuestas desaparecen.",
  "bs3h":"Una primera versión","bs3p":"El texto en español y en hindi es un primer borrador. Médicos nativos lo revisarán antes del lanzamiento público.",
  "whoTag":"Quién la hizo","whoH":"Hecha por los estudiantes que atienden los puestos",
- "whoP1":"HerTruth lo fundaron Nilakshya Rajora y Dev Amin, en colaboración con The Factor Foundation, una organización sin fines de lucro dirigida por jóvenes en Nueva Jersey que trabaja para dar a conocer los trastornos de la coagulación.",
+ "whoP1":"HerTruth lo fundaron Nilakshya Rajora, Dev Amin y Vaibhav Appalaneni, en colaboración con The Factor Foundation, una organización sin fines de lucro dirigida por jóvenes en Nueva Jersey que trabaja para dar a conocer los trastornos de la coagulación.",
  "whoP2":"Está hecha para las niñas y mujeres a las que no llegan las pruebas que solo están en inglés, y para las enfermeras escolares que las ven primero.",
  "whoBtn":"Conoce al equipo","shareBtn":"Copiar el enlace","shareDone":"Enlace copiado",
  "chkEyebrow":"Prueba de trastornos de la coagulación","chkH1":"Haz la prueba","chkBy":"Adaptada de la herramienta de Philipp",
@@ -164,7 +164,7 @@ NEW = {
  "bs2h":"आपके जवाब निजी रहते हैं","bs2p":"यह जाँच इसी पेज के अंदर चलती है। न कोई सर्वर है, न अकाउंट। पेज बंद करते ही आपके जवाब मिट जाते हैं।",
  "bs3h":"पहला संस्करण","bs3p":"स्पैनिश और हिन्दी अनुवाद अभी पहला मसौदा हैं। सार्वजनिक लॉन्च से पहले इन भाषाओं को जानने वाले डॉक्टर इनकी जाँच करेंगे।",
  "whoTag":"इसे किसने बनाया","whoH":"उन्हीं छात्रों ने बनाया जो स्टॉल पर खड़े होते हैं",
- "whoP1":"HerTruth की शुरुआत Nilakshya Rajora और Dev Amin ने The Factor Foundation के साथ मिलकर की। यह न्यू जर्सी की एक गैर-लाभकारी संस्था है जिसे युवा चलाते हैं और जो खून बहने की बीमारियों के बारे में जागरूकता फैलाती है।",
+ "whoP1":"HerTruth की शुरुआत Nilakshya Rajora, Dev Amin और Vaibhav Appalaneni ने The Factor Foundation के साथ मिलकर की। यह न्यू जर्सी की एक गैर-लाभकारी संस्था है जिसे युवा चलाते हैं और जो खून बहने की बीमारियों के बारे में जागरूकता फैलाती है।",
  "whoP2":"यह उन लड़कियों और महिलाओं के लिए बना है जिन तक सिर्फ़ अंग्रेज़ी वाली जाँचें नहीं पहुँचतीं, और उन स्कूल नर्सों के लिए जो उन्हें सबसे पहले देखती हैं।",
  "whoBtn":"टीम से मिलें","shareBtn":"लिंक कॉपी करें","shareDone":"लिंक कॉपी हो गया",
  "chkEyebrow":"खून बहने की बीमारी की जाँच","chkH1":"जाँच करें","chkBy":"Philipp स्क्रीनिंग टूल पर आधारित",
@@ -219,7 +219,7 @@ HELP = [
 # ---- v3 additions (English source). Translated for every language in src/i18n/<code>.json ----
 ADD_EN = {
  # v5: impact path, result details, find care near you
- "impK":"Where people get missed",
+ "impK":"Where people get forgotten",
  "impUsual":"Usually",
  "impWith":"With HerTruth",
  "impNext":"Next",

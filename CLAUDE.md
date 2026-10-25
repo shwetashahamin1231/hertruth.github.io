@@ -1,6 +1,6 @@
 # HerTruth: project context for Claude Code
 
-HerTruth (formerly BleedCheck) is a Congressional App Challenge 2026 entry (NJ-12), built by Nilakshya Rajora and Dev Amin
+HerTruth (formerly BleedCheck) is a Congressional App Challenge 2026 entry (NJ-12), built by Nilakshya Rajora, Dev Amin and Vaibhav Appalaneni
 in partnership with The Factor Foundation. Naveen is helping them. Deadline: Monday Oct 26, 2026, 12:00 pm EDT.
 
 ## Layout (since Oct 25, 2026)

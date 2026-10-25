@@ -1,6 +1,6 @@
 # HerTruth
 
-A free, private check for heavy periods and bleeding disorders, in 16 languages. Founded by Nilakshya Rajora and Dev Amin, with Vaibhav Appalaneni on the team,
+A free, private check for heavy periods and bleeding disorders, in 16 languages. Founded by Nilakshya Rajora, Dev Amin and Vaibhav Appalaneni,
 in partnership with The Factor Foundation. Congressional App Challenge 2026.
 
 The check is the published Philipp screening tool (not AI). The clinic tool is a logistic regression trained on CDC NHANES

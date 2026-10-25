@@ -405,13 +405,15 @@ body[data-tab="check"].res-open main{padding-bottom:calc(var(--bar-h) + 28px + e
 .team-photos img{display:block;width:100%;height:100%;object-fit:cover;cursor:zoom-in;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
 .team-photos .tp:hover img{transform:scale(1.03)}
 .team-photos .tp--a{grid-column:1 / -1;aspect-ratio:3/2}
-.team-photos .tp--b,.team-photos .tp--c{aspect-ratio:4/5}
+.team-photos .tp--b{aspect-ratio:3/4}.team-photos .tp--c{aspect-ratio:3/4}
 .team-photos .tp--b img{object-position:50% 30%}
 .team-photos figcaption,.events .shot figcaption{position:absolute;left:10px;bottom:10px;margin:0;background:rgba(255,255,255,.88);color:#2A1A24;font-size:.74rem;font-weight:650;padding:4px 10px;border-radius:999px}
 @media (min-width:860px){
-  .team-photos{grid-template-columns:1.25fr 1fr;grid-template-rows:auto auto;max-width:620px;justify-self:end;width:100%}
-  .team-photos .tp--a{grid-column:1;grid-row:1 / span 2;aspect-ratio:auto}
-  .team-photos .tp--b,.team-photos .tp--c{aspect-ratio:1}
+  .team-photos{grid-template-columns:1fr 1fr;grid-template-rows:auto auto;max-width:620px;justify-self:end;width:100%;align-items:stretch}
+  /* the portrait photo takes the tall slot; the two landscape photos keep their own 3:2 shape */
+  .team-photos .tp--b{grid-column:1;grid-row:1 / span 2;aspect-ratio:auto}
+  .team-photos .tp--a{grid-column:2;grid-row:1;aspect-ratio:3/2}
+  .team-photos .tp--c{grid-column:2;grid-row:2;aspect-ratio:3/2}
 }
 /* About: photos grouped by event, same shape within each row */
 .events{display:grid;gap:34px}
