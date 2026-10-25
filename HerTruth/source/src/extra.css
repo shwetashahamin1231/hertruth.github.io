@@ -79,8 +79,8 @@
 @media (prefers-reduced-motion:reduce){.flip-in{transition:none}.flip[aria-pressed="true"] .flip-f{visibility:hidden}}
 
 /* ===== v3: quiz keyboard hint ===== */
-.kbd-hint{display:none;font-size:.8rem;color:var(--muted);margin:14px 0 0}
-@media (hover:hover) and (pointer:fine){.kbd-hint{display:block}}
+
+
 
 /* ===== v3: clinic ===== */
 .cases{margin:0 0 20px}

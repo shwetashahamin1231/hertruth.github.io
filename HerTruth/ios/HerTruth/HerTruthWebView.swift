@@ -4,7 +4,8 @@ import WebKit
 
 /// Shows hertruth.html from the app bundle in a WKWebView.
 ///
-/// - The page makes no network requests. Links to outside sites (CDC, NBDF, Instagram, LinkedIn) open in Safari.
+/// - The check itself makes no network requests. Only the Find help map talks to OpenStreetMap (map tiles, and the
+///   place someone types or their location if they allow it). Links to outside sites open in Safari.
 /// - The camera is used only when someone taps "Take or add a photo" or "Photo of the lab report". iOS then shows its
 ///   own Take Photo / Photo Library menu. Photos stay in the page's memory and are gone when the app closes.
 /// - window.print() does nothing inside an app on its own, so the page's Print button opens the iOS print sheet,
@@ -14,6 +15,8 @@ struct HerTruthWebView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> WKWebView {
         let config = WKWebViewConfiguration()
+        // OpenStreetMap's tile policy asks apps to identify themselves in the User-Agent
+        config.applicationNameForUserAgent = "HerTruth/1.0 (org.thefactorfoundation.hertruth)"
         let printHook = WKUserScript(
             source: "window.print = function () { window.webkit.messageHandlers.print.postMessage(null); };",
             injectionTime: .atDocumentStart,
@@ -33,7 +36,7 @@ struct HerTruthWebView: UIViewRepresentable {
         if let page = Bundle.main.url(forResource: "hertruth", withExtension: "html") {
             webView.loadFileURL(page, allowingReadAccessTo: page.deletingLastPathComponent())
         } else {
-            webView.loadHTMLString("<p style='font:17px -apple-system;padding:24px'>hertruth.html is missing from the app. Run sync_web.sh, then build again.</p>", baseURL: nil)
+            webView.loadHTMLString("<p style='font:17px -apple-system;padding:24px'>hertruth.html is missing from the app. Run python3 source/sync_apps.py, then build again.</p>", baseURL: nil)
         }
         return webView
     }

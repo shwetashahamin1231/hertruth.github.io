@@ -173,10 +173,4 @@ out = head + body + "\n<script>" + leaflet_js + "</script>\n<script>" + js + "</
 out = out.replace("BleedCheck", "HerTruth")
 (R / "build").mkdir(exist_ok=True)
 (R / "build/hertruth.html").write_text(out)
-# Artifact copy: no document skeleton (the publisher adds one)
-inner = out.split("<head>", 1)[1]
-inner = re.sub(r'<meta charset="utf-8">\n<meta name="viewport"[^>]*>\n', "", inner, count=1)
-inner = inner.replace("</head>\n<body>\n", "").rsplit("</body>", 1)[0]
-inner = inner.replace("</style>", "/* hosted preview: the viewer frame cannot open the print dialog */\n#print{display:none!important}\n</style>", 1)
-(R / "build/bleedcheck_artifact.html").write_text(inner)
 print("ok", len(out) // 1024, "KB")

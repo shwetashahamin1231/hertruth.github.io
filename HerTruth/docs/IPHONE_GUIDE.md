@@ -1,14 +1,14 @@
 # HerTruth on iPhone
 
-There are two iPhone versions. Both show the exact same HerTruth page as the website, bundled inside the app, so the
-check, the scoring and the iron model are identical everywhere. Nothing typed or photographed leaves the phone.
+The iPhone app in `ios/` shows the exact same HerTruth page as the website, bundled inside the app, so the check, the
+scoring and the iron model are identical everywhere. Check answers and photos never leave the phone. Only Find help
+talks to OpenStreetMap, and only when someone searches or taps Use my location.
 
 | Folder | What it is | Needs |
 |---|---|---|
 | `ios/` | A native Xcode app (SwiftUI + WKWebView). Installs on your own iPhone like a real app. | Xcode, a free Apple Account, a USB cable |
-| `expo/` | The same app built with Expo (React Native). Runs in the Expo Go app or the iOS Simulator. | Node.js, the free Expo Go app |
 
-After any change to the site, run these from `source/` so both apps get the new page:
+After any change to the site, run these from `source/` so the app gets the new page:
 
 ```bash
 python3 build.py && python3 sync_apps.py
@@ -55,34 +55,15 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 
 With a free Apple Account the app keeps working for 7 days. To renew, connect the phone and press Run again.
 
-## Part 4. The Expo version
-
-1. **Install Node.js once:** go to https://nodejs.org, download the **LTS** installer for macOS, and run it.
-2. In Terminal:
-
-```bash
-cd ~/Desktop/BleedCheck/HerTruth/expo
-```
-
-```bash
-npx expo start
-```
-
-3. **On your iPhone:** install **Expo Go** from the App Store. Put the iPhone on the same Wi-Fi as the Mac.
-   Open the iPhone **Camera**, point it at the QR code in Terminal, and tap the banner. HerTruth opens in Expo Go.
-   Allow "Local Network" if Expo Go asks.
-4. **In the iPhone Simulator** (needs Xcode from Part 1): in the same Terminal window, press `i`.
-5. If the phone cannot connect (some school or public Wi-Fi blocks it), stop with Control-C and run `npx expo start --tunnel`.
-6. If Expo Go says the project's SDK is not supported, update Expo Go from the App Store. The project uses Expo SDK 58.
-
-## Part 5. What to check on the phone before the demo video
+## Part 4. What to check on the phone before the demo video
 
 - The check runs start to finish in English, Spanish and Hindi, and the result appears.
 - On the result, **Take or add a photo** asks for camera permission the first time, then shows the photo. Remove works.
 - In **For clinics**, **Photo of the lab report** shows the photo above the form while you type. Tap a case to see a score.
 - **Print or save as PDF** opens the iPhone print sheet. Pinch out on the preview to save a PDF.
 - Links such as **Find a treatment center** open in Safari.
-- Turn on **Airplane Mode** and reopen the app: everything still works, because nothing is downloaded.
+- In **Find help**, **Use my location** asks for location permission the first time, then shows numbered places on the map.
+- Turn on **Airplane Mode** and reopen the app: the check, results and clinic tool still work. Only the map needs internet.
 - Arabic and Urdu read right to left.
 
 ## What has been verified, and what has not
@@ -91,4 +72,3 @@ npx expo start
   current page, the camera permission text, the HerTruth name and the icon.
 - It has **not run yet**: no iPhone Simulator was installed (see Part 1, step 5), and running on your phone needs your
   Apple Account (Part 3).
-- The Expo app's code bundle compiles (`expo export`, `expo-doctor` 20/20), but it has not been opened on a phone yet.

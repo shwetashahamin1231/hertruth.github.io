@@ -200,6 +200,7 @@
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
 				INFOPLIST_KEY_NSCameraUsageDescription = "HerTruth uses the camera only when you tap Take or add a photo, so you can show a picture to your doctor or read a lab report. Photos stay on your phone and are never uploaded.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Find help uses your location only when you tap Use my location, to show clinics near you on the map. Your check answers are never sent.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -232,6 +233,7 @@
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
 				INFOPLIST_KEY_NSCameraUsageDescription = "HerTruth uses the camera only when you tap Take or add a photo, so you can show a picture to your doctor or read a lab report. Photos stay on your phone and are never uploaded.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Find help uses your location only when you tap Use my location, to show clinics near you on the map. Your check answers are never sent.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

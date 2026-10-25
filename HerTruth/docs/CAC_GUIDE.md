@@ -28,8 +28,9 @@ disqualification.
 What this means for HerTruth, plainly:
 - `Submission/bleedcheck.html`, the original tested app that the quiz logic, scoring and iron model come from, is
   byte-for-byte the file in the `Claude outputs` folder.
-- On October 24, Claude wrote the v4 redesign, both camera features, the Xcode app, the Expo app and the new tests,
-  working from Naveen's instructions.
+- On October 24, Claude wrote the v4 redesign, both camera features, the Xcode app, an Expo app (since removed) and the
+  new tests, working from Naveen's instructions. On October 25, Claude added the Find help map, the language picker and
+  the photo layout, and cleaned the project for release.
 - The 15 translations are AI first drafts.
 
 If Claude wrote most of the code, the entry is at real risk under these rules, even with full disclosure. Only Nilakshya
@@ -107,7 +108,7 @@ Draft script, about 2 minutes. Say it in your own words, and only say what is tr
 > diagnosis.
 >
 > **[1:40]** We built it with HTML, CSS and JavaScript, Python and scikit-learn in Google Colab for the model, and Swift
-> in Xcode plus React Native with Expo for the iPhone app. We used Claude, an AI coding assistant, for parts of the code
+> in Xcode for the iPhone app, and Leaflet with OpenStreetMap for the Find help map. We used Claude, an AI coding assistant, for parts of the code
 > and for the translation drafts, and our AI disclosure lists exactly what it did.
 >
 > **[1:55]** HerTruth is not a medical device and does not diagnose anything. It helps you ask the right question.
@@ -143,14 +144,16 @@ Fill the brackets truthfully, and remove anything that is not true.
 > *Written or drafted by AI:* [the first version of the app's code, confirm]; the translations into 15 languages beyond
 > English (marked on the site as first drafts awaiting review by native-speaking clinicians); and, on October 24, 2026,
 > the version 4 redesign (lighter design, system fonts, animations), the two photo features, the iPhone app in Swift
-> (Xcode), the iPhone app in React Native (Expo), and automated tests. [add anything else]
+> (Xcode), and automated tests; and, on October 25, 2026, the Find help map (Leaflet and
+> OpenStreetMap), the language picker before the check, the home page and photo layout, a fact-check of the cited
+> sources, plain-language edits to the English text, and the production cleanup. [add anything else]
 >
 > *Done by us:* [research, choosing the Philipp screening rule and the PBAC chart, the Colab notebook, testing, outreach,
 > code you wrote or changed, decisions you made; be specific]
 >
 > *Not AI inside the app:* the bleeding disorder check is a published screening rule (Philipp and colleagues, 2011) and
 > the iron estimate is a logistic regression trained on CDC NHANES 2017 to March 2020. Open-source and outside tools:
-> scikit-learn, pandas, Playwright (tests), Expo and React Native, react-native-webview, expo-print.
+> scikit-learn, pandas, Playwright (tests), Leaflet, OpenStreetMap (map tiles and Nominatim place search).
 
 ## Judging (rulebook, section 7)
 
