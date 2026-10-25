@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BleedCheck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Young+Serif&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F1F6; --surface:#FFFFFF; --ink:#231A2B; --muted:#5E5468; --line:#D9D3E0;
+  --accent:#7A1F35; --accent-ink:#FFFFFF; --blood:#B3243F;
+  --warn:#8A4E0E; --warn-bg:#FBF1E4; --ok:#3F6552; --ok-bg:#E8F1EC; --flag:#7A1F35; --flag-bg:#F7E6EA;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#18121C; --surface:#231B29; --ink:#EFE9F3; --muted:#B3A8BD; --line:#3A3042;
+  --accent:#D9677F; --accent-ink:#1A0D12; --blood:#E0556F;
+  --warn:#E6A65C; --warn-bg:#2E2216; --ok:#8FC3A6; --ok-bg:#17261E; --flag:#F08CA0; --flag-bg:#33171F; } }
+:root[data-theme="dark"]{
+  --bg:#18121C; --surface:#231B29; --ink:#EFE9F3; --muted:#B3A8BD; --line:#3A3042;
+  --accent:#D9677F; --accent-ink:#1A0D12; --blood:#E0556F;
+  --warn:#E6A65C; --warn-bg:#2E2216; --ok:#8FC3A6; --ok-bg:#17261E; --flag:#F08CA0; --flag-bg:#33171F; }
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);
+  font:1.0625rem/1.65 "Atkinson Hyperlegible","Noto Sans Devanagari",system-ui,-apple-system,"Segoe UI",sans-serif}
+:lang(hi) body, body:lang(hi){font-family:"Noto Sans Devanagari","Atkinson Hyperlegible",system-ui,sans-serif}
+main{max-width:40rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+h1,h2{font-family:"Young Serif","Noto Sans Devanagari",Georgia,serif;font-weight:400;line-height:1.25;margin:0}
+h1{font-size:clamp(1.9rem,6vw,2.7rem)}
+h2{font-size:clamp(1.35rem,4.5vw,1.8rem)}
+p{margin:.9rem 0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:2rem}
+.brand{font-weight:700;color:var(--accent)}
+.langs{display:flex;gap:.3rem}
+.langs button{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:.3rem .8rem;font:inherit;font-size:.95rem;cursor:pointer}
+.langs button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);font-weight:700}
+.lede{font-size:1.15rem;color:var(--muted)}
+button{font:inherit;cursor:pointer}
+.btn{display:inline-block;border:0;border-radius:999px;padding:.85rem 1.6rem;background:var(--accent);color:var(--accent-ink);font-weight:700}
+.btn.quiet{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn:focus-visible,.opt:focus-visible,input:focus-visible,.link:focus-visible,.langs button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.fine{font-size:.92rem;color:var(--muted)}
+.progress{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin:0 0 .7rem}
+.progress span{display:block;height:100%;background:var(--accent);transition:width .25s ease}
+.step{font-size:.95rem;color:var(--muted);margin-bottom:1.2rem}
+.help{color:var(--muted);margin-top:.5rem}
+.opts{display:grid;gap:.7rem;margin:1.5rem 0}
+.opt{text-align:left;background:var(--surface);color:var(--ink);border:1.5px solid var(--line);border-radius:14px;padding:1rem 1.15rem;font-weight:700}
+.opt[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.sub{margin:1.3rem 0 .4rem;font-weight:700}
+.row{display:flex;gap:.5rem;flex-wrap:wrap}
+.row .opt{flex:1 1 7rem;text-align:center;padding:.75rem .6rem;font-weight:400}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:2rem;gap:1rem}
+.link{background:none;border:0;color:var(--muted);text-decoration:underline;padding:.4rem 0}
+.pic{display:grid;grid-template-columns:3.2rem 1fr 5rem;gap:.6rem .9rem;align-items:center;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:.6rem .9rem;margin:.5rem 0}
+.pic svg{width:3rem;height:3.4rem}
+.pic input,.field input{width:100%;font:inherit;padding:.5rem .6rem;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.grp{font-weight:700;margin:1.2rem 0 .2rem}
+.total{font-weight:700;margin-top:1rem}
+.checks label{display:flex;gap:.75rem;align-items:flex-start;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:.9rem 1rem;margin:.6rem 0;cursor:pointer}
+.checks input{width:1.25rem;height:1.25rem;margin-top:.25rem;accent-color:var(--accent);flex:none}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:1.6rem 1.4rem;margin:1.4rem 0}
+.verdict{border-radius:14px;padding:1.2rem;margin:1rem 0 1.3rem}
+.verdict.flag{background:var(--flag-bg);color:var(--flag)} .verdict.warn{background:var(--warn-bg);color:var(--warn)} .verdict.ok{background:var(--ok-bg);color:var(--ok)}
+.verdict h2{color:inherit} .verdict p{color:var(--ink);margin-bottom:0}
+.card h3{font-size:1.05rem;margin:1.4rem 0 .4rem}
+.card ul{margin:.3rem 0;padding-left:1.2rem} .card li{margin:.35rem 0}
+.share{border:1.5px dashed var(--accent);border-radius:14px;padding:1rem 1.1rem;margin-top:1.2rem}
+.urgent{background:var(--flag-bg);border-left:5px solid var(--flag);border-radius:12px;padding:1.2rem}
+.urgent strong{color:var(--flag)}
+.actions{display:flex;gap:.75rem;flex-wrap:wrap}
+.field{display:grid;grid-template-columns:1fr 7rem;gap:.8rem;align-items:center;margin:.6rem 0}
+.field small{display:block;color:var(--muted)}
+footer{margin-top:3rem;border-top:1px solid var(--line);padding-top:1.2rem}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){.progress span{transition:none}}
+@media print{body{background:#fff;color:#000}.noprint{display:none!important}.card{border:1px solid #999;margin:0}main{padding:0}}
+</style>
+</head>
+<body>
+<main>
+  <div class="top noprint">
+    <span class="brand" data-t="brand"></span>
+    <div class="langs" role="group" aria-label="Language">
+      <button data-lang="en">English</button><button data-lang="es">Español</button><button data-lang="hi">हिन्दी</button>
+    </div>
+  </div>
+
+  <section id="intro">
+    <h1 data-t="h1"></h1>
+    <p class="lede" data-t="lede"></p>
+    <p><button class="btn" id="start" data-t="start"></button></p>
+    <p class="fine" data-t="startNote"></p>
+    <p class="fine"><button class="link" id="openClinic">For clinics and school nurses: estimate iron deficiency from a blood count</button></p>
+  </section>
+
+  <section id="quiz" hidden aria-live="polite">
+    <div class="progress noprint" aria-hidden="true"><span id="bar"></span></div>
+    <div class="step" id="stepLabel"></div>
+    <div id="qbody"></div>
+    <div class="nav noprint">
+      <button class="link" id="back" data-t="back"></button>
+      <button class="btn" id="next" disabled></button>
+    </div>
+  </section>
+
+  <section id="urgent" hidden>
+    <div class="urgent"><h2 data-t="urgTitle"></h2><p><strong data-t="urgBody"></strong></p><p data-t="urgAfter"></p></div>
+    <p class="noprint"><button class="btn quiet" id="urgentBack" data-t="urgContinue"></button></p>
+  </section>
+
+  <section id="result" hidden></section>
+
+  <!-- CLINIC MODE (English, clinician-facing) -->
+  <section id="clinic" hidden>
+    <h2>Iron deficiency estimate from a CBC</h2>
+    <p class="help">For non-pregnant girls and women aged 12 to 49. Uses a model trained on CDC NHANES 2017 to 2020 data. A high score means order a ferritin test. It is not a diagnosis.</p>
+    <div id="clinicStatus" class="fine"></div>
+    <div id="clinicFields"></div>
+    <p class="actions"><button class="btn" id="runIron">Estimate</button><button class="btn quiet" id="closeClinic">Back</button></p>
+    <div id="ironOut"></div>
+  </section>
+
+  <footer class="fine"><p data-t="footer"></p></footer>
+</main>
+
+<script>
+(function(){
+/* ============ TRANSLATIONS ============
+   Spanish and Hindi are first drafts. Have a native-speaking clinician review before public launch. */
+const T = {
+en:{
+ brand:"BleedCheck, by The Factor Foundation",
+ h1:"Heavy periods can be a sign of a bleeding disorder that runs in families.",
+ lede:"Answer a few questions about your periods, your bleeding, and your family. You'll get a summary to show your doctor, including which tests to ask for.",
+ start:"Start the check", startNote:"About 4 minutes. Your answers stay on this phone and are not sent anywhere. This check does not diagnose anything.",
+ qOf:"Question {i} of {n}", back:"Back", next:"Next", see:"See my results",
+ yes:"Yes", no:"No", unsure:"Not sure", never:"Never had this",
+ q_urgent:"Right now, are you soaking through a pad or tampon every hour for more than 2 hours, or feeling faint or dizzy from bleeding?",
+ q_days:"How many days does your period usually last?", lt7:"Fewer than 7 days", ge7:"7 days or more",
+ q_flood:"With most periods, do you bleed through your pad or tampon onto your clothes or bedding?",
+ q_impact:"With most periods, do you miss school, work, or plans because of bleeding?",
+ q_anemia:"Has a doctor ever treated you for anemia or low iron?", h_anemia:"For example, iron pills, an iron infusion, or a blood transfusion.",
+ q_family:"Has anyone in your blood family been diagnosed with a bleeding disorder?", h_family:"For example, von Willebrand disease or hemophilia.",
+ q_events:"Have you ever bled much more than expected after any of these?", p_dental:"A tooth being pulled", p_birth:"Childbirth or a miscarriage", p_surgery:"Surgery",
+ q_pbac:"Think about your last period. How many of each did you use?", h_pbac:"Match what you used to the pictures. Your best guess is fine, or skip.",
+ g_pads:"Pads", g_tam:"Tampons", g_other:"Clots and leaks",
+ i_light:"A little blood", i_half:"About half soaked", i_full:"Fully soaked",
+ i_clotS:"Small clots (smaller than a coin)", i_clotL:"Large clots (bigger than a coin)", i_flood:"Times you leaked onto clothes or bedding",
+ score:"Score: {s}", scoreNone:"Score: not entered", scoreHeavy:" (above 100 counts as heavy bleeding)",
+ q_other:"Do any of these happen to you?", h_other:"Check all that apply.",
+ o_clots:"I pass clots bigger than a coin", o_hourly:"On heavy days I change pads or tampons every hour",
+ o_nose:"Nosebleeds that last longer than 10 minutes", o_bruise:"Large bruises when I don't remember getting hurt", o_gums:"My gums bleed often",
+ q_fam:"Has your mother, sister, aunt, or grandmother ever had any of these?", h_fam:"Bleeding disorders are often never named in families. These signs can point to one.",
+ f_heavy:"Very heavy periods", f_transfusion:"A blood transfusion or heavy bleeding after childbirth", f_procedure:"Heavy bleeding after surgery or a tooth pulled", f_hyster:"Her uterus removed at a young age because of bleeding",
+ urgTitle:"Get medical care now", urgBody:"Heavy bleeding with dizziness or fainting, or soaking a pad or tampon every hour for more than 2 hours, needs care today. Go to urgent care or an emergency room, or call 911 if you feel faint or short of breath.",
+ urgAfter:"When you feel better, you can come back and finish this check.", urgContinue:"I'm okay right now, continue",
+ r_flagT:"Ask your doctor about bleeding disorder testing", r_flagB:"Your answers match the screen doctors use to decide who should be tested for a bleeding disorder like von Willebrand disease. This does not mean you have one. Many people who screen positive do not, but testing is how you find out.",
+ r_warnT:"Your periods sound heavy. Talk to a doctor.", r_warnB:"This screen did not flag a bleeding disorder, but heavy periods still deserve a checkup. Heavy bleeding often leads to low iron.",
+ r_okT:"This screen did not flag a bleeding disorder", r_okB:"If your periods change, or any bleeding worries you, talk to a doctor anyway.",
+ hFlag:"What flagged this", hOther:"Other bleeding to mention", hPbac:"Blood loss chart score, last period", notEntered:"Not entered",
+ rs_c1:"Periods lasting 7 days or more, with leaking or missing daily activities", rs_c2:"Past treatment for anemia or low iron", rs_c3:"A blood relative diagnosed with a bleeding disorder", rs_c4:"Heavy bleeding after a tooth pulled, childbirth, miscarriage, or surgery", rs_pb:"A blood loss chart score above 185",
+ hFam:"Signs in your family", famTxt:"You reported bleeding signs in women in your family. Tell your doctor. Bleeding disorders are inherited, so relatives may need testing too.",
+ famUnsure:"You were not sure about family history. Asking relatives whether anyone bleeds easily can change this result.",
+ hTests:"Tests to ask about", t1:"Complete blood count (CBC) and ferritin, to check for anemia and low iron", t2:"Von Willebrand factor antigen, von Willebrand factor activity, and factor VIII", t3:"A referral to a hematologist or hemophilia treatment center if results are low or unclear",
+ vwfNote:"These levels can read falsely normal during pregnancy, on birth control with estrogen, or when you are sick or stressed, so your doctor may repeat the tests.",
+ hSay:"What you can say", say:"\"My periods are heavy, and I screened positive on a bleeding disorder screening tool. I would like to be checked for anemia and for von Willebrand disease.\"",
+ hWorth:"Worth asking about", worth:"A CBC and ferritin test if you feel tired, dizzy, or short of breath",
+ hShare:"Share with your family", shareTxt:"Bleeding disorders run in families. If a sister, mother, or cousin has heavy periods, send her this check.",
+ about:"About this screen: in a study of 217 US women with heavy periods, it found about 89 of every 100 who had a bleeding disorder, and about 95 of 100 with the blood loss chart (Philipp and colleagues, 2011). It flags many people who turn out not to have a disorder, by design, so fewer are missed.",
+ print:"Print or save as PDF", restart:"Start over", summary:"BleedCheck summary",
+ footer:"BleedCheck uses a published screening tool that doctors use to decide who should be tested for a bleeding disorder (Philipp and colleagues, 2008 and 2011) and the Pictorial Blood Loss Assessment Chart (Higham, 1990). It is not a medical device and does not replace a doctor."
+},
+es:{
+ brand:"BleedCheck, de The Factor Foundation",
+ h1:"Las reglas abundantes pueden ser señal de un trastorno de la coagulación que se hereda en las familias.",
+ lede:"Responde unas preguntas sobre tu regla, tus sangrados y tu familia. Recibirás un resumen para mostrarle a tu médico, con las pruebas que puedes pedir.",
+ start:"Empezar", startNote:"Unos 4 minutos. Tus respuestas se quedan en este teléfono y no se envían a ningún lugar. Esta prueba no da un diagnóstico.",
+ qOf:"Pregunta {i} de {n}", back:"Atrás", next:"Siguiente", see:"Ver mis resultados",
+ yes:"Sí", no:"No", unsure:"No estoy segura", never:"Nunca me ha pasado",
+ q_urgent:"En este momento, ¿empapas una toalla o tampón cada hora por más de 2 horas, o te sientes mareada o a punto de desmayarte por el sangrado?",
+ q_days:"¿Cuántos días suele durar tu regla?", lt7:"Menos de 7 días", ge7:"7 días o más",
+ q_flood:"En la mayoría de tus reglas, ¿la sangre traspasa la toalla o el tampón y mancha tu ropa o la cama?",
+ q_impact:"En la mayoría de tus reglas, ¿faltas a la escuela, al trabajo o a tus planes por el sangrado?",
+ q_anemia:"¿Algún médico te ha tratado por anemia o hierro bajo?", h_anemia:"Por ejemplo, pastillas de hierro, hierro por vena o una transfusión de sangre.",
+ q_family:"¿Alguien de tu familia de sangre tiene un diagnóstico de trastorno de la coagulación?", h_family:"Por ejemplo, enfermedad de von Willebrand o hemofilia.",
+ q_events:"¿Alguna vez sangraste mucho más de lo esperado después de alguno de estos?", p_dental:"Te sacaron un diente", p_birth:"Un parto o una pérdida del embarazo", p_surgery:"Una cirugía",
+ q_pbac:"Piensa en tu última regla. ¿Cuántos de cada uno usaste?", h_pbac:"Compara lo que usaste con los dibujos. Un cálculo aproximado está bien, o puedes saltarlo.",
+ g_pads:"Toallas", g_tam:"Tampones", g_other:"Coágulos y manchas",
+ i_light:"Un poco de sangre", i_half:"Mitad empapado", i_full:"Totalmente empapado",
+ i_clotS:"Coágulos pequeños (menores que una moneda)", i_clotL:"Coágulos grandes (mayores que una moneda)", i_flood:"Veces que manchaste la ropa o la cama",
+ score:"Puntaje: {s}", scoreNone:"Puntaje: sin datos", scoreHeavy:" (más de 100 se considera sangrado abundante)",
+ q_other:"¿Te pasa alguna de estas cosas?", h_other:"Marca todas las que apliquen.",
+ o_clots:"Expulso coágulos más grandes que una moneda", o_hourly:"En los días fuertes cambio la toalla o el tampón cada hora",
+ o_nose:"Sangrados de nariz de más de 10 minutos", o_bruise:"Moretones grandes sin recordar haberme golpeado", o_gums:"Me sangran las encías con frecuencia",
+ q_fam:"¿Tu mamá, hermana, tía o abuela ha tenido alguna de estas cosas?", h_fam:"Muchas familias nunca ponen nombre a estos trastornos. Estas señales pueden indicar uno.",
+ f_heavy:"Reglas muy abundantes", f_transfusion:"Una transfusión o sangrado fuerte después de un parto", f_procedure:"Sangrado fuerte después de una cirugía o de sacarle un diente", f_hyster:"Le quitaron el útero joven por sangrados",
+ urgTitle:"Busca atención médica ahora", urgBody:"Un sangrado fuerte con mareo o desmayo, o empapar una toalla o tampón cada hora por más de 2 horas, necesita atención hoy. Ve a urgencias o llama al 911 si te sientes débil o te falta el aire.",
+ urgAfter:"Cuando te sientas mejor, puedes volver y terminar.", urgContinue:"Estoy bien ahora, continuar",
+ r_flagT:"Pregúntale a tu médico por pruebas de trastornos de la coagulación", r_flagB:"Tus respuestas coinciden con la prueba que usan los médicos para decidir a quién estudiar por un trastorno como la enfermedad de von Willebrand. Esto no significa que lo tengas. Muchas personas con resultado positivo no lo tienen, pero las pruebas son la forma de saberlo.",
+ r_warnT:"Tus reglas parecen abundantes. Habla con un médico.", r_warnB:"Esta prueba no señaló un trastorno de la coagulación, pero las reglas abundantes merecen una revisión. El sangrado fuerte muchas veces causa hierro bajo.",
+ r_okT:"Esta prueba no señaló un trastorno de la coagulación", r_okB:"Si tus reglas cambian, o algún sangrado te preocupa, habla con un médico de todas formas.",
+ hFlag:"Qué lo señaló", hOther:"Otros sangrados para mencionar", hPbac:"Puntaje de pérdida de sangre, última regla", notEntered:"Sin datos",
+ rs_c1:"Reglas de 7 días o más, con manchas o faltando a actividades", rs_c2:"Tratamiento previo por anemia o hierro bajo", rs_c3:"Un familiar con diagnóstico de trastorno de la coagulación", rs_c4:"Sangrado fuerte después de sacar un diente, un parto, una pérdida o una cirugía", rs_pb:"Un puntaje de pérdida de sangre mayor de 185",
+ hFam:"Señales en tu familia", famTxt:"Reportaste señales de sangrado en mujeres de tu familia. Díselo a tu médico. Estos trastornos se heredan, así que tus familiares también podrían necesitar pruebas.",
+ famUnsure:"No estabas segura de tu historia familiar. Preguntar a tus familiares si alguien sangra con facilidad puede cambiar este resultado.",
+ hTests:"Pruebas que puedes pedir", t1:"Biometría hemática completa (CBC) y ferritina, para revisar anemia y hierro bajo", t2:"Antígeno del factor von Willebrand, actividad del factor von Willebrand y factor VIII", t3:"Una referencia a hematología o a un centro de hemofilia si los resultados salen bajos o dudosos",
+ vwfNote:"Estos niveles pueden salir normales por error durante el embarazo, con anticonceptivos con estrógeno, o si estás enferma o estresada, así que tu médico podría repetir las pruebas.",
+ hSay:"Lo que puedes decir", say:"\"Mis reglas son abundantes y salí positiva en una prueba de detección de trastornos de la coagulación. Quisiera que me revisen por anemia y por la enfermedad de von Willebrand.\"",
+ hWorth:"Vale la pena preguntar", worth:"Una biometría hemática y ferritina si te sientes cansada, mareada o con falta de aire",
+ hShare:"Compártelo con tu familia", shareTxt:"Estos trastornos se heredan. Si tu hermana, mamá o prima tiene reglas abundantes, envíale esta prueba.",
+ about:"Sobre esta prueba: en un estudio con 217 mujeres de EE. UU. con reglas abundantes, encontró a unas 89 de cada 100 que tenían un trastorno de la coagulación, y a unas 95 de cada 100 junto con el puntaje de sangrado (Philipp y colegas, 2011). A propósito señala a muchas personas que no lo tienen, para que se escapen menos casos.",
+ print:"Imprimir o guardar en PDF", restart:"Empezar de nuevo", summary:"Resumen de BleedCheck",
+ footer:"BleedCheck usa una prueba publicada que los médicos usan para decidir a quién estudiar por un trastorno de la coagulación (Philipp y colegas, 2008 y 2011) y la tabla pictórica de pérdida de sangre (Higham, 1990). No es un dispositivo médico y no reemplaza a un médico."
+},
+hi:{
+ brand:"BleedCheck, The Factor Foundation की ओर से",
+ h1:"ज़्यादा माहवारी खून बहने की ऐसी बीमारी का संकेत हो सकती है जो परिवारों में चलती है।",
+ lede:"अपनी माहवारी, खून बहने और अपने परिवार के बारे में कुछ सवालों के जवाब दें। आपको डॉक्टर को दिखाने के लिए एक सारांश मिलेगा, जिसमें लिखा होगा कि कौन से टेस्ट माँगने हैं।",
+ start:"जाँच शुरू करें", startNote:"लगभग 4 मिनट। आपके जवाब इसी फ़ोन पर रहते हैं और कहीं नहीं भेजे जाते। यह जाँच कोई बीमारी तय नहीं करती।",
+ qOf:"सवाल {i} / {n}", back:"पीछे", next:"आगे", see:"मेरा नतीजा देखें",
+ yes:"हाँ", no:"नहीं", unsure:"पता नहीं", never:"ऐसा कभी नहीं हुआ",
+ q_urgent:"क्या अभी आपका पैड या टैम्पोन 2 घंटे से ज़्यादा समय तक हर घंटे पूरा भीग रहा है, या खून बहने से चक्कर या बेहोशी जैसा लग रहा है?",
+ q_days:"आपकी माहवारी आमतौर पर कितने दिन चलती है?", lt7:"7 दिन से कम", ge7:"7 दिन या ज़्यादा",
+ q_flood:"ज़्यादातर माहवारी में क्या खून पैड या टैम्पोन से निकलकर कपड़ों या बिस्तर पर लग जाता है?",
+ q_impact:"ज़्यादातर माहवारी में क्या खून की वजह से आप स्कूल, काम या बाहर जाना छोड़ देती हैं?",
+ q_anemia:"क्या किसी डॉक्टर ने कभी खून की कमी (एनीमिया) या आयरन की कमी का इलाज किया है?", h_anemia:"जैसे आयरन की गोलियाँ, आयरन की ड्रिप, या खून चढ़ाना।",
+ q_family:"क्या आपके खून के रिश्ते में किसी को खून बहने की बीमारी बताई गई है?", h_family:"जैसे वॉन विलेब्रांड रोग या हीमोफ़ीलिया।",
+ q_events:"क्या इनमें से किसी के बाद आपका खून उम्मीद से बहुत ज़्यादा बहा?", p_dental:"दाँत निकलवाने के बाद", p_birth:"बच्चे के जन्म या गर्भपात के बाद", p_surgery:"ऑपरेशन के बाद",
+ q_pbac:"अपनी पिछली माहवारी के बारे में सोचें। आपने हर तरह के कितने इस्तेमाल किए?", h_pbac:"जो आपने इस्तेमाल किया उसे तस्वीरों से मिलाएँ। अंदाज़ा काफ़ी है, या इसे छोड़ दें।",
+ g_pads:"पैड", g_tam:"टैम्पोन", g_other:"थक्के और रिसाव",
+ i_light:"थोड़ा सा खून", i_half:"लगभग आधा भीगा", i_full:"पूरा भीगा",
+ i_clotS:"छोटे थक्के (सिक्के से छोटे)", i_clotL:"बड़े थक्के (सिक्के से बड़े)", i_flood:"कितनी बार कपड़ों या बिस्तर पर खून लगा",
+ score:"स्कोर: {s}", scoreNone:"स्कोर: नहीं भरा", scoreHeavy:" (100 से ज़्यादा को ज़्यादा खून बहना माना जाता है)",
+ q_other:"क्या आपके साथ इनमें से कुछ होता है?", h_other:"जो भी लागू हो, सब चुनें।",
+ o_clots:"सिक्के से बड़े थक्के निकलते हैं", o_hourly:"ज़्यादा खून वाले दिनों में हर घंटे पैड या टैम्पोन बदलना पड़ता है",
+ o_nose:"नाक से खून 10 मिनट से ज़्यादा बहता है", o_bruise:"बिना चोट याद आए बड़े नीले निशान", o_gums:"मसूड़ों से अक्सर खून आता है",
+ q_fam:"क्या आपकी माँ, बहन, मौसी, बुआ या दादी/नानी के साथ इनमें से कुछ हुआ है?", h_fam:"कई परिवारों में इस बीमारी का नाम कभी नहीं लिया जाता। ये संकेत इसकी ओर इशारा कर सकते हैं।",
+ f_heavy:"बहुत ज़्यादा माहवारी", f_transfusion:"बच्चे के जन्म के बाद बहुत खून बहना या खून चढ़ाना", f_procedure:"ऑपरेशन या दाँत निकलवाने के बाद बहुत खून बहना", f_hyster:"खून बहने की वजह से कम उम्र में बच्चेदानी निकलवाना",
+ urgTitle:"अभी डॉक्टरी मदद लें", urgBody:"चक्कर या बेहोशी के साथ ज़्यादा खून बहना, या 2 घंटे से ज़्यादा समय तक हर घंटे पैड या टैम्पोन भीगना, आज ही इलाज माँगता है। इमरजेंसी में जाएँ, या कमज़ोरी या साँस फूलने पर 911 पर कॉल करें।",
+ urgAfter:"बेहतर महसूस होने पर आप वापस आकर जाँच पूरी कर सकती हैं।", urgContinue:"मैं अभी ठीक हूँ, आगे बढ़ें",
+ r_flagT:"अपने डॉक्टर से खून बहने की बीमारी की जाँच के बारे में पूछें", r_flagB:"आपके जवाब उस जाँच से मेल खाते हैं जिससे डॉक्टर तय करते हैं कि वॉन विलेब्रांड रोग जैसी बीमारी की जाँच किसकी होनी चाहिए। इसका मतलब यह नहीं कि आपको यह बीमारी है। ऐसे कई लोगों को यह बीमारी नहीं होती, पर पता जाँच से ही चलता है।",
+ r_warnT:"आपकी माहवारी ज़्यादा लगती है। डॉक्टर से बात करें।", r_warnB:"इस जाँच में खून बहने की बीमारी का संकेत नहीं मिला, पर ज़्यादा माहवारी की जाँच ज़रूरी है। ज़्यादा खून बहने से अक्सर आयरन की कमी हो जाती है।",
+ r_okT:"इस जाँच में खून बहने की बीमारी का संकेत नहीं मिला", r_okB:"अगर आपकी माहवारी बदले, या कोई खून बहना आपको परेशान करे, तो फिर भी डॉक्टर से बात करें।",
+ hFlag:"किस वजह से संकेत मिला", hOther:"बताने लायक और खून बहना", hPbac:"पिछली माहवारी का खून बहने का स्कोर", notEntered:"नहीं भरा",
+ rs_c1:"7 दिन या ज़्यादा चलने वाली माहवारी, रिसाव या रोज़ के काम छूटने के साथ", rs_c2:"पहले खून या आयरन की कमी का इलाज", rs_c3:"खून के रिश्ते में किसी को खून बहने की बीमारी", rs_c4:"दाँत निकलवाने, बच्चे के जन्म, गर्भपात या ऑपरेशन के बाद ज़्यादा खून बहना", rs_pb:"खून बहने का स्कोर 185 से ज़्यादा",
+ hFam:"आपके परिवार में संकेत", famTxt:"आपने अपने परिवार की महिलाओं में खून बहने के संकेत बताए। अपने डॉक्टर को बताएँ। यह बीमारी विरासत में मिलती है, इसलिए रिश्तेदारों की भी जाँच की ज़रूरत हो सकती है।",
+ famUnsure:"आपको परिवार के इतिहास के बारे में पक्का नहीं पता था। रिश्तेदारों से पूछना कि क्या किसी का खून आसानी से बहता है, यह नतीजा बदल सकता है।",
+ hTests:"कौन से टेस्ट माँगें", t1:"पूरी खून जाँच (CBC) और फ़ेरिटिन, खून और आयरन की कमी देखने के लिए", t2:"वॉन विलेब्रांड फ़ैक्टर एंटीजन, वॉन विलेब्रांड फ़ैक्टर एक्टिविटी और फ़ैक्टर VIII", t3:"नतीजे कम या साफ़ न होने पर हीमेटोलॉजिस्ट या हीमोफ़ीलिया सेंटर को रेफ़रल",
+ vwfNote:"गर्भावस्था, एस्ट्रोजन वाली गर्भनिरोधक गोलियों, या बीमारी और तनाव के समय ये स्तर गलती से सामान्य आ सकते हैं, इसलिए डॉक्टर जाँच दोबारा करवा सकते हैं।",
+ hSay:"आप यह कह सकती हैं", say:"\"मेरी माहवारी बहुत ज़्यादा होती है, और खून बहने की बीमारी की एक स्क्रीनिंग जाँच में मेरा नतीजा पॉज़िटिव आया। मैं एनीमिया और वॉन विलेब्रांड रोग की जाँच करवाना चाहती हूँ।\"",
+ hWorth:"यह पूछना अच्छा रहेगा", worth:"अगर थकान, चक्कर या साँस फूलती है तो CBC और फ़ेरिटिन टेस्ट",
+ hShare:"अपने परिवार के साथ बाँटें", shareTxt:"यह बीमारी परिवारों में चलती है। अगर आपकी बहन, माँ या कज़िन की माहवारी ज़्यादा होती है, तो उन्हें भी यह जाँच भेजें।",
+ about:"इस जाँच के बारे में: अमेरिका की 217 महिलाओं के एक अध्ययन में, इसने खून बहने की बीमारी वाली हर 100 में से लगभग 89 को पहचाना, और खून बहने के स्कोर के साथ लगभग 95 को (Philipp और साथी, 2011)। कम मामले छूटें, इसलिए यह जानबूझकर कई ऐसे लोगों को भी चिह्नित करती है जिन्हें बीमारी नहीं होती।",
+ print:"प्रिंट करें या PDF सेव करें", restart:"फिर से शुरू करें", summary:"BleedCheck सारांश",
+ footer:"BleedCheck एक प्रकाशित जाँच का इस्तेमाल करता है जिससे डॉक्टर तय करते हैं कि किसकी खून बहने की बीमारी की जाँच होनी चाहिए (Philipp और साथी, 2008 और 2011), और खून बहने का चित्र चार्ट (Higham, 1990)। यह कोई मेडिकल डिवाइस नहीं है और डॉक्टर की जगह नहीं लेता।"
+}};
+
+/* ============ IRON MODEL ============
+   Paste the contents of bleedcheck_iron_model.json (exported by the NHANES notebook) here. */
+const IRON_MODEL = {
+  "features": [
+    "RIDAGEYR",
+    "LBXHGB",
+    "LBXMCVSI",
+    "LBXRDW",
+    "LBXRBCSI",
+    "LBXPLTSI",
+    "LBXHSCRP"
+  ],
+  "impute_medians": {
+    "RIDAGEYR": 29.0,
+    "LBXHGB": 13.2,
+    "LBXMCVSI": 87.2,
+    "LBXRDW": 13.5,
+    "LBXRBCSI": 4.54,
+    "LBXPLTSI": 269.0,
+    "LBXHSCRP": 1.57
+  },
+  "scaler_mean": [
+    29.360114777618364,
+    13.083309421329508,
+    86.31468197034911,
+    13.940985174557627,
+    4.549292204686752,
+    276.0760401721664,
+    3.665160210425634
+  ],
+  "scaler_scale": [
+    11.386598749074768,
+    1.2606405078778544,
+    6.70006457150374,
+    1.641606562034516,
+    0.36524262781091565,
+    66.775543242484,
+    5.842910619345237
+  ],
+  "coef": [
+    -0.040787543932105264,
+    -0.9696985743738447,
+    -0.5000131146072079,
+    1.1612350841035974,
+    -0.27154237166657635,
+    0.1655843320753038,
+    -1.3052285818492544
+  ],
+  "intercept": -0.8422250731270877,
+  "threshold": 0.391734438802728,
+  "sensitivity_at_threshold": 0.813,
+  "specificity_at_threshold": 0.748,
+  "test_auc": 0.889,
+  "n": 2614,
+  "label": "ferritin < 15 ng/mL",
+  "data": "NHANES 2017-March 2020, non-pregnant females 12-49"
+};
+
+let L = "en";
+try { const s = localStorage.getItem("bc_lang"); if (s && T[s]) L = s; } catch(e){}
+const t = (k, v) => { let s = (T[L][k] ?? T.en[k] ?? k); if (v) for (const x in v) s = s.replace("{"+x+"}", v[x]); return s; };
+const $ = s => document.querySelector(s);
+const A = {};
+let i = 0;
+
+const Q = [
+ {id:"urgent", type:"yn", q:"q_urgent"},
+ {id:"days", type:"choice", q:"q_days", opts:[["lt7","lt7"],["ge7","ge7"]]},
+ {id:"flood", type:"yn", q:"q_flood"},
+ {id:"impact", type:"yn", q:"q_impact"},
+ {id:"anemia", type:"yn", q:"q_anemia", help:"h_anemia"},
+ {id:"family", type:"choice", q:"q_family", help:"h_family", opts:[["yes","yes"],["no","no"],["unsure","unsure"]]},
+ {id:"events", type:"multi", q:"q_events", parts:[["dental","p_dental"],["birth","p_birth"],["surgery","p_surgery"]]},
+ {id:"pbac", type:"pbac", q:"q_pbac", help:"h_pbac"},
+ {id:"other", type:"checks", q:"q_other", help:"h_other", items:["clots","hourly","nose","bruise","gums"].map(k=>[k,"o_"+k])},
+ {id:"fam", type:"checks", q:"q_fam", help:"h_fam", items:["heavy","transfusion","procedure","hyster"].map(k=>[k,"f_"+k])},
+];
+
+/* ---- pictures for the blood loss chart ---- */
+const pad = f => `<svg viewBox="0 0 40 60" aria-hidden="true"><rect x="6" y="4" width="28" height="52" rx="12" fill="none" stroke="currentColor" stroke-width="2"/><clipPath id="c${Math.round(f*100)}"><rect x="6" y="4" width="28" height="52" rx="12"/></clipPath><rect clip-path="url(#c${Math.round(f*100)})" x="6" y="${56-52*f}" width="28" height="${52*f}" fill="var(--blood)"/></svg>`;
+const tam = f => `<svg viewBox="0 0 40 60" aria-hidden="true"><rect x="13" y="4" width="14" height="38" rx="6" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="${42-38*f}" width="14" height="${38*f}" rx="${f>.9?6:2}" fill="var(--blood)"/><path d="M20 42v14" stroke="currentColor" stroke-width="2"/></svg>`;
+const clot = r => `<svg viewBox="0 0 40 60" aria-hidden="true"><circle cx="20" cy="30" r="${r}" fill="var(--blood)"/><circle cx="20" cy="30" r="10" fill="none" stroke="currentColor" stroke-dasharray="2 3"/></svg>`;
+const drop = `<svg viewBox="0 0 40 60" aria-hidden="true"><path d="M20 8C14 20 8 28 8 37a12 12 0 0 0 24 0c0-9-6-17-12-29z" fill="var(--blood)"/><path d="M4 54h32" stroke="currentColor" stroke-width="2"/></svg>`;
+const PB = [
+ ["g_pads",[["pad1","i_light",pad(.15),1],["pad5","i_half",pad(.5),5],["pad20","i_full",pad(1),20]]],
+ ["g_tam",[["tam1","i_light",tam(.15),1],["tam5","i_half",tam(.5),5],["tam10","i_full",tam(1),10]]],
+ ["g_other",[["clotS","i_clotS",clot(4),1],["clotL","i_clotL",clot(13),5],["flood","i_flood",drop,5]]],
+];
+function pbacScore(){
+  const p = A.pbac || {}; if (!Object.values(p).some(v => v !== "" && v != null)) return null;
+  let s = 0; PB.forEach(([,items]) => items.forEach(([k,,,w]) => s += w * Math.max(0, parseInt(p[k],10) || 0))); return s;
+}
+const scoreText = () => { const s = pbacScore(); return s === null ? t("scoreNone") : t("score",{s}) + (s > 100 ? t("scoreHeavy") : ""); };
+
+/* ---- rendering ---- */
+function applyStatic(){
+  document.documentElement.lang = L;
+  document.querySelectorAll("[data-t]").forEach(el => el.textContent = t(el.dataset.t));
+  document.querySelectorAll(".langs button").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === L ? "true" : "false"));
+  document.title = "BleedCheck";
+}
+const show = id => ["intro","quiz","urgent","result","clinic"].forEach(s => $("#"+s).hidden = s !== id);
+function optBtn(label, pressed, fn){ const b = document.createElement("button"); b.type="button"; b.className="opt"; b.textContent=label; b.setAttribute("aria-pressed", pressed?"true":"false"); b.onclick=fn; return b; }
+function answered(q){ const v = A[q.id]; if (q.type==="multi") return v && q.parts.every(p => v[p[0]]); if (q.type==="pbac"||q.type==="checks") return true; return v !== undefined; }
+
+function render(){
+  const q = Q[i], body = $("#qbody"); body.innerHTML = "";
+  $("#bar").style.width = (i / Q.length * 100) + "%";
+  $("#stepLabel").textContent = t("qOf",{i:i+1,n:Q.length});
+  const h = document.createElement("h2"); h.textContent = t(q.q); body.appendChild(h);
+  if (q.help){ const p = document.createElement("p"); p.className="help"; p.textContent=t(q.help); body.appendChild(p); }
+  if (q.type==="yn"||q.type==="choice"){
+    const w = document.createElement("div"); w.className="opts";
+    (q.type==="yn" ? [["yes","yes"],["no","no"]] : q.opts).forEach(([val,key]) => w.appendChild(optBtn(t(key), A[q.id]===val, () => {
+      A[q.id]=val; render(); if (q.id!=="urgent" || val==="no") setTimeout(go,160);
+    })));
+    body.appendChild(w);
+  }
+  if (q.type==="multi"){
+    A[q.id] = A[q.id] || {};
+    q.parts.forEach(([k,lab]) => {
+      const s = document.createElement("div"); s.className="sub"; s.textContent=t(lab); body.appendChild(s);
+      const r = document.createElement("div"); r.className="row";
+      [["yes","yes"],["no","no"],["na","never"]].forEach(([v,key]) => r.appendChild(optBtn(t(key), A[q.id][k]===v, () => { A[q.id][k]=v; render(); })));
+      body.appendChild(r);
+    });
+  }
+  if (q.type==="pbac"){
+    A.pbac = A.pbac || {};
+    const tot = document.createElement("p"); tot.className="total";
+    PB.forEach(([g,items]) => {
+      const gh = document.createElement("div"); gh.className="grp"; gh.textContent=t(g); body.appendChild(gh);
+      items.forEach(([k,lab,svg]) => {
+        const row = document.createElement("div"); row.className="pic";
+        const ic = document.createElement("div"); ic.innerHTML = svg;
+        const lb = document.createElement("label"); lb.htmlFor="f_"+k; lb.textContent=t(lab);
+        const inp = document.createElement("input"); inp.type="number"; inp.min="0"; inp.inputMode="numeric"; inp.id="f_"+k; inp.value = A.pbac[k] ?? "";
+        inp.oninput = () => { A.pbac[k]=inp.value; tot.textContent=scoreText(); };
+        row.append(ic, lb, inp); body.appendChild(row);
+      });
+    });
+    tot.textContent = scoreText(); body.appendChild(tot);
+  }
+  if (q.type==="checks"){
+    A[q.id] = A[q.id] || {};
+    const w = document.createElement("div"); w.className="checks";
+    q.items.forEach(([k,lab]) => { const l=document.createElement("label"); const c=document.createElement("input"); c.type="checkbox"; c.checked=!!A[q.id][k]; c.onchange=()=>A[q.id][k]=c.checked; l.append(c, document.createTextNode(t(lab))); w.appendChild(l); });
+    body.appendChild(w);
+  }
+  $("#next").disabled = !answered(q);
+  $("#next").textContent = i===Q.length-1 ? t("see") : t("next");
+  $("#back").style.visibility = i===0 ? "hidden" : "visible";
+}
+function go(){
+  if (Q[i].id==="urgent" && A.urgent==="yes"){ show("urgent"); return; }
+  if (i < Q.length-1){ i++; render(); window.scrollTo(0,0); } else result();
+}
+
+/* ---- result: Philipp tool (validated) + PBAC > 185 enhancement; family signs are informational only ---- */
+function result(){
+  const ev = A.events||{}, o = A.other||{}, fam = A.fam||{}, pb = pbacScore();
+  const c1 = A.days==="ge7" && (A.flood==="yes" || A.impact==="yes");
+  const c2 = A.anemia==="yes", c3 = A.family==="yes";
+  const c4 = ["dental","birth","surgery"].some(k => ev[k]==="yes");
+  const pbHigh = pb!==null && pb>185;
+  const positive = c1||c2||c3||c4||pbHigh;
+  const heavy = (pb!==null && pb>100) || A.flood==="yes" || A.impact==="yes" || o.clots || o.hourly || A.days==="ge7";
+  const famSigns = Object.values(fam).some(Boolean);
+  const reasons = [c1&&"rs_c1", c2&&"rs_c2", c3&&"rs_c3", c4&&"rs_c4", pbHigh&&"rs_pb"].filter(Boolean).map(k=>t(k));
+  const extra = ["clots","hourly","nose","bruise","gums"].filter(k=>o[k]).map(k=>t("o_"+k));
+  const famList = ["heavy","transfusion","procedure","hyster"].filter(k=>fam[k]).map(k=>t("f_"+k));
+  const [cls,T1,B1] = positive ? ["flag","r_flagT","r_flagB"] : heavy ? ["warn","r_warnT","r_warnB"] : ["ok","r_okT","r_okB"];
+  const li = a => a.map(x=>`<li>${x}</li>`).join("");
+  const pbTxt = pb===null ? t("notEntered") : pb + (pb>100 ? t("scoreHeavy") : "");
+  $("#result").innerHTML = `
+  <div class="card">
+    <p class="fine">${t("summary")}, ${new Date().toLocaleDateString(L)}</p>
+    <div class="verdict ${cls}"><h2>${t(T1)}</h2><p>${t(B1)}</p></div>
+    ${reasons.length?`<h3>${t("hFlag")}</h3><ul>${li(reasons)}</ul>`:""}
+    ${extra.length?`<h3>${t("hOther")}</h3><ul>${li(extra)}</ul>`:""}
+    <h3>${t("hPbac")}</h3><p>${pbTxt}</p>
+    ${famSigns?`<h3>${t("hFam")}</h3><ul>${li(famList)}</ul><p>${t("famTxt")}</p>`:""}
+    ${A.family==="unsure"?`<p class="fine">${t("famUnsure")}</p>`:""}
+    ${positive||famSigns?`
+      <h3>${t("hTests")}</h3><ul>${li([t("t1"),t("t2"),t("t3")])}</ul>
+      <p class="fine">${t("vwfNote")}</p>
+      <h3>${t("hSay")}</h3><p>${t("say")}</p>`:`
+      <h3>${t("hWorth")}</h3><ul><li>${t("worth")}</li></ul>`}
+    <div class="share"><h3 style="margin-top:0">${t("hShare")}</h3><p style="margin-bottom:0">${t("shareTxt")}</p></div>
+    <p class="fine">${t("about")}</p>
+  </div>
+  <div class="actions noprint"><button class="btn" id="print">${t("print")}</button><button class="btn quiet" id="restart">${t("restart")}</button></div>`;
+  $("#bar").style.width="100%"; show("result"); window.scrollTo(0,0);
+  $("#print").onclick = () => window.print();
+  $("#restart").onclick = () => { for (const k in A) delete A[k]; i=0; show("intro"); };
+}
+
+/* ---- clinic mode: NHANES-trained logistic regression, runs locally ---- */
+const CF = [
+ ["RIDAGEYR","Age","years",12,49],["LBXHGB","Hemoglobin","g/dL"],["LBXMCVSI","MCV","fL"],["LBXRDW","RDW","%"],
+ ["LBXRBCSI","RBC count","million/µL"],["LBXPLTSI","Platelets","1000/µL"],["LBXHSCRP","hs-CRP (optional)","mg/L"],
+];
+function openClinic(){
+  show("clinic");
+  $("#clinicStatus").textContent = IRON_MODEL
+    ? `Model loaded: trained on ${IRON_MODEL.n} NHANES participants, test AUC ${IRON_MODEL.test_auc}.`
+    : "Model not loaded yet. Run the NHANES notebook and paste bleedcheck_iron_model.json into IRON_MODEL. Until then, basic CBC flags are shown.";
+  $("#clinicFields").innerHTML = CF.map(([k,l,u]) => `<div class="field"><label for="c_${k}">${l}<small>${u}</small></label><input id="c_${k}" type="number" step="any" inputmode="decimal"></div>`).join("");
+  $("#ironOut").innerHTML = "";
+}
+function runIron(){
+  const v = {}; CF.forEach(([k]) => { const x = parseFloat($("#c_"+k).value); v[k] = isNaN(x) ? null : x; });
+  const req = CF.filter(([k]) => k!=="LBXHSCRP").map(([k])=>k);
+  if (req.some(k => v[k]===null)){ $("#ironOut").innerHTML = `<p class="fine">Enter every value except hs-CRP.</p>`; return; }
+  const flags = [];
+  if (v.LBXHGB < 12) flags.push("Hemoglobin below 12 g/dL: anemia for a non-pregnant female 12 or older (WHO).");
+  if (v.LBXMCVSI < 80) flags.push("MCV below 80 fL: small red cells, a pattern seen in iron deficiency.");
+  if (v.LBXRDW > 14.5) flags.push("RDW above 14.5%: mixed red cell sizes, often seen early in iron deficiency.");
+  let html = "";
+  if (IRON_MODEL){
+    const m = IRON_MODEL; let z = m.intercept;
+    m.features.forEach((f,j) => { const x = v[f]===null || v[f]===undefined ? m.impute_medians[f] : v[f]; z += m.coef[j] * (x - m.scaler_mean[j]) / m.scaler_scale[j]; });
+    const pr = 1/(1+Math.exp(-z)), hi = pr >= m.threshold;
+    html += `<div class="verdict ${hi?"flag":"ok"}"><h2>${hi?"Likely iron deficient: order ferritin":"Iron deficiency less likely"}</h2><p>Model score ${(pr*100).toFixed(0)} out of 100 (cutoff ${(m.threshold*100).toFixed(0)}, chosen for about ${(m.sensitivity_at_threshold*100).toFixed(0)}% sensitivity).</p></div>`;
+  }
+  html += flags.length ? `<ul>${flags.map(f=>`<li>${f}</li>`).join("")}</ul>` : `<p class="fine">No basic CBC flags.</p>`;
+  html += `<p class="fine">Heavy menstrual bleeding with iron deficiency is a reason to also screen for a bleeding disorder. Iron deficiency without anemia is common and is missed by hemoglobin alone.</p>`;
+  $("#ironOut").innerHTML = html;
+}
+
+/* ---- wire up ---- */
+document.querySelectorAll(".langs button").forEach(b => b.onclick = () => {
+  L = b.dataset.lang; try { localStorage.setItem("bc_lang", L); } catch(e){}
+  applyStatic(); if (!$("#quiz").hidden) render(); if (!$("#result").hidden) result();
+});
+$("#start").onclick = () => { i=0; show("quiz"); render(); };
+$("#next").onclick = go;
+$("#back").onclick = () => { if (i>0){ i--; render(); } };
+$("#urgentBack").onclick = () => { A.urgent="no"; i=1; show("quiz"); render(); };
+$("#openClinic").onclick = openClinic;
+$("#closeClinic").onclick = () => show("intro");
+$("#runIron").onclick = runIron;
+applyStatic();
+})();
+</script>
+</body>
+</html>

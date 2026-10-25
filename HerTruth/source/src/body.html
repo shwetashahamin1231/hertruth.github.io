@@ -1,0 +1,705 @@
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="mark" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="17.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-dasharray="2.6 3.1" stroke-linecap="round" opacity=".5"/>
+    <path d="M20 7.5c-4.9 6.6-8.4 11-8.4 15.6a8.4 8.4 0 0 0 16.8 0c0-4.6-3.5-9-8.4-15.6Z" fill="var(--accent)"/>
+    <path d="m16.3 23.2 2.7 2.7 5.1-5.6" fill="none" stroke="var(--on-accent)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+</svg>
+<!-- guided start, once per visit: a question in many languages, pick a language, the problem and how HerTruth helps,
+     then start the check or read more. Every line uses an already-translated string. wire.js runs and removes it. -->
+<div class="welcome noprint" id="guide" role="dialog" aria-modal="true" aria-label="Welcome to HerTruth" hidden>
+  <button type="button" class="guide-x" id="guideX" aria-label="Skip the introduction">&times;</button>
+  <section class="guide-step" id="guide1">
+    <svg class="guide-mark" width="58" height="58" aria-hidden="true"><use href="#mark"/></svg>
+    <p class="guide-ask" id="guideAsk" aria-hidden="true">How many days does your period usually last?</p>
+    <p class="guide-asklang" id="guideAskLang" aria-hidden="true">English</p>
+    <p class="guide-pick"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 12h17M12 3c2.5 2.6 3.7 5.6 3.7 9s-1.2 6.4-3.7 9c-2.5-2.6-3.7-5.6-3.7-9S9.5 5.6 12 3Z" stroke="currentColor" stroke-width="1.6"/></svg><span id="guidePickLab">Language</span></p>
+    <div class="guide-langs" id="guideLangs" role="group" aria-label="Choose your language"></div>
+  </section>
+  <section class="guide-step" id="guide2" hidden>
+    <figure class="guide-photo"><img data-src-from="outreach" alt="Two team members at the foundation's awareness table, talking with a visitor" lang="en"></figure>
+    <div class="guide-body">
+      <p class="kicker issue-k"><svg width="14" height="17" viewBox="0 0 40 48" aria-hidden="true"><path d="M20 3C13 13 7 20 7 28a13 13 0 0 0 26 0C33 20 27 13 20 3Z" fill="currentColor"/></svg><span data-t="isK">The problem</span></p>
+      <h2 class="guide-h" data-th="h1"></h2>
+      <p class="guide-p" data-t="isP"></p>
+      <p class="guide-help" data-t="lede"></p>
+      <div class="guide-go">
+        <button type="button" class="btn btn--big" id="guideStart"><span class="btn-main"><span data-t="start">Start the check</span></span><span class="btn-sub" data-t="ctaSub"></span></button>
+        <button type="button" class="btn btn--quiet" id="guideMore"><span data-t="whyK">Why it matters</span></button>
+      </div>
+      <button type="button" class="link guide-back" id="guideBack"><span data-t="back">Back</span></button>
+    </div>
+  </section>
+</div>
+
+<!-- full-screen photo viewer -->
+<div class="lightbox noprint" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo" hidden>
+  <button type="button" class="lb-btn lb-x" id="lbX" aria-label="Close photo">&times;</button>
+  <button type="button" class="lb-btn lb-prev" id="lbPrev" aria-label="Previous photo">&#8249;</button>
+  <figure class="lb-fig"><img id="lbImg" alt=""><figcaption id="lbCap" lang="en"></figcaption></figure>
+  <button type="button" class="lb-btn lb-next" id="lbNext" aria-label="Next photo">&#8250;</button>
+</div>
+<a class="skip" href="#main">Skip to main content</a>
+
+<header class="site-head noprint">
+  <div class="wrap head-inner">
+    <button class="brand" type="button" data-goto="t-home" aria-label="HerTruth home">
+      <svg class="brand-mark" width="38" height="38" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="brand-word">Her<b>Truth</b></span>
+    </button>
+    <button type="button" class="check-x" id="checkX" aria-label="Close the check">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </button>
+    <div class="langs" id="langs">
+      <button type="button" class="lang-btn" id="langBtn" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 12h17M12 3c2.5 2.6 3.7 5.6 3.7 9s-1.2 6.4-3.7 9c-2.5-2.6-3.7-5.6-3.7-9S9.5 5.6 12 3Z" stroke="currentColor" stroke-width="1.6"/></svg>
+        <span id="langCur">English</span><span class="sr-only" data-t="langLabel">Language</span>
+        <svg class="chev" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="m2.5 4.5 3.5 3.5 3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <div class="lang-menu" id="langMenu" role="group" aria-labelledby="langBtn" hidden>{{LANG_BUTTONS}}</div>
+    </div>
+    <button type="button" class="theme-btn" id="themeBtn" aria-pressed="false" aria-label="Switch to dark mode">
+      <svg width="22" height="22" viewBox="0 0 40 48" aria-hidden="true"><path d="M20 4C13 14 7 21 7 29a13 13 0 0 0 26 0C33 21 27 14 20 4Z" fill="none" stroke="currentColor" stroke-width="3.2"/><path class="theme-fill" d="M20 4C13 14 7 21 7 29a13 13 0 0 0 13 13Z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+<div class="draftbar noprint" id="draftBar" hidden><div class="wrap"><span class="draft-dot" aria-hidden="true"></span><span data-t="langDraft"></span></div></div>
+
+<main id="main">
+
+<!-- ============================ HOME ============================ -->
+<div role="tabpanel" id="p-home" aria-labelledby="t-home">
+
+
+
+  <!-- Home opens with the help line switching languages, and a path you can tap through: where people get missed -->
+  <section class="hero hero2" id="help" aria-labelledby="helpLineSr">
+    <span class="blob blob--a" aria-hidden="true"></span><span class="blob blob--b" aria-hidden="true"></span>
+    <div class="wrap hero2-grid">
+      <div class="hero2-copy">
+        <p class="help-lang" aria-hidden="true"><span id="helpLangName">English</span> <span class="help-count" id="helpCount">1 / 16</span>
+          <button class="pause" type="button" id="helpPause" aria-pressed="false"><span data-t="helpPause">Pause</span></button></p>
+        <h1 class="help-line" id="helpLineSr"><span class="sr-only">It's okay to ask for help.</span><span class="help-say" id="helpSay" aria-hidden="true">It's okay to ask for help.</span></h1>
+        <p class="hero2-sub" data-t="whyH">Heavy periods get treated. The cause often goes unchecked.</p>
+        <div class="cta-row">
+          <button class="btn btn--big" id="start" type="button">
+            <span class="btn-main"><span data-t="start">Start the check</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6.5 18.5 12 13 17.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="btn-sub" data-t="ctaSub">10 questions, adapted from a screen doctors use</span>
+          </button>
+        </div>
+        <p class="help-urgent"><b>!</b><span data-t="helpUrgent"></span></p>
+        <div class="orbit" hidden><div class="orbit-ring" id="orbitRing"></div></div>
+      </div>
+
+      <div class="impact" id="impact" data-mode="usual">
+        <p class="kicker issue-k"><svg width="14" height="17" viewBox="0 0 40 48" aria-hidden="true"><path d="M20 3C13 13 7 20 7 28a13 13 0 0 0 26 0C33 20 27 13 20 3Z" fill="currentColor"/></svg><span data-t="impK">Where people get missed</span></p>
+        <div class="imp-seg seg" role="group">
+          <button type="button" class="imp-mode" data-mode="usual" aria-pressed="true"><span data-t="impUsual">Usually</span></button>
+          <button type="button" class="imp-mode" data-mode="with" aria-pressed="false"><span data-t="impWith">With HerTruth</span></button>
+        </div>
+        <div class="imp-path" id="impPath" role="group"></div>
+        <div class="imp-stage" id="impStage" aria-live="polite"><p class="imp-big" id="impBig"></p><p class="imp-text" id="impText"></p></div>
+        <button type="button" class="btn btn--quiet imp-next" id="impNext"><span data-t="impNext">Next</span></button>
+        <p class="src" data-t="impSrc"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- who built this: The Factor Foundation partnership, with event photos -->
+  <section class="section who-sec"><div class="wrap">
+    <div class="who-head">
+      <p class="kicker" data-t="whoTag">Who built this</p>
+      <h2 class="h-section" data-t="whoH"></h2>
+      <p data-t="whoP1"></p>
+      <p data-t="whoP3"></p>
+      <p data-t="whoP2"></p>
+      <button class="btn btn--quiet" type="button" data-goto="t-about" data-t="whoBtn">Meet the team</button>
+    </div>
+    <div class="strip" id="photoStrip" role="region" aria-label="Photos from The Factor Foundation's events" lang="en" tabindex="0">
+      <figure class="strip-item"><img data-name="team3" src="{{IMG:team3}}" alt="Three team members in The Factor Foundation shirts at the volleyball fundraiser" width="820" height="547" decoding="async"></figure>
+      <figure class="strip-item"><img data-name="outreach" src="{{IMG:outreach}}" alt="Two team members at the foundation's awareness table, talking with a visitor" width="820" height="547" decoding="async"></figure>
+      <figure class="strip-item"><img data-name="serve" src="{{IMG:serve}}" alt="A player serving at the foundation's volleyball fundraiser" width="820" height="588" decoding="async"></figure>
+      <figure class="strip-item"><img data-name="un_emblem" src="{{IMG:un_emblem}}" alt="A team member at the United Nations" width="640" height="853" decoding="async"></figure>
+      <figure class="strip-item"><img data-name="table2" src="{{IMG:table2}}" alt="Team members at the foundation's outreach table" width="640" height="853" decoding="async"></figure>
+      <figure class="strip-item"><img data-name="ball" src="{{IMG:ball}}" alt="Two team members with a volleyball at the fundraiser" width="820" height="547" decoding="async"></figure>
+    </div>
+  </div></section>
+
+
+
+
+  <section class="section"><div class="wrap why">
+    <div class="why-text">
+      <p class="kicker" data-t="whyK">Why it matters</p>
+      <h2 class="h-section" data-t="whyH"></h2>
+      <p data-t="whyP1"></p>
+      <p data-t="whyP2"></p>
+    </div>
+    <div class="defs">
+      <div class="def"><h3 data-t="d1t"></h3><p data-t="d1p"></p></div>
+      <div class="def"><h3 data-t="d2t"></h3><p data-t="d2p"></p></div>
+    </div>
+  </div></section>
+
+
+  <section class="section band-sec"><div class="wrap"><figure class="photo-band"><img data-src-from="rally" alt="Players in a game at the foundation's volleyball fundraiser" lang="en"><figcaption lang="en">Game time at the foundation's volleyball fundraiser</figcaption></figure></div></section>
+
+  <section class="section section--tint"><div class="wrap">
+    <div class="head"><p class="kicker" data-t="stepsK">How the check works</p><h2 class="h-section" data-t="stepsH"></h2></div>
+    <ol class="steps">
+      <li class="step-i"><h3 data-t="s1h"></h3><p data-t="s1p"></p></li>
+      <li class="step-i"><h3 data-t="s2h"></h3><p data-t="s2p"></p></li>
+      <li class="step-i"><h3 data-t="s3h"></h3><p data-t="s3p"></p></li>
+      <li class="step-i"><h3 data-t="s4h"></h3><p data-t="s4p"></p></li>
+    </ol>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <div class="head"><p class="kicker" data-t="getK">Straight about limits</p><h2 class="h-section" data-t="getH"></h2></div>
+    <div class="ledger">
+      <div class="ledger-col ledger-yes"><h3 data-t="yesH"></h3><ul><li data-t="y1"></li><li data-t="y2"></li><li data-t="y3"></li><li data-t="y4"></li><li data-t="y5"></li></ul></div>
+      <div class="ledger-col ledger-no"><h3 data-t="noH"></h3><ul><li data-t="n1"></li><li data-t="n2"></li><li data-t="n3"></li></ul></div>
+    </div>
+    <p class="note" data-t="exClose"></p>
+  </div></section>
+
+  <section class="section band-sec"><div class="wrap"><figure class="photo-band"><img data-src-from="un_session" alt="A team member seated at a youth participation session at the United Nations" lang="en"><figcaption lang="en">Youth session at the United Nations</figcaption></figure></div></section>
+
+  <section class="section section--tint"><div class="wrap">
+    <div class="head"><h2 class="h-section" data-t="bsH">Before you start</h2><p data-t="bsSub">Three things to know.</p></div>
+    <div class="trio">
+      <div class="tile tile--alert">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5 21 19.5H3L12 3.5Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M12 10v4.5M12 17h.01" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg>
+        <h3 data-t="bs1h"></h3><p data-t="bs1p"></p></div>
+      <div class="tile">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5" stroke="currentColor" stroke-width="1.9"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" stroke="currentColor" stroke-width="1.9"/></svg>
+        <h3 data-t="bs2h"></h3><p data-t="bs2p"></p></div>
+      <div class="tile">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h13" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+        <h3 data-t="bs3h"></h3><p data-t="bs3p"></p></div>
+    </div>
+  </div></section>
+
+  <section class="section section--tint band-sec"><div class="wrap"><figure class="photo-band"><img data-src-from="signup2" alt="Visitors talking with team members at the foundation's booth" lang="en"><figcaption lang="en">Visitors at the foundation's booth</figcaption></figure></div></section>
+
+  <section class="share-band"><div class="wrap share-inner">
+    <div><h2 class="h-section" data-t="hShare">Share with your family</h2><p data-t="shareTxt"></p></div>
+    <button class="btn btn--light" type="button" id="shareLink"><span data-t="shareBtn">Copy the link</span></button>
+  </div></section>
+
+  <section class="section clinic-teaser"><div class="wrap">
+    <button class="clinic-card" id="openClinic" type="button">
+      <span class="cc-pill" data-t="clinicPill">For clinics</span>
+      <span class="cc-title" data-t="clinicTitle">Iron deficiency estimate</span>
+      <span class="cc-desc" data-t="clinicDesc"></span>
+      <span class="cc-note" data-t="clinicNote"></span>
+      <span class="cc-go" aria-hidden="true">&#8594;</span>
+    </button>
+  </div></section>
+</div>
+
+<!-- ============================ CHECK ============================ -->
+<div role="tabpanel" id="p-check" aria-labelledby="t-check" hidden>
+  <section class="page-top"><div class="wrap">
+    <p class="kicker" data-t="chkEyebrow">Bleeding disorder check</p>
+    <h1 class="display" data-t="chkH1">Take the check</h1>
+    <p class="by" data-t="chkBy">Adapted from the Philipp screening tool</p>
+    <p class="page-lede" data-t="chkP"></p>
+    <figure class="pt-photo"><img data-src-from="outreach" alt="Two team members at the foundation's awareness table, talking with a visitor" lang="en"></figure>
+  </div></section>
+
+  <section class="section check-sec"><div class="wrap check-grid">
+    <div class="check-panel" id="checkPanel">
+      <section id="intro" class="intro-card">
+        <svg class="intro-mark" width="64" height="64" aria-hidden="true"><use href="#mark"/></svg>
+        <h2 data-t="introH">Ready when you are</h2>
+        <p class="fine" data-t="startNote"></p>
+        <button class="btn btn--big js-start" type="button">
+          <span class="btn-main"><span data-t="start">Start the check</span></span>
+          <span class="btn-sub" data-t="ctaSub"></span>
+        </button>
+      </section>
+
+      <section id="quiz" hidden aria-live="polite">
+        <div class="progress noprint" aria-hidden="true"><span id="bar"></span></div>
+        <div class="step" id="stepLabel"></div>
+        <div id="qbody"></div>
+        <div class="nav noprint">
+          <button class="link" id="back" type="button" data-t="back">Back</button>
+          <button class="btn" id="next" type="button" disabled>Next</button>
+        </div>
+      </section>
+
+      <section id="urgent" hidden>
+        <div class="urgent"><h2 data-t="urgTitle"></h2><p><strong data-t="urgBody"></strong></p><p data-t="urgAfter"></p></div>
+        <p class="noprint actions"><button class="btn btn--quiet" id="urgentBack" type="button" data-t="urgContinue"></button></p>
+      </section>
+
+      <section id="result" hidden aria-live="polite"></section>
+    </div>
+
+    <aside class="check-side noprint" aria-label="Progress">
+      <div class="side-card">
+        <p class="side-h" data-t="progH">Your progress</p>
+        <div class="prog-dial"><svg id="progRing" viewBox="0 0 120 120" aria-hidden="true"></svg><b id="progNum">0/10</b></div>
+      </div>
+      <div class="side-card">
+        <p class="side-h" data-t="readyH">Have these in mind</p>
+        <ul class="ready"><li data-t="r1"></li><li data-t="r2"></li><li data-t="r3"></li></ul>
+      </div>
+    </aside>
+  </div></section>
+
+  <section class="section section--tint read-guide"><div class="wrap">
+    <div class="head"><h2 class="h-section" data-t="rgH">How to read your result</h2><p data-t="rgSub"></p></div>
+    <div class="trio">
+      <div class="tile guide gd-flag"><span class="gd-dot"></span><h3 data-t="tier_flag"></h3><p data-t="g_flag"></p></div>
+      <div class="tile guide gd-warn"><span class="gd-dot"></span><h3 data-t="tier_warn"></h3><p data-t="g_warn"></p></div>
+      <div class="tile guide gd-ok"><span class="gd-dot"></span><h3 data-t="tier_ok"></h3><p data-t="g_ok"></p></div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ============================ CLINIC (English, clinician-facing) ============================ -->
+<div role="tabpanel" id="p-clinic" class="clinic-scope" aria-labelledby="t-clinic" hidden lang="en" dir="ltr">
+  <section class="page-top"><div class="wrap">
+    <p class="enonly" data-enonly><span data-t="enOnly"></span></p>
+    <p class="kicker">For clinics and school nurses</p>
+    <h1 class="display">Iron deficiency estimate from a CBC</h1>
+    <p class="by mono">Logistic regression · CDC NHANES 2017 to March 2020</p>
+    <p class="page-lede">For non-pregnant girls and women aged 12 to 49. A high score means order a ferritin test. It is not a diagnosis.</p>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <div class="head"><p class="kicker">Explore the tradeoff</p><h2 class="h-section">Move the cutoff, see what happens to 523 real people</h2>
+      <p>Every number below is a real count from the held-out NHANES test set, scored with the exact model this page runs. The app uses a cutoff of 0.392.</p></div>
+    <div class="explorer">
+      <div class="ex-controls">
+        <label for="cutRange" class="ex-lab">Cutoff <b id="cutVal" class="mono">0.392</b></label>
+        <input type="range" id="cutRange" min="0" max="1" step="1" value="0">
+        <button type="button" class="btn btn--quiet" id="cutReset">Back to the app's cutoff</button>
+        <div class="ex-stats">
+          <div class="ex-stat"><span>Sensitivity</span><b id="exSens"></b><small>of iron-deficient people flagged</small></div>
+          <div class="ex-stat"><span>Specificity</span><b id="exSpec"></b><small>of others correctly not flagged</small></div>
+          <div class="ex-stat"><span>PPV</span><b id="exPpv"></b><small>of flags that were right</small></div>
+          <div class="ex-stat"><span>NPV</span><b id="exNpv"></b><small>of all-clears that were right</small></div>
+        </div>
+      </div>
+      <div class="ex-vis">
+        <div class="cm" aria-live="polite">
+          <div class="cm-cell cm-tp"><b id="cmTP"></b><span>iron deficient, flagged</span></div>
+          <div class="cm-cell cm-fn"><b id="cmFN"></b><span>iron deficient, missed</span></div>
+          <div class="cm-cell cm-fp"><b id="cmFP"></b><span>not iron deficient, flagged</span></div>
+          <div class="cm-cell cm-tn"><b id="cmTN"></b><span>not iron deficient, cleared</span></div>
+        </div>
+        <figure class="roc"><svg id="rocSvg" viewBox="0 0 260 260" role="img" aria-label="ROC curve of the iron model on the test set"></svg>
+          <figcaption>ROC curve, test AUC <b id="rocAuc" class="mono"></b>. The dot is the cutoff you chose.</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="t1">
+      <h3>Typical values in the training data</h3>
+      <div class="table-scroll"><table id="t1Table"><thead><tr><th>Measure</th><th class="num">Iron deficient</th><th class="num">Not iron deficient</th></tr></thead><tbody></tbody></table></div>
+      <p class="src">Median (interquartile range), 2,614 non-pregnant girls and women 12 to 49, CDC NHANES 2017 to March 2020.</p>
+    </div>
+  </div></section>
+
+  <section class="section section--tint band-sec"><div class="wrap"><figure class="photo-band"><img data-src-from="table" alt="Two team members at the foundation's outreach table" lang="en"><figcaption lang="en">At our outreach table</figcaption></figure></div></section>
+
+  <section class="section check-sec"><div class="wrap clinic-grid">
+    <div class="check-panel">
+      <section id="clinic">
+        <div id="clinicStatus" class="status-line"></div>
+        <div class="cases" aria-label="Held-out NHANES test participants">
+          <p class="cases-h">Try a real held-out case <span>Six NHANES participants the model never saw in training. Tap one to fill the form.</span></p>
+          <div class="case-row" id="caseRow"></div>
+        </div>
+        <div class="labshot" id="labShot">
+          <div class="lab-row">
+            <input type="file" id="labInput" class="sr-only" accept="image/*">
+            <label class="btn btn--quiet cam-btn" for="labInput"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.6l1.3-2h5.2l1.3 2h1.6A2.5 2.5 0 0 1 20 8.5v8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5v-8Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><circle cx="12" cy="12.5" r="3.4" stroke="currentColor" stroke-width="1.9"/></svg><span>Photo of the lab report</span></label>
+            <p class="fine">Snap the CBC printout, then read the numbers from it while you type. HerTruth does not read or keep the photo. It stays on this device and is gone when you close the page.</p>
+          </div>
+          <figure class="lab-view" id="labView" hidden>
+            <img id="labImg" alt="Your photo of the lab report">
+            <div class="lab-ctl"><button type="button" class="btn btn--quiet" id="labZoom" aria-pressed="false">Bigger</button><button type="button" class="btn btn--quiet" id="labRm">Remove</button></div>
+          </figure>
+        </div>
+        <div id="clinicFields" class="cfields"></div>
+        <p class="actions"><button class="btn" id="runIron" type="button">Estimate</button><button class="btn btn--quiet" id="closeClinic" type="button">Back to home</button></p>
+        <div id="ironOut" aria-live="polite"></div>
+        <div id="ironTruth"></div>
+        <div id="ironWhy" class="why-bars"></div>
+      </section>
+    </div>
+    <dl class="metrics" aria-label="Model performance on held-out NHANES data">
+      <div class="metric"><dt>2,614</dt><dd>participants used to train and test</dd></div>
+      <div class="metric"><dt>0.889</dt><dd>test AUC, 95% CI 0.852 to 0.923</dd></div>
+      <div class="metric"><dt>81 / 75</dt><dd>% sensitivity / specificity at the cutoff</dd></div>
+      <div class="metric"><dt>95.0%</dt><dd>negative predictive value on the test set</dd></div>
+    </dl>
+  </div></section>
+
+
+  <section class="section section--tint"><div class="wrap">
+    <div class="head"><h2 class="h-section">Reading the score</h2><p>The cutoff is 0.392, chosen for about 81% sensitivity.</p></div>
+    <div class="trio">
+      <div class="tile guide gd-flag"><span class="gd-dot"></span><h3>At or above the cutoff</h3><p>Iron deficiency is likely. Order a ferritin test. The model learned the WHO label, ferritin below 15 ng/mL. On the test set, 40% of flagged patients were iron deficient (PPV 40.4%).</p></div>
+      <div class="tile guide gd-ok"><span class="gd-dot"></span><h3>Below the cutoff</h3><p>Less likely, not ruled out. On the test set, 95% of people below the cutoff were not iron deficient. Hemoglobin below 12 alone found only 53% of cases.</p></div>
+      <div class="tile guide gd-warn"><span class="gd-dot"></span><h3>When hs-CRP is high or blank</h3><p>Inflammation raises ferritin, so a low score with a very high hs-CRP is not reassuring. Left blank, hs-CRP is filled with the training median (1.57 mg/L), which lowered test AUC to 0.871.</p></div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ============================ HOW IT WORKS ============================ -->
+<div role="tabpanel" id="p-how" aria-labelledby="t-how" hidden lang="en" dir="ltr">
+  <section class="page-top"><div class="wrap">
+    <p class="enonly" data-enonly><span data-t="enOnly"></span></p>
+    <p class="kicker">How it works</p>
+    <h1 class="display">From your answers to the right blood test</h1>
+    <p class="page-lede">HerTruth asks about your bleeding history, applies a published screening rule, and gives you a summary your doctor can act on. Nothing is sent anywhere.</p>
+    <figure class="pt-photo"><img data-src-from="table2" alt="Team members at the foundation's outreach table" lang="en"></figure>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <ol class="flow">
+      <li><h2>You answer ten questions</h2><p>How long your periods last, whether you flood or miss activities, past anemia treatment, bleeding after procedures, and signs in the women in your family.</p></li>
+      <li><h2>The screen is applied on your device</h2><p>Any one of four validated criteria, or a blood loss chart score above 185, marks the screen positive.</p></li>
+      <li><h2>You get a summary</h2><p>One of three results, the answers that led to it, the tests to ask for, and a sentence you can say at your appointment.</p></li>
+    </ol>
+
+    <figure class="photo-band"><img data-src-from="un_emblem" alt="A team member at the United Nations" lang="en"><figcaption lang="en">At the United Nations</figcaption></figure>
+    <dl class="metrics metrics--wide" aria-label="Screening tool evidence">
+      <div class="metric"><dt>217</dt><dd>US women with heavy periods in the validation study</dd></div>
+      <div class="metric"><dt>89%</dt><dd>of those with a hemostatic abnormality found by the tool</dd></div>
+      <div class="metric"><dt>95%</dt><dd>found when the blood loss chart is added</dd></div>
+      <div class="metric"><dt>0</dt><dd>answers or lab values sent off the device</dd></div>
+    </dl>
+    <p class="src">Philipp and colleagues, American Journal of Obstetrics and Gynecology, 2011.</p>
+
+    <div class="acc">
+      <details open><summary>The four screening criteria</summary><div class="acc-body">
+        <p>The questions are adapted from the Philipp screening tool, which the CDC publishes for clinicians. The screen is positive if any one of these is true:</p>
+        <ol>
+          <li>Periods lasting 7 days or more, with flooding or missed daily activities</li>
+          <li>Past treatment for anemia</li>
+          <li>A blood relative diagnosed with a bleeding disorder</li>
+          <li>Heavy bleeding after a tooth extraction, childbirth, miscarriage or surgery</li>
+        </ol>
+        <p>In the validation study, 71% of the 217 women (154) had at least one hemostatic abnormality on lab testing. Most were platelet function defects (120 of 217). The tool found 89% of them. It was built to miss as few as possible, so it also flags many women whose tests come back normal.</p>
+        <p>HerTruth's first question is worded in plain language. The validated tool asks about flooding or gushing, or bleeding through a pad or tampon in 2 hours or less, with most periods.</p>
+      </div></details>
+
+      <details><summary>The pictorial blood loss chart (PBAC)</summary><div class="acc-body">
+        <p>The optional chart turns what you used in your last period into a score. A score of 100 or more counts as heavy bleeding (Higham, 1990). A score above 185 adds to the screen, which raised sensitivity to 95% in the Philipp study.</p>
+        <div class="table-scroll"><table id="pbacTable"><thead><tr><th><span class="sr-only">Picture</span></th><th>Item</th><th class="num">Points each</th></tr></thead><tbody></tbody></table></div>
+      </div></details>
+
+      <details><summary>Why it asks about mothers, sisters, aunts and grandmothers</summary><div class="acc-body">
+        <p>Bleeding disorders are inherited and often never named in a family. A mother who had a transfusion after childbirth, or an aunt who had a hysterectomy young because of bleeding, can be a clue. These answers go into the doctor summary. They do not change the validated score, because the family questions have not been validated.</p>
+      </div></details>
+
+      <details><summary>The iron model for clinics</summary><div class="acc-body">
+        <p>A logistic regression trained on CDC NHANES 2017 to March 2020, non-pregnant girls and women aged 12 to 49. The label is ferritin below 15 ng/mL, the WHO cutoff. Ferritin builds the label and is never an input.</p>
+        <div class="table-scroll"><table><thead><tr><th>Input</th><th>Unit</th><th>Why it helps</th></tr></thead><tbody>
+          <tr><td>Age</td><td>years</td><td>Risk changes across the teen and adult years</td></tr>
+          <tr><td>Hemoglobin</td><td>g/dL</td><td>Falls once iron runs low</td></tr>
+          <tr><td>MCV</td><td>fL</td><td>Red cells shrink in iron deficiency</td></tr>
+          <tr><td>RDW</td><td>%</td><td>Cell sizes spread out early, often before anemia</td></tr>
+          <tr><td>RBC count</td><td>million/µL</td><td>Separates iron deficiency from thalassemia trait patterns</td></tr>
+          <tr><td>Platelets</td><td>1000/µL</td><td>Often rise in iron deficiency</td></tr>
+          <tr><td>hs-CRP (optional)</td><td>mg/L</td><td>Adjusts for inflammation, which raises ferritin</td></tr>
+        </tbody></table></div>
+      </div></details>
+
+      <details><summary>Performance of the iron model</summary><div class="acc-body">
+        <p>Of 2,656 girls and women in the cohort, 461 (17.4%) were iron deficient, and 221 of them had hemoglobin of 12 or higher, so an anemia check alone would have missed them. The 2,614 with complete data were split into training and test sets.</p>
+        <div class="table-scroll"><table><thead><tr><th>Measure</th><th class="num">Result</th></tr></thead><tbody>
+          <tr><td>Logistic regression, 5-fold cross-validated AUC</td><td class="num">0.905 ± 0.018</td></tr>
+          <tr><td>Logistic regression, test AUC (the app's model)</td><td class="num">0.889 (0.852 to 0.923)</td></tr>
+          <tr><td>Sensitivity / specificity at cutoff 0.392</td><td class="num">81.3% / 74.8%</td></tr>
+          <tr><td>PPV / NPV</td><td class="num">40.4% / 95.0%</td></tr>
+          <tr><td>Hemoglobin below 12 alone</td><td class="num">52.7% / 91.2%</td></tr>
+          <tr><td>Shuffled-label control (leak check)</td><td class="num">AUC 0.492</td></tr>
+        </tbody></table></div>
+      </div></details>
+
+      <details><summary>Limits</summary><div class="acc-body">
+        <ul>
+          <li>HerTruth is not a medical device and does not diagnose anything.</li>
+          <li>Von Willebrand factor levels can read falsely normal during pregnancy, on estrogen-containing birth control, or during illness or stress, so a doctor may repeat the tests.</li>
+          <li>The iron model has only been tested on NHANES data.</li>
+          <li>NHANES releases pregnancy status only for women aged 20 to 44, so pregnant girls and women outside that age range could not be removed from the training data.</li>
+          <li>All 15 translations are first drafts awaiting review by native-speaking clinicians. English is the reference version.</li>
+        </ul>
+      </div></details>
+    </div>
+
+    <p class="center-cta"><button class="btn btn--big js-start" type="button"><span class="btn-main">Start the check</span><span class="btn-sub">About 4 minutes</span></button></p>
+  </div></section>
+</div>
+
+<!-- ============================ QUESTIONS ============================ -->
+<div role="tabpanel" id="p-faq" aria-labelledby="t-faq" hidden>
+  <section class="page-top"><div class="wrap">
+    <p class="kicker" data-t="fqK">Questions</p>
+    <h1 class="display" data-t="fqH">Straight answers</h1>
+    <p class="page-lede" data-t="fqLede"></p>
+    <figure class="pt-photo"><img data-src-from="team3" alt="Three team members in The Factor Foundation shirts at the volleyball fundraiser" lang="en"></figure>
+  </div></section>
+
+  <section class="section section--tint"><div class="wrap signs">
+    <div class="signs-head">
+      <p class="kicker" data-t="sgK">Quick self-check</p>
+      <h2 class="h-section" id="sgHead" data-t="sgH">Which of these sound like your period?</h2>
+      <p data-t="sgP">Tap any that fit. Nothing is saved.</p>
+    </div>
+    <div class="signs-grid" role="group" aria-labelledby="sgHead">
+      <button type="button" class="sign" aria-pressed="false"><span class="sign-box" aria-hidden="true"></span><span data-t="sg1"></span></button>
+      <button type="button" class="sign" aria-pressed="false"><span class="sign-box" aria-hidden="true"></span><span data-t="sg2"></span></button>
+      <button type="button" class="sign" aria-pressed="false"><span class="sign-box" aria-hidden="true"></span><span data-t="sg3"></span></button>
+      <button type="button" class="sign" aria-pressed="false"><span class="sign-box" aria-hidden="true"></span><span data-t="sg4"></span></button>
+      <button type="button" class="sign" aria-pressed="false"><span class="sign-box" aria-hidden="true"></span><span data-t="sg5"></span></button>
+    </div>
+    <div class="signs-out" aria-live="polite">
+      <div class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <p class="meter-count" id="sgCount"></p>
+      <p class="meter-msg" id="sgMsg"></p>
+      <button type="button" class="btn js-start" id="sgGo"><span data-t="sgGo">Take the full check</span></button>
+    </div>
+  </div></section>
+
+  <section class="section band-sec"><div class="wrap"><figure class="photo-band"><img data-src-from="jerseys" alt="Two team members in numbered foundation shirts at the fundraiser" lang="en"><figcaption lang="en">Volleyball fundraiser</figcaption></figure></div></section>
+
+  <section class="section ring-sec"><div class="wrap">
+    <figure class="cycle" aria-labelledby="ringQ">
+        <p class="cycle-q" id="ringQ" data-t="ringQ">How many days does your period usually last?</p>
+        <div class="cycle-dial">
+          <svg id="ring" viewBox="0 0 300 300" role="img" aria-describedby="ringCap"></svg>
+          <div class="cycle-center" aria-live="polite"><b id="ringN">5</b><span id="ringUnit" data-t="ringDays">days</span></div>
+        </div>
+        <div class="cycle-ctl">
+          <button type="button" class="round" id="ringMinus" data-aria="ringLess" aria-label="Fewer days">&minus;</button>
+          <input type="range" id="ringRange" min="2" max="12" value="5" data-aria="ringQ" aria-label="How many days does your period usually last?">
+          <button type="button" class="round" id="ringPlus" data-aria="ringMore" aria-label="More days">+</button>
+        </div>
+        <p class="cycle-cap" id="ringCap"></p>
+        <div class="cycle-legend"><span class="lg lg-p" data-t="ringLegendP">Period days</span><span class="lg lg-7" data-t="ringLegend7">Past day 7</span></div>
+        <figcaption class="cycle-note" data-t="ringNote">A preview only. Nothing here is saved or scored.</figcaption>
+      </figure>
+  </div></section>
+
+  <section class="section"><div class="wrap realdata">
+    <div class="head">
+      <p class="kicker" data-t="rdK">Built on real CDC data</p>
+      <h2 class="h-section" data-t="rdH"></h2>
+      <p data-t="rdP"></p>
+    </div>
+    <div class="rd-grid">
+      <dl class="funnel">
+        <div class="fn"><dt id="rdN1"></dt><dd data-t="rdC1l"></dd></div>
+        <div class="fn"><dt id="rdN2"></dt><dd data-t="rdC2l"></dd></div>
+        <div class="fn fn--hot"><dt id="rdN3"></dt><dd data-t="rdC3l"></dd></div>
+      </dl>
+      <div class="dots-card">
+        <p class="side-h" data-t="rdDotsH"></p>
+        <div class="seg" role="group">
+          <button type="button" id="rdHgbBtn" aria-pressed="false"><span data-t="rdHgb">Hemoglobin below 12</span></button>
+          <button type="button" id="rdModelBtn" aria-pressed="true"><span data-t="rdModel">HerTruth iron model</span></button>
+        </div>
+        <div class="dots" id="rdDots" aria-hidden="true"></div>
+        <p class="dots-count" id="rdCount" aria-live="polite"></p>
+        <p class="dots-legend"><span class="dl dl-f" data-t="rdFoundL">Found</span><span class="dl dl-m" data-t="rdMissedL">Missed</span></p>
+        <p class="fine" data-t="rdNote"></p>
+        <button type="button" class="btn btn--quiet" data-goto="t-clinic" data-t="rdLink">Explore the model</button>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="section section--tint band-sec"><div class="wrap"><figure class="photo-band"><img data-src-from="un_pair" alt="A team member with a guest at the United Nations" lang="en"><figcaption lang="en">At the United Nations</figcaption></figure></div></section>
+
+  <section class="section section--tint"><div class="wrap">
+    <div class="head"><p class="kicker" data-t="mfK">Myth or fact</p><h2 class="h-section" data-t="mfH">Tap a card to flip it</h2></div>
+    <div class="flips">
+      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf1q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf1a"></span></span></span></button>
+      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf2q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf2a"></span></span></span></button>
+      <button type="button" class="flip" aria-pressed="false" data-v="fact"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf3q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfFact"></span><span class="flip-a" data-t="mf3a"></span></span></span></button>
+      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf4q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf4a"></span></span></span></button>
+    </div>
+  </div></section>
+
+  <section class="section"><div class="wrap faq-grid">
+    <div class="faq-list">
+      <details class="faq" open><summary data-t="fq1q"></summary><div class="faq-body"><p data-t="fq1a"></p></div></details>
+      <details class="faq"><summary data-t="fq2q"></summary><div class="faq-body"><p data-t="fq2a"></p></div></details>
+      <details class="faq"><summary data-t="fq3q"></summary><div class="faq-body"><p data-t="fq3a"></p></div></details>
+      <details class="faq"><summary data-t="fq4q"></summary><div class="faq-body"><p data-t="fq4a"></p><p data-t="fq4b"></p></div></details>
+      <details class="faq"><summary data-t="fq5q"></summary><div class="faq-body"><p data-t="fq5a"></p></div></details>
+      <details class="faq"><summary data-t="fq6q"></summary><div class="faq-body"><p data-t="fq6a"></p></div></details>
+      <details class="faq"><summary data-t="fq7q"></summary><div class="faq-body"><p data-t="fq7a"></p></div></details>
+      <details class="faq"><summary data-t="fq8q"></summary><div class="faq-body"><p data-t="fq8a"></p></div></details>
+      <details class="faq"><summary data-t="fq9q"></summary><div class="faq-body"><p data-t="fq9a"></p></div></details>
+      <details class="faq"><summary data-t="fq10q"></summary><div class="faq-body"><p data-t="fq10a"></p></div></details>
+    </div>
+
+    <aside class="help-card" id="get-help" aria-labelledby="ghH">
+      <h2 id="ghH" data-t="ghH">Where to get help</h2>
+      <div class="gh-item gh-now"><h3 data-t="ghNowH"></h3><p data-t="ghNowP"></p></div>
+      <div class="gh-item"><h3 data-t="ghWeekH"></h3><p data-t="ghWeekP"></p></div>
+      <div class="gh-item"><h3 data-t="ghSpecH"></h3><p data-t="ghSpecP"></p>
+        <p class="gh-links"><a href="https://www.cdc.gov/hemophilia/treatment/treatment-centers.html" target="_blank" rel="noopener noreferrer"><span data-t="ghL1"></span> &#8599;</a><a href="https://www.bleeding.org/community-resources/resources-near-you" target="_blank" rel="noopener noreferrer"><span data-t="ghL2"></span> &#8599;</a></p></div>
+    </aside>
+  </div></section>
+</div>
+
+<!-- ============================ FIND CARE (live map, only after a search) ============================ -->
+<div role="tabpanel" id="p-find" aria-labelledby="t-find" hidden>
+  <section class="page-top"><div class="wrap">
+    <p class="kicker" data-t="ghH">Where to get help</p>
+    <h1 class="display" data-t="fdH">Find care near you</h1>
+    <p class="page-lede" data-t="fdP"></p>
+    <figure class="pt-photo"><img data-src-from="outreach" alt="Two team members at the foundation's awareness table, talking with a visitor" lang="en"></figure>
+  </div></section>
+  <section class="section"><div class="wrap finder">
+    <p class="help-urgent"><b>!</b><span data-t="fdEr"></span></p>
+    <form class="fd-form" id="fdForm">
+      <label class="sr-only" for="fdQ" data-t="fdIn">ZIP or postal code, or city</label>
+      <input id="fdQ" type="search" enterkeyhint="search" autocomplete="postal-code" data-ph="fdIn" required>
+      <button class="btn" type="submit"><span data-t="fdBtn">Search</span></button>
+      <button class="btn btn--quiet" type="button" id="fdLoc"><span data-t="fdLoc">Use my location</span></button>
+    </form>
+    <p class="fd-status" id="fdStatus" aria-live="polite"></p>
+    <div class="fd-map" id="fdMap" hidden></div>
+    <ol class="fd-list" id="fdList"></ol>
+    <div class="fd-spec">
+      <h2 class="h-section" data-t="fdSpec">Bleeding disorder specialists</h2>
+      <p class="gh-links"><a href="https://www.cdc.gov/hemophilia/treatment/treatment-centers.html" target="_blank" rel="noopener noreferrer"><span data-t="ghL1"></span> &#8599;</a>
+        <a href="https://www.bleeding.org/community-resources/resources-near-you" target="_blank" rel="noopener noreferrer"><span data-t="ghL2"></span> &#8599;</a>
+        <a href="https://wfh.org" target="_blank" rel="noopener noreferrer" lang="en">World Federation of Hemophilia: treatment centres worldwide &#8599;</a></p>
+    </div>
+    <p class="src" lang="en">Map and places &copy; OpenStreetMap contributors. Opening hours come from OpenStreetMap and can be missing or out of date, so call before you go.</p>
+  </div></section>
+</div>
+
+<!-- ============================ ABOUT ============================ -->
+<div role="tabpanel" id="p-about" aria-labelledby="t-about" hidden lang="en" dir="ltr">
+  <section class="page-top"><div class="wrap">
+    <p class="enonly" data-enonly><span data-t="enOnly"></span></p>
+    <p class="kicker">About</p>
+    <h1 class="display">A check built by students, for the people quizzes miss</h1>
+    <p class="page-lede">HerTruth was founded by Nilakshya Rajora and Dev Amin, in partnership with The Factor Foundation, a youth-led 501(c)(3) nonprofit in New Jersey. It is our entry in the 2026 Congressional App Challenge.</p>
+    <figure class="pt-photo"><img data-src-from="serve" alt="A player serving at the foundation's volleyball fundraiser" lang="en"></figure>
+  </div></section>
+
+  <section class="section"><div class="wrap about-grid">
+    <div class="about-text">
+      <h2 class="h-section">Why we built it</h2>
+      <p>Bleeding disorders are usually told as a hemophilia story, about boys and men. Von Willebrand disease is more common and affects women as often as men. In women it hides inside something people are taught to put up with: a heavy period.</p>
+      <p>Screening questions that doctors trust already exist. They sit in clinical papers, in English, written for clinicians. We moved them onto a phone, wrote them in plain words, translated them into the 16 languages spoken in New Jersey homes, and ended with a summary that tells a patient exactly which tests to ask for.</p>
+      <p>The clinic tool came from the same idea. School nurses already see blood counts. A small model trained on national CDC data can point out who needs a ferritin test, before anemia shows up.</p>
+    </div>
+    <div class="about-facts">
+      <div class="af"><span class="af-k">Founded</span><span class="af-v">August 2025</span></div>
+      <div class="af"><span class="af-k">Founders</span><span class="af-v">Nilakshya Rajora &amp; Dev Amin</span></div>
+      <div class="af"><span class="af-k">Partner</span><span class="af-v">The Factor Foundation</span></div>
+      <div class="af"><span class="af-k">Based in</span><span class="af-v">New Jersey</span></div>
+      <div class="af"><span class="af-k">Languages</span><span class="af-v">16</span></div>
+      <div class="af"><span class="af-k">Runs on</span><span class="af-v">Your phone. No server.</span></div>
+    </div>
+  </div></section>
+
+  <section class="section section--tint"><div class="wrap">
+    <div class="head"><h2 class="h-section">Built in partnership with The Factor Foundation</h2><p>Two students lead HerTruth. A youth-led nonprofit gives it a home and brings it to the people who need it.</p></div>
+    <div class="partner">
+      <div class="pcard"><h3>What Nilakshya and Dev lead</h3><p>The research behind HerTruth, the plain-language check, the iron model trained and tested in our notebook on CDC data, and the testing of every version of the app.</p></div>
+      <div class="pcard pcard--ff"><h3>What The Factor Foundation brings</h3><p>A nonprofit home for the project, and the outreach that puts it in front of families: awareness booths, fundraisers and youth advocacy events.</p></div>
+    </div>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <div class="head"><h2 class="h-section">Out in the community</h2><p>The students behind HerTruth also staff the foundation's booths and fundraisers.</p></div>
+    <div class="gallery6">
+      <figure class="shot"><img data-name="table" src="{{IMG:table}}" alt="Two team members at the foundation's outreach table" width="900" height="600" decoding="async"><figcaption>At our outreach table</figcaption></figure>
+      <figure class="shot"><img data-name="signup2" src="{{IMG:signup2}}" alt="Visitors talking with team members at the foundation's booth" width="640" height="853" decoding="async"><figcaption>Visitors at the booth</figcaption></figure>
+      <figure class="shot"><img data-name="un_session" src="{{IMG:un_session}}" alt="A team member seated at a youth participation session at the United Nations" width="640" height="853" decoding="async"><figcaption>Youth session at the United Nations</figcaption></figure>
+      <figure class="shot"><img data-name="jerseys" src="{{IMG:jerseys}}" alt="Two team members in numbered foundation shirts at the fundraiser" width="820" height="567" decoding="async"><figcaption>Volleyball fundraiser</figcaption></figure>
+      <figure class="shot"><img data-name="un_pair" src="{{IMG:un_pair}}" alt="A team member with a guest at the United Nations" width="640" height="853" decoding="async"><figcaption>At the United Nations</figcaption></figure>
+      <figure class="shot"><img data-name="rally" src="{{IMG:rally}}" alt="Players in a game at the foundation's volleyball fundraiser" width="820" height="547" decoding="async"><figcaption>Game time</figcaption></figure>
+    </div>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <div class="head"><h2 class="h-section">What would help most</h2><p>HerTruth is a first version. These are the gaps we cannot close alone.</p></div>
+    <ol class="asks">
+      <li><h3>Clinicians who speak our languages</h3><p>Every translated line, in all 15 languages beyond English, needs a native-speaking clinician's review before public launch.</p></li>
+      <li><h3>Clinics with lab data</h3><p>The iron model has only been tested on NHANES. A clinic that can test it on its own records would tell us if it holds up.</p></li>
+      <li><h3>Anyone who shares it</h3><p>A school nurse, a pediatrician's office, a sister. The check only helps the people who find it.</p></li>
+    </ol>
+  </div></section>
+
+  <section class="section section--tint" id="contact-card"><div class="wrap">
+    <div class="head"><h2 class="h-section">Get in touch</h2><p>For questions about HerTruth, the foundation, or working together.</p></div>
+    <div class="contacts">
+      <div class="contact"><span class="c-k">Foundation email</span><span class="c-v">thefactorfoundation@gmail.com</span><button class="c-copy" type="button" data-copy="thefactorfoundation@gmail.com">Copy</button></div>
+      <div class="contact"><span class="c-k">Nilakshya Rajora, co-founder</span><span class="c-v">rajoranilakshya@gmail.com</span><button class="c-copy" type="button" data-copy="rajoranilakshya@gmail.com">Copy</button></div>
+      <a class="contact" href="https://www.instagram.com/the_factorfoundation" target="_blank" rel="noopener noreferrer"><span class="c-k">Instagram</span><span class="c-v">@the_factorfoundation</span><span class="c-go" aria-hidden="true">&#8599;</span></a>
+      <a class="contact" href="https://www.linkedin.com/company/the-factor-foundation" target="_blank" rel="noopener noreferrer"><span class="c-k">LinkedIn</span><span class="c-v">The Factor Foundation</span><span class="c-go" aria-hidden="true">&#8599;</span></a>
+    </div>
+  </div></section>
+</div>
+
+</main>
+
+<footer class="site-foot noprint"><div class="wrap">
+  <div class="foot-top">
+    <div class="foot-brand">
+      <span class="brand foot-b"><svg class="brand-mark" width="34" height="34" aria-hidden="true"><use href="#mark"/></svg><span class="brand-word">Her<b>Truth</b></span></span>
+      <p data-t="footBrand"></p>
+    </div>
+    <div class="foot-links">
+      <button class="foot-link" type="button" data-goto="t-faq" data-focus="get-help" data-t="footHelp">Get help</button>
+      <button class="foot-link" type="button" data-goto="t-how" data-t="footHow">How it works</button>
+      <button class="foot-link" type="button" data-goto="t-about" data-focus="contact-card" data-t="footContact">Contact</button>
+    </div>
+  </div>
+  <details class="foot-details">
+    <summary>Sources and research notice</summary>
+    <div class="foot-body">
+      <p data-t="footer"></p>
+      <p>Evidence cited on this site. Each was checked against the paper or page itself on October 24, 2026.</p>
+      <ul class="cites">
+        <li>Philipp CS, Faiz A, Heit JA, et al. Evaluation of a screening tool for bleeding disorders in a US multisite cohort of women with menorrhagia. Am J Obstet Gynecol. 2011;204(3):209.e1-209.e7. doi:10.1016/j.ajog.2010.10.897</li>
+        <li>Philipp CS, Faiz A, Dowling NF, et al. Development of a screening tool for identifying women with menorrhagia for hemostatic evaluation. Am J Obstet Gynecol. 2008:163.e1-163.e8 (as cited by the CDC screening tool).</li>
+        <li>CDC, Division of Blood Disorders. Screening Tool for Identifying Women with Menorrhagia for Testing and Evaluation for Underlying Bleeding Disorders.</li>
+        <li>Zia A, Stanek J, Christian-Rancy M, et al. Utility of a screening tool for haemostatic defects in a multicentre cohort of adolescents with heavy menstrual bleeding. Haemophilia. 2018;24(6):957-963. doi:10.1111/hae.13609</li>
+        <li>James PD, Connell NT, Ameer B, et al. ASH ISTH NHF WFH 2021 guidelines on the diagnosis of von Willebrand disease. Blood Adv. 2021;5(1):280-300.</li>
+        <li>Perez Botero J. von Willebrand disease and heavy menstrual bleeding: when and how to test. Hematology Am Soc Hematol Educ Program. 2024:376-381. doi:10.1182/hematology.2024000563</li>
+        <li>Higham JM, O'Brien PM, Shaw RW. Assessment of menstrual blood loss using a pictorial chart. Br J Obstet Gynaecol. 1990;97(8):734-739.</li>
+        <li>Mayo Clinic. Heavy menstrual bleeding: symptoms and causes. Updated August 29, 2026. mayoclinic.org</li>
+        <li>WHO guideline on use of ferritin concentrations to assess iron status in individuals and populations. World Health Organization; 2020.</li>
+        <li>CDC National Center for Health Statistics. NHANES 2017 to March 2020 pre-pandemic files P_DEMO, P_CBC, P_FERTIN and P_HSCRP. The copies used here are byte-for-byte identical to the files on cdc.gov.</li>
+      </ul>
+      <p>Iron model: logistic regression on CDC NHANES 2017 to March 2020. Runs entirely on your device. No entered data leaves this page.</p>
+    </div>
+  </details>
+  <p class="copy-line">© 2026 The Factor Foundation · thefactorfoundation@gmail.com</p>
+</div></footer>
+
+<!-- app tab bar (bottom). The check is the raised drop in the middle; it opens full screen. -->
+<nav class="tabs appbar noprint" role="tablist" aria-label="Sections">
+  <button role="tab" id="t-home" aria-controls="p-home" aria-selected="true" data-hash="home"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1v-8.5Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span data-t="nav_home">Home</span></button>
+  <button role="tab" id="t-how" aria-controls="p-how" aria-selected="false" tabindex="-1" data-hash="how"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="2.5" stroke="currentColor" stroke-width="1.9"/><path d="M8.5 8.5h7M8.5 12h7M8.5 15.5h4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg><span data-t="nav_how">How it works</span></button>
+  <button role="tab" id="t-check" class="tab-check" aria-controls="p-check" aria-selected="false" tabindex="-1" data-hash="check"><span class="tab-drop" aria-hidden="true"><svg width="30" height="30"><use href="#mark"/></svg></span><span data-t="nav_check">Take the check</span></button>
+  <button role="tab" id="t-faq" aria-controls="p-faq" aria-selected="false" tabindex="-1" data-hash="questions"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.5 6.5A2.5 2.5 0 0 1 7 4h10a2.5 2.5 0 0 1 2.5 2.5v7A2.5 2.5 0 0 1 17 16h-6l-4.5 4v-4H7a2.5 2.5 0 0 1-2.5-2.5v-7Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M10 8.6a2 2 0 1 1 2.6 1.9c-.4.2-.6.5-.6.9v.4M12 13.6h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span data-t="nav_faq">Questions</span></button>
+  <button role="tab" id="t-clinic" aria-controls="p-clinic" aria-selected="false" tabindex="-1" data-hash="clinic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9.5 4h5v5.5H20v5h-5.5V20h-5v-5.5H4v-5h5.5V4Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span data-t="nav_clinic">For clinics</span></button>
+  <button role="tab" id="t-find" class="tab-hidden" aria-controls="p-find" aria-selected="false" tabindex="-1" data-hash="care"><span data-t="fdH">Find care near you</span></button>
+  <button role="tab" id="t-about" aria-controls="p-about" aria-selected="false" tabindex="-1" data-hash="about"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="3.2" stroke="currentColor" stroke-width="1.9"/><circle cx="16.5" cy="10" r="2.6" stroke="currentColor" stroke-width="1.9"/><path d="M3.5 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M14.5 15c2.6-.4 5 1 5.8 4.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg><span data-t="nav_about">About</span></button>
+</nav>
+
+<!-- the drop in the corner: opens "Where to get help" -->
+<button type="button" class="drop-fab noprint" id="dropFab" data-goto="t-find" data-aria="footHelp" aria-label="Get help">
+  <span class="drop-ring" aria-hidden="true"></span>
+  <svg width="28" height="34" viewBox="0 0 40 48" aria-hidden="true"><defs><linearGradient id="dropG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF9DB8"/><stop offset="1" stop-color="#D93D69"/></linearGradient></defs><path d="M20 3C13 13 7 20 7 28a13 13 0 0 0 26 0C33 20 27 13 20 3Z" fill="url(#dropG)"/><path d="M13.5 29a7 7 0 0 0 4.5 6" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" fill="none" opacity=".8"/></svg>
+  <span class="drop-drip" aria-hidden="true"></span>
+</button>

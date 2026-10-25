@@ -1,0 +1,22 @@
+{
+  "name": "BleedCheck iron arm",
+  "data": "NHANES 2017-March 2020",
+  "cohort": "non-pregnant females 12-49",
+  "label": "ferritin < 15 ng/mL",
+  "label_source_excluded": true,
+  "features": [
+    "RIDAGEYR",
+    "LBXHGB",
+    "LBXMCVSI",
+    "LBXRDW",
+    "LBXRBCSI",
+    "LBXPLTSI",
+    "LBXHSCRP"
+  ],
+  "n": 2614,
+  "prevalence": 0.174,
+  "test_auc": 0.882,
+  "shuffled_auc": 0.492,
+  "survey_weights": "not used (prediction, not prevalence)",
+  "not_for": "Diagnosis. High score = ask for a ferritin test."
+}

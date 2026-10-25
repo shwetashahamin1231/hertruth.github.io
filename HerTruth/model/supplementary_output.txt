@@ -1,0 +1,31 @@
+MCH-like columns in P_CBC: ['LBXMCVSI', 'LBXMC', 'LBXMCHSI'] | LBXMC1SI present: False
+Modeling cohort n=2614, ID=455 (17.4%) | train 2091 (ID 364) | test 523 (ID 91)
+
+TABLE 1, median (IQR)
+variable | iron deficient (n=455) | not iron deficient (n=2159)
+Age, y | 29.0 (18.0-39.5) | 29.0 (19.0-39.0)
+Hemoglobin, g/dL | 11.9 (10.9-12.8) | 13.4 (12.8-14.0)
+MCV, fL | 81.4 (74.5-85.8) | 88.1 (84.7-91.0)
+RDW, % | 15.4 (14.2-17.1) | 13.3 (12.9-14.0)
+RBC, million/uL | 4.5 (4.2-4.7) | 4.5 (4.3-4.8)
+Platelets, 1000/uL | 289.0 (249.0-344.0) | 268.0 (230.0-310.0)
+hs-CRP, mg/L | 1.2 (0.5-3.3) | 1.7 (0.6-4.8)
+Ferritin, ng/mL | 9.6 (6.8-12.4) | 44.7 (28.2-75.2)
+Hgb < 12: iron deficient 235/455 ; not iron deficient 162/2159
+Age 12-19: n=761, iron deficient 149
+
+Reproduced: RF test AUC 0.882 | LR test AUC 0.889 | cutoff 0.392
+LR at cutoff: TP 74 FN 17 FP 109 TN 323 | sens 0.813 spec 0.748 PPV 0.404 NPV 0.950
+Hemoglobin < 12 alone (test set): TP 48 FN 43 FP 38 TN 394 | sens 0.527 spec 0.912
+CBC-only LR (no hs-CRP): CV AUC 0.883 +/- 0.023 | test AUC 0.873 | cutoff 0.372 | sens 0.824 spec 0.715
+App with hs-CRP left blank (median 1.57): test AUC 0.871 | sens 0.857 spec 0.688
+
+Bootstrap 95% CIs (2000 resamples of the test set, seed 42):
+  RF test AUC: 0.838 to 0.920
+  LR test AUC: 0.852 to 0.923
+  LR sensitivity at cutoff: 0.729 to 0.892
+  LR specificity at cutoff: 0.707 to 0.790
+  CBC-only LR test AUC: 0.835 to 0.907
+  LR AUC minus CBC-only AUC: 0.002 to 0.032
+
+LR standardized coefficients: {'RIDAGEYR': -0.041, 'LBXHGB': -0.97, 'LBXMCVSI': -0.5, 'LBXRDW': 1.161, 'LBXRBCSI': -0.272, 'LBXPLTSI': 0.166, 'LBXHSCRP': -1.305}

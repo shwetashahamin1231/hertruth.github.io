@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "hertruth-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8650", "--bind", "127.0.0.1", "--directory", "HerTruth/web"],
+      "port": 8650
+    }
+  ]
+}
