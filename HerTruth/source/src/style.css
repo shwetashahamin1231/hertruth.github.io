@@ -164,7 +164,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .help-say{display:block;transition:opacity .45s ease,transform .45s cubic-bezier(.2,.8,.2,1),filter .45s ease}
 .help-say.out{opacity:0;transform:translateY(-.35em);filter:blur(6px)}
 .help-say.pre{opacity:0;transform:translateY(.35em);filter:blur(6px);transition:none}
-.help-say[dir="rtl"]{font-family:system-ui,sans-serif;letter-spacing:0}
+.help-say[dir="rtl"]{font-family:"HT Script",system-ui,sans-serif;letter-spacing:0}
 .help-lang{font-family:var(--mono);font-size:.82rem;color:var(--band-muted);margin:0 0 8px;display:flex;gap:12px;align-items:center}
 .help-lang #helpLangName{color:var(--sun);font-weight:600}
 .help-count{opacity:.7}
