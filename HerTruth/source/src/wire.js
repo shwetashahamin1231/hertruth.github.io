@@ -431,6 +431,37 @@ document.addEventListener("click", e => {
     document.documentElement.addEventListener("mouseleave", () => g.classList.remove("on"));
   } }
 
+/* ================= v8: after the check, go straight to Find help =================
+   When a result is ready the app opens Find help, with the result headline on top and a button back to the full
+   summary. A flag preselects hemophilia treatment centers, other results gynecologists. Scoring is untouched. */
+{ let sent = false;
+  const res = $("#result");
+  const esc = v => String(v).replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"})[c]);
+  const banner = () => {
+    const v = $("#resCard .verdict"), top = $("#p-find .pt-text"); if (!v || !top) return;
+    let b = $("#fdRes");
+    if (!b){ b = document.createElement("div"); b.id = "fdRes"; b.className = "fd-res noprint"; top.prepend(b); }
+    const cls = ["flag", "warn", "ok"].find(c => v.classList.contains(c)) || "ok";
+    b.className = "fd-res noprint " + cls;
+    b.innerHTML = `<b>${esc(v.querySelector("h2") ? v.querySelector("h2").textContent : "")}</b>
+      <button type="button" class="btn btn--quiet" id="fdBack"><span>${esc(t("resMore"))}</span></button>`;
+    $("#fdBack").onclick = () => { selectTab("t-check"); const m = $("#resMore"); if (m && $("#result").classList.contains("brief")) m.click(); };
+  };
+  if (res) new MutationObserver(() => { if (res.hidden){ sent = false; const b = $("#fdRes"); if (b) b.remove(); } })
+    .observe(res, {attributes: true, attributeFilter: ["hidden"]});
+  const base = window.__bcResBrief;
+  window.__bcResBrief = () => {
+    if (base) base();
+    if (!res || res.hidden || !$("#resCard .verdict")) return;
+    banner();
+    if (sent) return; sent = true;
+    const v = $("#resCard .verdict");
+    selectTab("t-find");
+    const chip = document.querySelector(`.fd-type[data-q="${v.classList.contains("flag") ? "hemophilia treatment center" : "gynecologist"}"]`);
+    if (chip) chip.click();
+  };
+}
+
 /* per-language refresh for widgets */
 window.__bcStatic = () => {
   document.querySelectorAll("[data-aria]").forEach(e => e.setAttribute("aria-label", t(e.dataset.aria)));

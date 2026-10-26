@@ -536,3 +536,9 @@ main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
 @media (min-width:900px){.page-top .wrap:has(.pt-pic){grid-template-columns:minmax(0,1fr) minmax(260px,400px);column-gap:48px}}
 @media (max-width:899px){.pt-pic{max-width:100%}.pt-pic img{aspect-ratio:5/2}.pt-pic figcaption{display:none}}
 @media print{.pt-pic{display:none}}
+
+/* result headline on top of Find help after the check */
+.fd-res{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:0 0 18px;padding:14px 16px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line-2);border-inline-start:6px solid var(--ok);box-shadow:var(--shadow-s)}
+.fd-res.flag{border-inline-start-color:var(--flag)}.fd-res.warn{border-inline-start-color:var(--warn)}
+.fd-res b{flex:1 1 220px;font-size:1.05rem;color:var(--ink)}
+.fd-res .btn{min-height:44px}
