@@ -612,3 +612,17 @@ main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
 /* ---------- home: no badge, counter or pause button above the help line ---------- */
 #p-home .hero-chip,#helpCount,#helpPause{display:none!important}
 [role="tabpanel"]:not(#p-home) .h-section{text-align:center}
+
+/* the way back to the full result: big and red */
+.fd-res{flex-direction:column;align-items:stretch;gap:14px;padding:18px}
+.fd-res b{font-size:1.25rem;flex:none}
+.fd-res .fd-back{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:64px;padding:16px 22px;
+  border:0;border-radius:18px;background:#B4232C;color:#fff;font-size:1.25rem;font-weight:800;box-shadow:0 12px 26px -12px rgba(180,35,44,.7);cursor:pointer}
+.fd-res .fd-back:hover{background:#961C24}
+.fd-res .fd-back:focus-visible{outline:3px solid #2E2430;outline-offset:3px}
+/* Find help has no banner photo, so no tint and dark title text */
+#p-find .page-top::after{content:none}
+#p-find .page-top :is(h1,.kicker,.enonly){color:inherit;text-shadow:none}
+#p-find .page-top h1{color:var(--ink)}
+#p-find .page-top{background:var(--paper-2)}
+#p-find .pt-text{width:min(100%,720px)}

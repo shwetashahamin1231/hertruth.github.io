@@ -1274,6 +1274,20 @@ main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
 #p-home .hero-chip,#helpCount,#helpPause{display:none!important}
 [role="tabpanel"]:not(#p-home) .h-section{text-align:center}
 
+/* the way back to the full result: big and red */
+.fd-res{flex-direction:column;align-items:stretch;gap:14px;padding:18px}
+.fd-res b{font-size:1.25rem;flex:none}
+.fd-res .fd-back{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:64px;padding:16px 22px;
+  border:0;border-radius:18px;background:#B4232C;color:#fff;font-size:1.25rem;font-weight:800;box-shadow:0 12px 26px -12px rgba(180,35,44,.7);cursor:pointer}
+.fd-res .fd-back:hover{background:#961C24}
+.fd-res .fd-back:focus-visible{outline:3px solid #2E2430;outline-offset:3px}
+/* Find help has no banner photo, so no tint and dark title text */
+#p-find .page-top::after{content:none}
+#p-find .page-top :is(h1,.kicker,.enonly){color:inherit;text-shadow:none}
+#p-find .page-top h1{color:var(--ink)}
+#p-find .page-top{background:var(--paper-2)}
+#p-find .pt-text{width:min(100%,720px)}
+
 /* required styles */
 
 .leaflet-pane,
@@ -3532,7 +3546,8 @@ document.addEventListener("click", e => {
     const cls = ["flag", "warn", "ok"].find(c => v.classList.contains(c)) || "ok";
     b.className = "fd-res noprint " + cls;
     b.innerHTML = `<b>${esc(v.querySelector("h2") ? v.querySelector("h2").textContent : "")}</b>
-      <button type="button" class="btn btn--quiet" id="fdBack"><span>${esc(t("resMore"))}</span></button>`;
+      <button type="button" class="btn fd-back" id="fdBack"><span>${esc(t("resMore"))}</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6.5 18.5 12 13 17.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`;
     $("#fdBack").onclick = () => { selectTab("t-check"); const m = $("#resMore"); if (m && $("#result").classList.contains("brief")) m.click(); };
   };
   if (res) new MutationObserver(() => { if (res.hidden){ sent = false; const b = $("#fdRes"); if (b) b.remove(); } })

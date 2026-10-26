@@ -450,7 +450,8 @@ document.addEventListener("click", e => {
     const cls = ["flag", "warn", "ok"].find(c => v.classList.contains(c)) || "ok";
     b.className = "fd-res noprint " + cls;
     b.innerHTML = `<b>${esc(v.querySelector("h2") ? v.querySelector("h2").textContent : "")}</b>
-      <button type="button" class="btn btn--quiet" id="fdBack"><span>${esc(t("resMore"))}</span></button>`;
+      <button type="button" class="btn fd-back" id="fdBack"><span>${esc(t("resMore"))}</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6.5 18.5 12 13 17.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`;
     $("#fdBack").onclick = () => { selectTab("t-check"); const m = $("#resMore"); if (m && $("#result").classList.contains("brief")) m.click(); };
   };
   if (res) new MutationObserver(() => { if (res.hidden){ sent = false; const b = $("#fdRes"); if (b) b.remove(); } })
