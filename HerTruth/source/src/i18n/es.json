@@ -51,7 +51,7 @@
  "fq3q": "Me siento bien. ¿Por qué me señaló?",
  "fq3a": "La prueba está hecha para detectar a la mayor cantidad posible de personas, así que señala a muchas cuyos análisis salen normales. En un estudio de 2018 con 248 chicas con reglas abundantes, la herramienta detectó el 95% de los problemas de sangrado, pero también señaló a la mayoría de las chicas que no los tenían (Zia y colegas). Una alerta es una razón para hacerte análisis, no un resultado.",
  "fq4q": "¿Qué análisis debo pedir?",
- "fq4a": "Una biometría hemática completa (CBC) y ferritina, para revisar anemia y hierro bajo. Para un trastorno de la coagulación, antígeno del factor von Willebrand, actividad del factor von Willebrand y factor VIII. Si los resultados salen bajos o dudosos, una referencia a hematología o a un centro de tratamiento de hemofilia.",
+ "fq4a": "Una biometría hemática completa (CBC) y ferritina, para revisar anemia y hierro bajo. Para un trastorno de la coagulación, antígeno del factor von Willebrand, actividad del factor von Willebrand y factor VIII. Si los resultados salen bajos o dudosos, una referencia a hematología.",
  "fq4b": "El estrés, las enfermedades, el embarazo y el estrógeno pueden subir el factor von Willebrand por un tiempo, así que un resultado normal no siempre es definitivo (Perez Botero, Hematology, 2024).",
  "fq5q": "¿Por qué pregunta sobre mi familia?",
  "fq5a": "La enfermedad de von Willebrand se hereda, y muchas familias viven con ella por años sin ponerle nombre. Reglas abundantes, sangrado después de un parto o una histerectomía (cirugía para quitar el útero) a una edad joven en tu mamá, hermanas, tías o abuelas pueden ser señal de ella. Esas respuestas van en tu resumen para el médico.",
@@ -71,7 +71,7 @@
  "ghWeekH": "Esta semana",
  "ghWeekP": "Cuéntale a tu mamá o papá, a la enfermera de la escuela o a tu médico. Lleva tu resumen de HerTruth para que vean tus respuestas.",
  "ghSpecH": "Atención especializada",
- "ghSpecP": "Los centros de tratamiento de hemofilia diagnostican y tratan la enfermedad de von Willebrand, también en mujeres y niñas.",
+ "ghSpecP": "Los hematólogos, médicos especialistas en la sangre, diagnostican y tratan la enfermedad de von Willebrand, también en mujeres y niñas.",
  "ghL1": "CDC: encuentra un centro de tratamiento",
  "ghL2": "National Bleeding Disorders Foundation: recursos cerca de ti",
  "bs3p": "Cada traducción es un primer borrador. Profesionales de la salud nativos las revisarán antes del lanzamiento público.",
@@ -126,7 +126,7 @@
  "fdT_prim": "Pediatras y médicos de familia",
  "fdT_urg": "Atención de urgencia",
  "fdOpenG": "Abrir en Google Maps",
- "fdNoteG": "Los lugares vienen de OpenStreetMap y no son recomendaciones de HerTruth. Los horarios y datos pueden estar mal, así que llama antes de ir. Los centros de tratamiento de hemofilia también diagnostican y tratan la enfermedad de von Willebrand.",
+ "fdNoteG": "Los lugares vienen de OpenStreetMap y no son recomendaciones de HerTruth. Los horarios y datos pueden estar mal, así que llama antes de ir.",
  "fdLocNo": "La ubicación está desactivada o no se permitió. Escribe un código postal o una ciudad.",
  "fdShow": "Ver en el mapa"
 }

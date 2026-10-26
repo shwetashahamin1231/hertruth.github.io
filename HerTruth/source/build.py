@@ -47,6 +47,13 @@ for lang in ("en", "es", "hi"):
     js, n = re.subn(block_re, lambda m: m.group(1) + m.group(2) + ABOUT[lang].replace('"', '\\"') + m.group(4), js, count=1, flags=re.M)
     assert n == 1, "about " + lang
 
+# Team request (Oct 26, 2026): name hematologists instead of hemophilia treatment centers in two original strings
+OVR = {"en": {"t3": "A referral to a hematologist (a blood specialist) if results are low or unclear", "h_family": "For example, von Willebrand disease."}, "es": {"t3": "Una referencia a hematología si los resultados salen bajos o dudosos", "h_family": "Por ejemplo, enfermedad de von Willebrand."}, "hi": {"t3": "नतीजे कम या साफ़ न होने पर हीमेटोलॉजिस्ट को रेफ़रल", "h_family": "जैसे वॉन विलेब्रांड रोग।"}}
+for lang, kv in OVR.items():
+    for k, v in kv.items():
+        js, n = re.subn(rf'(^{lang}:\{{[\s\S]*?)({k}:")(.*?)(")', lambda m: m.group(1) + m.group(2) + v + m.group(4), js, count=1, flags=re.M)
+        assert n == 1, (lang, k)
+
 js = js.replace("\n}};\n\n/* ============ IRON MODEL", "\n},\n" + "".join(f"{c}:" + json.dumps(v, ensure_ascii=False) + ",\n" for c, v in FULL.items()) + "};\n\n/* ============ IRON MODEL", 1)
 assert all(f"\n{c}:{{" in js for c in FULL), "language injection failed"
 

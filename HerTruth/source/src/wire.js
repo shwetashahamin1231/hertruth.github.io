@@ -219,7 +219,7 @@ document.addEventListener("click", e => { if (e.target.closest("#restart, .js-st
    (typed, or the phone's location if they allow it) is sent. Check answers are never part of it. */
 { const form = $("#fdForm");
   if (form){
-    let at = null, list = [], kind = "hemophilia treatment center";
+    let at = null, list = [], kind = "hematologist";
     const say = (k, raw) => { $("#fdStatus").textContent = raw != null ? raw : (k ? t(k) : ""); };
     const esc = v => String(v).replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"})[c]);
     const enc = encodeURIComponent;
@@ -249,7 +249,6 @@ document.addEventListener("click", e => { if (e.target.closest("#restart, .js-st
     /* places come from OpenStreetMap's Nominatim search, one term at a time inside a box around the person
        (Nominatim allows about one request per second, so the terms run in turn). */
     const TERMS = {
-      "hemophilia treatment center": ["hemophilia", "hematology", "hospital"],
       "hematologist": ["hematology", "hematologist", "oncology", "hospital"],
       "gynecologist": ["gynecology", "obstetrics", "women's health", "hospital"],
       "pediatrician OR family doctor": ["pediatrician", "family medicine", "doctors", "clinic"],
@@ -280,7 +279,6 @@ document.addEventListener("click", e => { if (e.target.closest("#restart, .js-st
     };
     /* what each "who to look for" chip matches in OpenStreetMap tags and names */
     const MATCH = {
-      "hemophilia treatment center": /h(a)?emophilia|h(a)?ematolog|bleeding|blood disorder|thrombosis|hemostasis|haemostasis/i,
       "hematologist": /h(a)?ematolog|oncolog|blood/i,
       "gynecologist": /gyn|obstet|ob\/gyn|women|maternity/i,
       "pediatrician OR family doctor": /p(a)?ediatric|children|family|general|primary|community health/i,
@@ -433,7 +431,7 @@ document.addEventListener("click", e => {
 
 /* ================= v8: after the check, go straight to Find help =================
    When a result is ready the app opens Find help, with the result headline on top and a button back to the full
-   summary. A flag preselects hemophilia treatment centers, other results gynecologists. Scoring is untouched. */
+   summary. A flag preselects hematologists, other results gynecologists. Scoring is untouched. */
 { let sent = false;
   const res = $("#result");
   const esc = v => String(v).replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"})[c]);
@@ -457,7 +455,7 @@ document.addEventListener("click", e => {
     if (sent) return; sent = true;
     const v = $("#resCard .verdict");
     selectTab("t-find");
-    const chip = document.querySelector(`.fd-type[data-q="${v.classList.contains("flag") ? "hemophilia treatment center" : "gynecologist"}"]`);
+    const chip = document.querySelector(`.fd-type[data-q="${v.classList.contains("flag") ? "hematologist" : "gynecologist"}"]`);
     if (chip) chip.click();
   };
 }
