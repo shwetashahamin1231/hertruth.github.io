@@ -460,6 +460,9 @@ document.addEventListener("click", e => {
   };
 }
 
+/* remove the opening splash once it has faded */
+{ const sp = document.getElementById("splash"); if (sp) setTimeout(() => sp.remove(), 1800); }
+
 /* per-language refresh for widgets */
 window.__bcStatic = () => {
   document.querySelectorAll("[data-aria]").forEach(e => e.setAttribute("aria-label", t(e.dataset.aria)));

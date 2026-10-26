@@ -542,3 +542,15 @@ main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
 .fd-res.flag{border-inline-start-color:var(--flag)}.fd-res.warn{border-inline-start-color:var(--warn)}
 .fd-res b{flex:1 1 220px;font-size:1.05rem;color:var(--ink)}
 .fd-res .btn{min-height:44px}
+
+/* ---------- opening splash: logo first ---------- */
+.splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:var(--paper);pointer-events:none;
+  animation:splashOut .45s ease-in 1.15s forwards}
+.splash-in{display:grid;justify-items:center;gap:14px}
+.splash-mark{animation:splashDrop .7s cubic-bezier(.2,1.4,.4,1) both}
+.splash-word{font-family:var(--display);font-weight:800;font-size:2.2rem;letter-spacing:-.02em;color:var(--ink);animation:splashText .5s ease-out .35s both}
+.splash-word b{color:var(--accent)}
+@keyframes splashDrop{from{opacity:0;transform:translateY(-28px) scale(.6)}to{opacity:1;transform:none}}
+@keyframes splashText{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes splashOut{to{opacity:0;visibility:hidden}}
+@media (prefers-reduced-motion:reduce){.splash{animation:splashOut .2s ease-in .5s forwards}.splash-mark,.splash-word{animation:none}}

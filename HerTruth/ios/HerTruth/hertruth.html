@@ -1204,6 +1204,18 @@ main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
 .fd-res b{flex:1 1 220px;font-size:1.05rem;color:var(--ink)}
 .fd-res .btn{min-height:44px}
 
+/* ---------- opening splash: logo first ---------- */
+.splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:var(--paper);pointer-events:none;
+  animation:splashOut .45s ease-in 1.15s forwards}
+.splash-in{display:grid;justify-items:center;gap:14px}
+.splash-mark{animation:splashDrop .7s cubic-bezier(.2,1.4,.4,1) both}
+.splash-word{font-family:var(--display);font-weight:800;font-size:2.2rem;letter-spacing:-.02em;color:var(--ink);animation:splashText .5s ease-out .35s both}
+.splash-word b{color:var(--accent)}
+@keyframes splashDrop{from{opacity:0;transform:translateY(-28px) scale(.6)}to{opacity:1;transform:none}}
+@keyframes splashText{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes splashOut{to{opacity:0;visibility:hidden}}
+@media (prefers-reduced-motion:reduce){.splash{animation:splashOut .2s ease-in .5s forwards}.splash-mark,.splash-word{animation:none}}
+
 /* required styles */
 
 .leaflet-pane,
@@ -1885,6 +1897,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 </div>
 <a class="skip" href="#main">Skip to main content</a>
 
+<!-- Opening splash: the logo first, then it fades away (about 1.4 s, CSS only, skipped with reduced motion) -->
+<div class="splash noprint" id="splash" aria-hidden="true">
+  <div class="splash-in"><svg class="splash-mark" width="96" height="96"><use href="#mark"/></svg>
+    <span class="splash-word">Her<b>Truth</b></span></div>
+</div>
 <header class="site-head noprint">
   <div class="wrap head-inner">
     <button class="brand" type="button" data-goto="t-home" aria-label="HerTruth home">
@@ -3453,6 +3470,9 @@ document.addEventListener("click", e => {
     if (chip) chip.click();
   };
 }
+
+/* remove the opening splash once it has faded */
+{ const sp = document.getElementById("splash"); if (sp) setTimeout(() => sp.remove(), 1800); }
 
 /* per-language refresh for widgets */
 window.__bcStatic = () => {
