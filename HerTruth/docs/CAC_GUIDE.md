@@ -114,7 +114,7 @@ Draft script, about 2 minutes. Say it in your own words, and only say what is tr
 > **[1:55]** HerTruth is not a medical device and does not diagnose anything. It helps you ask the right question.
 > Thanks for watching.
 
-Every number above is from the notebook and `export_site_data.py`: 221 of 461 (cohort), 523 test participants,
+Every number above is from the notebook and `model/export_site_data.py`: 221 of 461 (cohort), 523 test participants,
 74 of 91 found (TP 74, FN 17), hemoglobin alone 48 of 91, 109 false alarms (FP).
 
 ## The application questions (rulebook, section 4)

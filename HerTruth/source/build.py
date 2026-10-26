@@ -12,7 +12,7 @@ css = (R / "src/style.css").read_text()
 extra_css = (R / "src/extra.css").read_text()
 theme_css = (R / "src/theme.css").read_text()
 # Leaflet (map library, BSD-2) is built into the page so nothing loads from a CDN. It draws the "Find help" map only after
-# someone searches; map tiles then come from CARTO (OpenStreetMap data) and places from OpenStreetMap's Nominatim.
+# someone searches; map tiles and places then come from OpenStreetMap (tiles and Nominatim search).
 LEAF = R / "vendor/leaflet"   # leaflet@1.9.4 (BSD-2, see vendor/leaflet/LICENSE)
 leaflet_css = (LEAF / "leaflet.css").read_text()
 leaflet_js = (LEAF / "leaflet.js").read_text()
@@ -141,7 +141,7 @@ swap('scoreHeavy:" (más de 100 se considera sangrado abundante)"', 'scoreHeavy:
 swap('scoreHeavy:" (100 से ज़्यादा को ज़्यादा खून बहना माना जाता है)"', 'scoreHeavy:" (100 या उससे ज़्यादा को ज़्यादा खून बहना माना जाता है)"')
 
 wire = (R / "src/wire.js").read_text()
-swap("applyStatic();\n})();", "const HELP = " + json.dumps(HELP, ensure_ascii=False) + ";\nconst SITE = " + (R / "build/site_data.json").read_text() + ";\nconst CASES = " + (R / "orig/tests/app_test_cases.json").read_text() + ";\n" + wire + "\napplyStatic();\n})();")
+swap("applyStatic();\n})();", "const HELP = " + json.dumps(HELP, ensure_ascii=False) + ";\nconst SITE = " + (R / "data/site_data.json").read_text() + ";\nconst CASES = " + (R / "data/clinic_cases.json").read_text() + ";\n" + wire + "\napplyStatic();\n})();")
 
 head = f'''<!DOCTYPE html>
 <html lang="en" data-theme="light">
@@ -171,6 +171,7 @@ head = f'''<!DOCTYPE html>
 out = head + body + "\n<script>" + leaflet_js + "</script>\n<script>" + js + "</script>\n</body>\n</html>\n"
 # Rebrand: the tested app's own strings (quiz, results, footer) still say BleedCheck; the product is now HerTruth.
 out = out.replace("BleedCheck", "HerTruth")
-(R / "build").mkdir(exist_ok=True)
-(R / "build/hertruth.html").write_text(out)
+# the website and the iPhone app ship this exact page, so the check, scoring and iron model are identical in both
+(R.parent / "web/index.html").write_text(out)
+(R.parent / "ios/HerTruth/hertruth.html").write_text(out)
 print("ok", len(out) // 1024, "KB")

@@ -11,7 +11,7 @@ talks to OpenStreetMap, and only when someone searches or taps Use my location.
 After any change to the site, run these from `source/` so the app gets the new page:
 
 ```bash
-python3 build.py && python3 sync_apps.py
+python3 build.py
 ```
 
 ---

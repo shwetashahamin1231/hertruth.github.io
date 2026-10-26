@@ -5,7 +5,7 @@ import json, numpy as np, pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score, roc_curve
 
-P = "data/"
+P = "nhanes/"   # the four NHANES 2017 to March 2020 files from cdc.gov (not included)
 rd = lambda f: pd.read_sas(P + f, format="xport")
 demo, cbc, fer, crp = rd("P_DEMO.xpt"), rd("P_CBC.xpt"), rd("P_FERTIN.xpt"), rd("P_HSCRP.xpt")
 d = demo[["SEQN", "RIAGENDR", "RIDAGEYR", "RIDEXPRG"]].merge(cbc, on="SEQN").merge(fer[["SEQN", "LBXFER"]], on="SEQN").merge(crp[["SEQN", "LBXHSCRP"]], on="SEQN", how="left")
@@ -19,7 +19,7 @@ d = d.dropna(subset=F)
 X, y = d[F], d.iron_deficient.values
 Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 
-M = json.load(open("orig/results/bleedcheck_iron_model.json"))
+M = json.load(open("bleedcheck_iron_model.json"))
 assert M["features"] == F
 z = M["intercept"] + sum(M["coef"][j] * (Xte[f].values - M["scaler_mean"][j]) / M["scaler_scale"][j] for j, f in enumerate(F))
 p = 1 / (1 + np.exp(-z))
@@ -47,7 +47,7 @@ idm = yte == 1; mf = (p >= thr)[idm]; hf = (Xte.LBXHGB.values < 12)[idm]
 overlap = dict(both=int((mf & hf).sum()), model_only=int((mf & ~hf).sum()), hgb_only=int((~mf & hf).sum()), neither=int((~mf & ~hf).sum()))
 print("overlap among test ID:", overlap)
 # where do the app's reference cases come from?
-cases = json.load(open("orig/tests/app_test_cases.json"))
+cases = json.load(open("../source/data/clinic_cases.json"))
 def where(x):
     for name, XX, yy in (("test", Xte, yte), ("train", Xtr, ytr)):
         m = np.ones(len(XX), bool)
@@ -62,5 +62,5 @@ out = {"source": "CDC NHANES 2017-March 2020 (P_DEMO, P_CBC, P_FERTIN, P_HSCRP);
        "cohort_n": cohort_n, "cohort_id": cohort_id, "cohort_id_normal_hgb": cohort_id_normal_hgb,
        "model_n": int(len(d)), "model_id": int(y.sum()), "train_n": int(len(ytr)), "test_n": int(len(yte)), "test_id": int(yte.sum()),
        "test_auc": round(float(auc), 3), "cutoff": round(thr, 3), "app": app, "hgb12": hgb, "grid": grid, "overlap": overlap, "case_src": case_src, "roc": roc, "table1": table1}
-json.dump(out, open("build/site_data.json", "w"))
+json.dump(out, open("../source/data/site_data.json", "w"))
 print("wrote build/site_data.json", len(json.dumps(out)), "bytes")
