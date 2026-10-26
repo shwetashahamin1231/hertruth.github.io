@@ -68,7 +68,8 @@ With a free Apple Account the app keeps working for 7 days. To renew, connect th
 
 ## What has been verified, and what has not
 
-- The Xcode app **builds** with Xcode 27.1 for the iPhone Simulator, with no Swift warnings. The built app contains the
-  current page, the camera permission text, the HerTruth name and the icon.
-- It has **not run yet**: no iPhone Simulator was installed (see Part 1, step 5), and running on your phone needs your
-  Apple Account (Part 3).
+- On October 26, 2026 the app **built** with Xcode 26.2 and **ran** in the iPhone 17 Pro Simulator (iOS 26.3). The home
+  page loads, and the help line shows all 16 languages correctly, including Korean, Chinese, the Indian scripts, Arabic
+  and Urdu. The app includes the camera and location permission text, the HerTruth name and the icon.
+- Not yet tried in the Simulator by tapping: the full check, Find help with Use my location, and printing. Running on
+  your own phone needs your Apple Account (Part 3).
