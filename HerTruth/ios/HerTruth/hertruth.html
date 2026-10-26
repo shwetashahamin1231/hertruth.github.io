@@ -1311,6 +1311,23 @@ main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
 #p-find .page-top .wrap:has(#fdRes){height:auto;flex-direction:column}
 #p-find .fd-res{width:min(100%,720px)}
 
+/* ---------- centered text across the site ---------- */
+main,.site-foot{text-align:center}
+main :is(h1,h2,h3,h4,p,li,dt,dd,figcaption,label,blockquote,.kicker,.head,.h-section,.page-lede,.hero2-sub,.help-line,.help-lang){text-align:center}
+main :is(p,.head,.page-lede,.h-section,h1,h2,h3){margin-inline:auto}
+main :is(ul,ol){list-style-position:inside;padding-inline-start:0}
+main :is(.cta-row,.fd-types,.gh-links,.actions,.res-more,.imp-seg,.seg,.share-inner,.hero-trust,.help-urgent,.foot-links,.case-row,#caseRow){justify-content:center}
+main .hero-trust,main .help-urgent{margin-inline:auto}
+main .help-lang{justify-content:center}
+.site-foot :is(p,.brand,.foot-links){justify-content:center;margin-inline:auto}
+/* left-aligned on purpose: tables, the list of places, form fields, references */
+main :is(table,th,td,#fdList,#fdList *,input,select,textarea,.leaflet-container,.leaflet-container *,.refs,.refs *,ol.src-list,ol.src-list *){text-align:start}
+main #fdList{list-style-position:outside}
+main .btn,main .btn-main{justify-content:center;text-align:center}
+main .btn--big{align-items:center}
+main .imp-next{display:flex;margin-inline:auto}
+main [class*="legend"],main [class*="key"]{justify-content:center;text-align:center}
+
 /* required styles */
 
 .leaflet-pane,
