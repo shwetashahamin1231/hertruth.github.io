@@ -23,7 +23,7 @@ NEW = {
  "whyK":"Why it matters","whyH":"Heavy periods often get treated without anyone checking the cause.",
  "whyP1":"Von Willebrand disease is the most common inherited bleeding disorder. Estimates run from about 1 in 100 people to 1 in 10,000. Women are more likely to reach a doctor with it, because it shows up as heavy periods and heavy bleeding after childbirth (ASH, ISTH, NHF and WFH guideline, 2021).",
  "whyP2":"Many women are treated for low iron and never tested for the cause. The same guideline reports delays of 15 years or more between the first symptoms and a diagnosis. Knowing matters most before surgery, dental work and childbirth.",
- "f1v":"1 in 100","f1l":"people may carry von Willebrand disease, at the high estimate",
+ "f1v":"1 in 100","f1l":"people may have von Willebrand disease, based on the highest estimate",
  "f2v":"15+ yrs","f2l":"between first symptoms and a diagnosis, for some women",
  "f3v":"0","f3l":"answers sent anywhere. The check runs on your phone",
  "d1t":"What counts as a heavy period?",
