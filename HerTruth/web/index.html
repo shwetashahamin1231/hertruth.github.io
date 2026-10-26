@@ -1216,6 +1216,39 @@ main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
 @keyframes splashOut{to{opacity:0;visibility:hidden}}
 @media (prefers-reduced-motion:reduce){.splash{animation:splashOut .2s ease-in .5s forwards}.splash-mark,.splash-word{animation:none}}
 
+/* ---------- compact page banners: the page's own content shows sooner ---------- */
+.page-top{padding-block:18px 16px}
+@media (min-width:720px){.page-top{padding-block:24px 20px}}
+.page-top h1{font-size:clamp(1.6rem,3.6vw,2.4rem);margin-bottom:6px}
+:lang(hi) .page-top h1{font-size:clamp(1.5rem,3.2vw,2.1rem)}
+.page-top .kicker{margin-bottom:4px}
+.page-lede{font-size:.98rem;line-height:1.5}
+.page-top .wrap:has(.pt-pic){gap:12px}
+@media (min-width:900px){.page-top .wrap:has(.pt-pic){grid-template-columns:minmax(0,1fr) 240px;column-gap:32px}}
+.pt-pic{max-width:240px}
+.pt-pic img{aspect-ratio:16/10;border-radius:var(--r)}
+.pt-pic figcaption{display:none}
+@media (max-width:899px){.pt-pic{max-width:100%}.pt-pic img{aspect-ratio:4/1}}
+/* Find help: a one-line banner so the map gets the room */
+#p-find .page-top{padding-block:10px 8px}
+#p-find .page-top .kicker,#p-find .pt-pic{display:none}
+#p-find .page-top h1{font-size:1.35rem;margin:0 0 2px}
+#p-find .page-lede{font-size:.85rem;color:var(--muted)}
+#p-find .page-top .wrap:has(.pt-pic){display:block}
+#p-find .finder{gap:10px}
+#p-find > .section{padding-top:12px}
+
+/* help line: a quick fade between languages (no blur, which is slow on iPhone), and Korean/Chinese wrap between words */
+.help-say{transition:opacity .25s ease,transform .25s ease;filter:none}
+.help-say.out{opacity:0;transform:translateY(-.2em);filter:none}
+.help-say.pre{opacity:0;transform:translateY(.2em);filter:none}
+.help-say:lang(ko),.help-say:lang(zh),.help-say[lang="ko"],.help-say[lang="zh"]{word-break:keep-all;line-break:strict}
+/* phones: the language menu spans the screen under the header instead of hanging off the left edge */
+@media (max-width:640px){
+  .langs{position:static}
+  .lang-menu{inset-inline:12px;left:12px;right:12px;width:auto;top:calc(100% + 6px);max-height:calc(100dvh - 140px);overflow:auto}
+}
+
 /* required styles */
 
 .leaflet-pane,
@@ -2221,6 +2254,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <figure class="pt-pic"><img data-src-from="un_session" alt="Nilakshya Rajora seated at a youth participation session at the United Nations" lang="en"><figcaption lang="en">At the United Nations</figcaption></figure>
   </div></section>
 
+  <section class="section section--tint follow-lang"><div class="wrap">
+    <div class="head"><p class="kicker" data-t="mfK">Myth or fact</p><h2 class="h-section" data-t="mfH">Tap a card to flip it</h2></div>
+    <div class="flips">
+      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf1q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf1a"></span></span></span></button>
+      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf2q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf2a"></span></span></span></button>
+      <button type="button" class="flip" aria-pressed="false" data-v="fact"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf3q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfFact"></span><span class="flip-a" data-t="mf3a"></span></span></span></button>
+      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf4q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf4a"></span></span></span></button>
+    </div>
+  </div></section>
+
   <section class="section"><div class="wrap">
     <ol class="flow">
       <li><h2>You answer ten questions</h2><p>How long your periods last, whether you flood or miss activities, past anemia treatment, bleeding after procedures, and signs in the women in your family.</p></li>
@@ -2377,16 +2420,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div></section>
 
 
-  <section class="section section--tint"><div class="wrap">
-    <div class="head"><p class="kicker" data-t="mfK">Myth or fact</p><h2 class="h-section" data-t="mfH">Tap a card to flip it</h2></div>
-    <div class="flips">
-      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf1q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf1a"></span></span></span></button>
-      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf2q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf2a"></span></span></span></button>
-      <button type="button" class="flip" aria-pressed="false" data-v="fact"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf3q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfFact"></span><span class="flip-a" data-t="mf3a"></span></span></span></button>
-      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf4q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf4a"></span></span></span></button>
-    </div>
-  </div></section>
-
   <section class="section"><div class="wrap faq-grid">
     <div class="faq-list">
       <details class="faq" open><summary data-t="fq1q"></summary><div class="faq-body"><p data-t="fq1a"></p></div></details>
@@ -2478,14 +2511,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
   </div></section>
 
-  <section class="section section--tint"><div class="wrap">
-    <div class="head"><h2 class="h-section">Built in partnership with The Factor Foundation</h2><p>Three students founded HerTruth. The Factor Foundation, a youth-led nonprofit, gives it a home and brings it to families at its events.</p></div>
-    <div class="partner">
-      <div class="pcard"><h3>What the founders lead</h3><p>The research, the plain-language check, the iron model trained on CDC data, and testing every version of the app.</p></div>
-      <div class="pcard pcard--ff"><h3>What The Factor Foundation brings</h3><p>A nonprofit home for the project, plus outreach at awareness booths, fundraisers and youth advocacy events.</p></div>
-    </div>
-  </div></section>
-
   <section class="section"><div class="wrap">
     <div class="head"><h2 class="h-section">Out in the community</h2><p>The students behind HerTruth also staff the foundation's booths and fundraisers.</p></div>
     <div class="events">
@@ -2508,6 +2533,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </div></div>
     </div>
   </div></section>
+
+  <section class="section section--tint"><div class="wrap">
+    <div class="head"><h2 class="h-section">Built in partnership with The Factor Foundation</h2><p>Three students founded HerTruth. The Factor Foundation, a youth-led nonprofit, gives it a home and brings it to families at its events.</p></div>
+    <div class="partner">
+      <div class="pcard"><h3>What the founders lead</h3><p>The research, the plain-language check, the iron model trained on CDC data, and testing every version of the app.</p></div>
+      <div class="pcard pcard--ff"><h3>What The Factor Foundation brings</h3><p>A nonprofit home for the project, plus outreach at awareness booths, fundraisers and youth advocacy events.</p></div>
+    </div>
+  </div></section>
+
 
   <section class="section"><div class="wrap">
     <div class="head"><h2 class="h-section">What would help most</h2><p>HerTruth is a first version. We need outside help with three things.</p></div>
@@ -3097,7 +3131,7 @@ const help = (() => {
     idx = (idx + 1) % N; turn++;
     if (reduce){ paint(); return; }
     say.classList.add("out");
-    setTimeout(() => { paint(); say.classList.remove("out"); say.classList.add("pre"); void say.offsetWidth; say.classList.remove("pre"); }, 450);
+    setTimeout(() => { paint(); say.classList.remove("out"); say.classList.add("pre"); void say.offsetWidth; say.classList.remove("pre"); }, 250);
   };
   const run = () => { clearInterval(timer); if (!paused) timer = setInterval(() => { if (!document.hidden) step(); }, 3000); };
   const btn = $("#helpPause");
@@ -3376,6 +3410,14 @@ document.addEventListener("click", e => { if (e.target.closest("#restart, .js-st
       say("fdLoading");
       navigator.geolocation.getCurrentPosition(pos => start(pos.coords.latitude, pos.coords.longitude), () => say("fdLocNo"), {timeout: 15000, maximumAge: 300000});
     };
+    /* opening Find help shows all of New Jersey right away; a search then zooms to that place */
+    const panel = $("#p-find");
+    const showNJ = () => {
+      if (map || !panel || panel.hidden) return;
+      ensure(); map.fitBounds([[38.93, -75.56], [41.36, -73.89]]);
+      setTimeout(() => { map.invalidateSize(); map.fitBounds([[38.93, -75.56], [41.36, -73.89]]); }, 80);
+    };
+    if (panel){ new MutationObserver(showNJ).observe(panel, {attributes: true, attributeFilter: ["hidden"]}); showNJ(); }
   } }
 
 /* ================= v7: pick a language before the check =================
@@ -3473,6 +3515,11 @@ document.addEventListener("click", e => {
 
 /* remove the opening splash once it has faded */
 { const sp = document.getElementById("splash"); if (sp) setTimeout(() => sp.remove(), 1800); }
+
+/* sections moved into English-only pages (myth or fact cards) follow the chosen language and direction */
+{ const sync = () => { const h = document.documentElement;
+    document.querySelectorAll(".follow-lang").forEach(el => { el.lang = h.lang; el.dir = h.dir || "ltr"; }); };
+  new MutationObserver(sync).observe(document.documentElement, {attributes: true, attributeFilter: ["lang", "dir"]}); sync(); }
 
 /* per-language refresh for widgets */
 window.__bcStatic = () => {

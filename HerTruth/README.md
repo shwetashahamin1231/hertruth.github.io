@@ -32,4 +32,4 @@ so the website and the app always ship the same page.
 
 - Find help: Leaflet 1.9.4 (BSD-2, bundled into the page from `source/vendor/leaflet`), map tiles from
   tile.openstreetmap.org, places from OpenStreetMap's Nominatim search (data © OpenStreetMap contributors, ODbL).
-  Nothing loads until someone searches or taps Use my location. No API key.
+  The map loads when someone opens Find help, places only when they search. No API key.

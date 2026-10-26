@@ -554,3 +554,36 @@ main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
 @keyframes splashText{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes splashOut{to{opacity:0;visibility:hidden}}
 @media (prefers-reduced-motion:reduce){.splash{animation:splashOut .2s ease-in .5s forwards}.splash-mark,.splash-word{animation:none}}
+
+/* ---------- compact page banners: the page's own content shows sooner ---------- */
+.page-top{padding-block:18px 16px}
+@media (min-width:720px){.page-top{padding-block:24px 20px}}
+.page-top h1{font-size:clamp(1.6rem,3.6vw,2.4rem);margin-bottom:6px}
+:lang(hi) .page-top h1{font-size:clamp(1.5rem,3.2vw,2.1rem)}
+.page-top .kicker{margin-bottom:4px}
+.page-lede{font-size:.98rem;line-height:1.5}
+.page-top .wrap:has(.pt-pic){gap:12px}
+@media (min-width:900px){.page-top .wrap:has(.pt-pic){grid-template-columns:minmax(0,1fr) 240px;column-gap:32px}}
+.pt-pic{max-width:240px}
+.pt-pic img{aspect-ratio:16/10;border-radius:var(--r)}
+.pt-pic figcaption{display:none}
+@media (max-width:899px){.pt-pic{max-width:100%}.pt-pic img{aspect-ratio:4/1}}
+/* Find help: a one-line banner so the map gets the room */
+#p-find .page-top{padding-block:10px 8px}
+#p-find .page-top .kicker,#p-find .pt-pic{display:none}
+#p-find .page-top h1{font-size:1.35rem;margin:0 0 2px}
+#p-find .page-lede{font-size:.85rem;color:var(--muted)}
+#p-find .page-top .wrap:has(.pt-pic){display:block}
+#p-find .finder{gap:10px}
+#p-find > .section{padding-top:12px}
+
+/* help line: a quick fade between languages (no blur, which is slow on iPhone), and Korean/Chinese wrap between words */
+.help-say{transition:opacity .25s ease,transform .25s ease;filter:none}
+.help-say.out{opacity:0;transform:translateY(-.2em);filter:none}
+.help-say.pre{opacity:0;transform:translateY(.2em);filter:none}
+.help-say:lang(ko),.help-say:lang(zh),.help-say[lang="ko"],.help-say[lang="zh"]{word-break:keep-all;line-break:strict}
+/* phones: the language menu spans the screen under the header instead of hanging off the left edge */
+@media (max-width:640px){
+  .langs{position:static}
+  .lang-menu{inset-inline:12px;left:12px;right:12px;width:auto;top:calc(100% + 6px);max-height:calc(100dvh - 140px);overflow:auto}
+}

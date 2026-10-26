@@ -86,7 +86,7 @@ const help = (() => {
     idx = (idx + 1) % N; turn++;
     if (reduce){ paint(); return; }
     say.classList.add("out");
-    setTimeout(() => { paint(); say.classList.remove("out"); say.classList.add("pre"); void say.offsetWidth; say.classList.remove("pre"); }, 450);
+    setTimeout(() => { paint(); say.classList.remove("out"); say.classList.add("pre"); void say.offsetWidth; say.classList.remove("pre"); }, 250);
   };
   const run = () => { clearInterval(timer); if (!paused) timer = setInterval(() => { if (!document.hidden) step(); }, 3000); };
   const btn = $("#helpPause");
@@ -365,6 +365,14 @@ document.addEventListener("click", e => { if (e.target.closest("#restart, .js-st
       say("fdLoading");
       navigator.geolocation.getCurrentPosition(pos => start(pos.coords.latitude, pos.coords.longitude), () => say("fdLocNo"), {timeout: 15000, maximumAge: 300000});
     };
+    /* opening Find help shows all of New Jersey right away; a search then zooms to that place */
+    const panel = $("#p-find");
+    const showNJ = () => {
+      if (map || !panel || panel.hidden) return;
+      ensure(); map.fitBounds([[38.93, -75.56], [41.36, -73.89]]);
+      setTimeout(() => { map.invalidateSize(); map.fitBounds([[38.93, -75.56], [41.36, -73.89]]); }, 80);
+    };
+    if (panel){ new MutationObserver(showNJ).observe(panel, {attributes: true, attributeFilter: ["hidden"]}); showNJ(); }
   } }
 
 /* ================= v7: pick a language before the check =================
@@ -462,6 +470,11 @@ document.addEventListener("click", e => {
 
 /* remove the opening splash once it has faded */
 { const sp = document.getElementById("splash"); if (sp) setTimeout(() => sp.remove(), 1800); }
+
+/* sections moved into English-only pages (myth or fact cards) follow the chosen language and direction */
+{ const sync = () => { const h = document.documentElement;
+    document.querySelectorAll(".follow-lang").forEach(el => { el.lang = h.lang; el.dir = h.dir || "ltr"; }); };
+  new MutationObserver(sync).observe(document.documentElement, {attributes: true, attributeFilter: ["lang", "dir"]}); sync(); }
 
 /* per-language refresh for widgets */
 window.__bcStatic = () => {
