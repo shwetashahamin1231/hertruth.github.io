@@ -1251,6 +1251,29 @@ main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
 .page-note{padding-block:20px 28px;border-top:1px solid var(--line)}
 .page-note .page-lede{font-size:.9rem;color:var(--muted);max-width:70ch}
 
+/* ---------- subpage banners: the page's photo fills the banner, title centered on top ---------- */
+.page-top{position:relative;overflow:hidden;padding:0;border-bottom:0}
+.page-top .wrap,.page-top .wrap:has(.pt-pic){display:grid;place-items:center;grid-template-columns:1fr;min-height:clamp(150px,24vw,230px);padding-block:22px;position:static}
+.page-top .pt-text{position:relative;z-index:1;text-align:center;width:min(100%,820px);margin-inline:auto}
+.page-top h1{font-size:clamp(2.1rem,5.4vw,3.4rem)}
+.page-top h1{margin-inline:auto;max-width:none;text-wrap:balance}
+.page-top .pt-pic{position:absolute;inset:0;max-width:none;margin:0;z-index:0}
+.page-top .pt-pic img{width:100%;height:100%;aspect-ratio:auto;object-fit:cover;object-position:50% 35%;border-radius:0;box-shadow:none}
+.page-top:has(.pt-pic)::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(42,20,32,.55),rgba(42,20,32,.68))}
+.page-top:has(.pt-pic) :is(h1,.kicker,.enonly){color:#fff}
+.page-top:has(.pt-pic) .kicker{opacity:.92}
+.page-top:has(.pt-pic) h1{text-shadow:0 2px 18px rgba(0,0,0,.35)}
+@media (max-width:899px){.page-top .pt-pic img{aspect-ratio:auto}}
+/* Find help keeps a plain banner (no photo) so the map stays close */
+#p-find .page-top .wrap{min-height:0;padding-block:16px 10px}
+/* section headings on the subpages are centered too */
+[role="tabpanel"]:not(#p-home) .head{margin-inline:auto;text-align:center}
+[role="tabpanel"]:not(#p-home) .head p:not(.kicker){margin-inline:auto}
+
+/* ---------- home: no badge, counter or pause button above the help line ---------- */
+#p-home .hero-chip,#helpCount,#helpPause{display:none!important}
+[role="tabpanel"]:not(#p-home) .h-section{text-align:center}
+
 /* required styles */
 
 .leaflet-pane,
