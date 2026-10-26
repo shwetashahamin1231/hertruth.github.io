@@ -558,8 +558,8 @@ main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
 /* ---------- compact page banners: the page's own content shows sooner ---------- */
 .page-top{padding-block:18px 16px}
 @media (min-width:720px){.page-top{padding-block:24px 20px}}
-.page-top h1{font-size:clamp(1.6rem,3.6vw,2.4rem);margin-bottom:6px}
-:lang(hi) .page-top h1{font-size:clamp(1.5rem,3.2vw,2.1rem)}
+.page-top h1{font-size:clamp(2.3rem,6vw,3.6rem);line-height:1.05;margin-bottom:0}
+:lang(hi) .page-top h1{font-size:clamp(2rem,5vw,2.8rem);line-height:1.25}
 .page-top .kicker{margin-bottom:4px}
 .page-lede{font-size:.98rem;line-height:1.5}
 .page-top .wrap:has(.pt-pic){gap:12px}
@@ -571,8 +571,6 @@ main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
 /* Find help: a one-line banner so the map gets the room */
 #p-find .page-top{padding-block:10px 8px}
 #p-find .page-top .kicker,#p-find .pt-pic{display:none}
-#p-find .page-top h1{font-size:1.35rem;margin:0 0 2px}
-#p-find .page-lede{font-size:.85rem;color:var(--muted)}
 #p-find .page-top .wrap:has(.pt-pic){display:block}
 #p-find .finder{gap:10px}
 #p-find > .section{padding-top:12px}
@@ -587,3 +585,7 @@ main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
   .langs{position:static}
   .lang-menu{inset-inline:12px;left:12px;right:12px;width:auto;top:calc(100% + 6px);max-height:calc(100dvh - 140px);overflow:auto}
 }
+
+/* the page's explanation sits at the bottom, quietly */
+.page-note{padding-block:20px 28px;border-top:1px solid var(--line)}
+.page-note .page-lede{font-size:.9rem;color:var(--muted);max-width:70ch}
