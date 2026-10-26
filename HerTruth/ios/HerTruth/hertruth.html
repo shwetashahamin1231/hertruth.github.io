@@ -1288,6 +1288,29 @@ main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
 #p-find .page-top{background:var(--paper-2)}
 #p-find .pt-text{width:min(100%,720px)}
 
+/* ---------- pink banners (check, clinics, how it works, questions, find help): white title on a pink gradient,
+   a small photo shown whole beside it, every banner the same height. About keeps its full photo banner. ---------- */
+:is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top{background:linear-gradient(120deg,#9E2554 0%,#C8376B 52%,#D9507D 100%);border-bottom:0}
+:is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top::after{content:none}
+:is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top .wrap,
+:is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top .wrap:has(.pt-pic){display:flex;align-items:center;justify-content:center;gap:28px;min-height:0;height:200px;padding-block:20px}
+:is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top .pt-text{flex:1 1 auto;width:auto;max-width:760px;text-align:center}
+:is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top :is(h1,.kicker,.enonly){color:#fff;text-shadow:none}
+:is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top .kicker{opacity:.9}
+:is(#p-check,#p-clinic,#p-how,#p-faq) .page-top .pt-pic{position:static;inset:auto;flex:none;display:block;height:100%;max-width:38%;margin:0;padding:6px;background:rgba(255,255,255,.18);border-radius:18px}
+:is(#p-check,#p-clinic,#p-how,#p-faq) .page-top .pt-pic img{width:auto;height:100%;max-width:100%;aspect-ratio:auto;object-fit:contain;border-radius:13px;box-shadow:0 10px 24px -14px rgba(0,0,0,.5)}
+#p-find .page-top h1{color:#fff}
+#p-find .page-top .wrap{height:200px}
+@media (max-width:699px){
+  :is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top .wrap,
+  :is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top .wrap:has(.pt-pic){height:150px;gap:14px;padding-block:14px}
+  :is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top h1{font-size:clamp(1.55rem,6.6vw,2.1rem)}
+  :is(#p-check,#p-clinic,#p-how,#p-faq) .page-top .pt-text{text-align:start}
+  :is(#p-check,#p-clinic,#p-how,#p-faq) .page-top .pt-pic{padding:4px;border-radius:14px}
+}
+#p-find .page-top .wrap:has(#fdRes){height:auto;flex-direction:column}
+#p-find .fd-res{width:min(100%,720px)}
+
 /* required styles */
 
 .leaflet-pane,
@@ -2196,8 +2219,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <p class="enonly" data-enonly><span data-t="enOnly"></span></p>
     <p class="kicker">For clinics and school nurses</p>
     <h1 class="display">Iron deficiency estimate from a CBC</h1>
-    <p class="by mono">Logistic regression · CDC NHANES 2017 to March 2020</p>
-    <p class="note note--guide">In September 2026 the American Society of Hematology suggested a higher ferritin cutoff for diagnosing iron deficiency: 30 ng/mL or less for adults and for people who menstruate, and 50 ng/mL or less with heavy menstrual bleeding. This model learned the older WHO cutoff of below 15 ng/mL, so it will miss some people the new guideline counts as iron deficient. Use it to decide who needs a ferritin test, and read the ferritin result against current guidance.</p>
   </div>
     <figure class="pt-pic"><img data-src-from="table" alt="Two team members at the foundation's awareness table" lang="en"><figcaption lang="en">Awareness table</figcaption></figure>
   </div></section>
@@ -2281,6 +2302,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
   </div></section>
   <section class="page-note"><div class="wrap">
+    <p class="by mono">Logistic regression · CDC NHANES 2017 to March 2020</p>
     <p class="page-lede">For non-pregnant girls and women aged 12 to 49. A high score means order a ferritin test. It is not a diagnosis.</p>
   </div></section>
 </div>
@@ -2295,15 +2317,33 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <figure class="pt-pic"><img data-src-from="un_session" alt="Nilakshya Rajora seated at a youth participation session at the United Nations" lang="en"><figcaption lang="en">At the United Nations</figcaption></figure>
   </div></section>
 
-  <section class="section section--tint follow-lang"><div class="wrap">
-    <div class="head"><p class="kicker" data-t="mfK">Myth or fact</p><h2 class="h-section" data-t="mfH">Tap a card to flip it</h2></div>
-    <div class="flips">
-      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf1q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf1a"></span></span></span></button>
-      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf2q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf2a"></span></span></span></button>
-      <button type="button" class="flip" aria-pressed="false" data-v="fact"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf3q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfFact"></span><span class="flip-a" data-t="mf3a"></span></span></span></button>
-      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf4q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf4a"></span></span></span></button>
+  <section class="section follow-lang"><div class="wrap realdata">
+    <div class="head">
+      <p class="kicker" data-t="rdK">Built on real CDC data</p>
+      <h2 class="h-section" data-t="rdH"></h2>
+      <p data-t="rdP"></p>
+    </div>
+    <div class="rd-grid">
+      <dl class="funnel">
+        <div class="fn"><dt id="rdN1"></dt><dd data-t="rdC1l"></dd></div>
+        <div class="fn"><dt id="rdN2"></dt><dd data-t="rdC2l"></dd></div>
+        <div class="fn fn--hot"><dt id="rdN3"></dt><dd data-t="rdC3l"></dd></div>
+      </dl>
+      <div class="dots-card">
+        <p class="side-h" data-t="rdDotsH"></p>
+        <div class="seg" role="group">
+          <button type="button" id="rdHgbBtn" aria-pressed="false"><span data-t="rdHgb">Hemoglobin below 12</span></button>
+          <button type="button" id="rdModelBtn" aria-pressed="true"><span data-t="rdModel">HerTruth iron model</span></button>
+        </div>
+        <div class="dots" id="rdDots" aria-hidden="true"></div>
+        <p class="dots-count" id="rdCount" aria-live="polite"></p>
+        <p class="dots-legend"><span class="dl dl-f" data-t="rdFoundL">Found</span><span class="dl dl-m" data-t="rdMissedL">Missed</span></p>
+        <p class="fine" data-t="rdNote"></p>
+        <button type="button" class="btn btn--quiet" data-goto="t-clinic" data-t="rdLink">Explore the model</button>
+      </div>
     </div>
   </div></section>
+
 
   <section class="section"><div class="wrap">
     <ol class="flow">
@@ -2395,6 +2435,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <figure class="pt-pic"><img data-src-from="table2" alt="A team member talking with a visitor at the foundation's booth" lang="en"><figcaption lang="en">Awareness booth</figcaption></figure>
   </div></section>
 
+  <section class="section section--tint follow-lang"><div class="wrap">
+    <div class="head"><p class="kicker" data-t="mfK">Myth or fact</p><h2 class="h-section" data-t="mfH">Tap a card to flip it</h2></div>
+    <div class="flips">
+      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf1q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf1a"></span></span></span></button>
+      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf2q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf2a"></span></span></span></button>
+      <button type="button" class="flip" aria-pressed="false" data-v="fact"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf3q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfFact"></span><span class="flip-a" data-t="mf3a"></span></span></span></button>
+      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf4q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf4a"></span></span></span></button>
+    </div>
+  </div></section>
+
   <section class="section section--tint"><div class="wrap signs">
     <div class="signs-head">
       <p class="kicker" data-t="sgK">Quick self-check</p>
@@ -2435,32 +2485,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </figure>
   </div></section>
 
-  <section class="section"><div class="wrap realdata">
-    <div class="head">
-      <p class="kicker" data-t="rdK">Built on real CDC data</p>
-      <h2 class="h-section" data-t="rdH"></h2>
-      <p data-t="rdP"></p>
-    </div>
-    <div class="rd-grid">
-      <dl class="funnel">
-        <div class="fn"><dt id="rdN1"></dt><dd data-t="rdC1l"></dd></div>
-        <div class="fn"><dt id="rdN2"></dt><dd data-t="rdC2l"></dd></div>
-        <div class="fn fn--hot"><dt id="rdN3"></dt><dd data-t="rdC3l"></dd></div>
-      </dl>
-      <div class="dots-card">
-        <p class="side-h" data-t="rdDotsH"></p>
-        <div class="seg" role="group">
-          <button type="button" id="rdHgbBtn" aria-pressed="false"><span data-t="rdHgb">Hemoglobin below 12</span></button>
-          <button type="button" id="rdModelBtn" aria-pressed="true"><span data-t="rdModel">HerTruth iron model</span></button>
-        </div>
-        <div class="dots" id="rdDots" aria-hidden="true"></div>
-        <p class="dots-count" id="rdCount" aria-live="polite"></p>
-        <p class="dots-legend"><span class="dl dl-f" data-t="rdFoundL">Found</span><span class="dl dl-m" data-t="rdMissedL">Missed</span></p>
-        <p class="fine" data-t="rdNote"></p>
-        <button type="button" class="btn btn--quiet" data-goto="t-clinic" data-t="rdLink">Explore the model</button>
-      </div>
-    </div>
-  </div></section>
 
 
   <section class="section"><div class="wrap faq-grid">

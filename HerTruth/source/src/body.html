@@ -241,8 +241,6 @@
     <p class="enonly" data-enonly><span data-t="enOnly"></span></p>
     <p class="kicker">For clinics and school nurses</p>
     <h1 class="display">Iron deficiency estimate from a CBC</h1>
-    <p class="by mono">Logistic regression · CDC NHANES 2017 to March 2020</p>
-    <p class="note note--guide">In September 2026 the American Society of Hematology suggested a higher ferritin cutoff for diagnosing iron deficiency: 30 ng/mL or less for adults and for people who menstruate, and 50 ng/mL or less with heavy menstrual bleeding. This model learned the older WHO cutoff of below 15 ng/mL, so it will miss some people the new guideline counts as iron deficient. Use it to decide who needs a ferritin test, and read the ferritin result against current guidance.</p>
   </div>
     <figure class="pt-pic"><img data-src-from="table" alt="Two team members at the foundation's awareness table" lang="en"><figcaption lang="en">Awareness table</figcaption></figure>
   </div></section>
@@ -326,6 +324,7 @@
     </div>
   </div></section>
   <section class="page-note"><div class="wrap">
+    <p class="by mono">Logistic regression · CDC NHANES 2017 to March 2020</p>
     <p class="page-lede">For non-pregnant girls and women aged 12 to 49. A high score means order a ferritin test. It is not a diagnosis.</p>
   </div></section>
 </div>
@@ -340,15 +339,33 @@
     <figure class="pt-pic"><img data-src-from="un_session" alt="Nilakshya Rajora seated at a youth participation session at the United Nations" lang="en"><figcaption lang="en">At the United Nations</figcaption></figure>
   </div></section>
 
-  <section class="section section--tint follow-lang"><div class="wrap">
-    <div class="head"><p class="kicker" data-t="mfK">Myth or fact</p><h2 class="h-section" data-t="mfH">Tap a card to flip it</h2></div>
-    <div class="flips">
-      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf1q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf1a"></span></span></span></button>
-      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf2q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf2a"></span></span></span></button>
-      <button type="button" class="flip" aria-pressed="false" data-v="fact"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf3q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfFact"></span><span class="flip-a" data-t="mf3a"></span></span></span></button>
-      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf4q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf4a"></span></span></span></button>
+  <section class="section follow-lang"><div class="wrap realdata">
+    <div class="head">
+      <p class="kicker" data-t="rdK">Built on real CDC data</p>
+      <h2 class="h-section" data-t="rdH"></h2>
+      <p data-t="rdP"></p>
+    </div>
+    <div class="rd-grid">
+      <dl class="funnel">
+        <div class="fn"><dt id="rdN1"></dt><dd data-t="rdC1l"></dd></div>
+        <div class="fn"><dt id="rdN2"></dt><dd data-t="rdC2l"></dd></div>
+        <div class="fn fn--hot"><dt id="rdN3"></dt><dd data-t="rdC3l"></dd></div>
+      </dl>
+      <div class="dots-card">
+        <p class="side-h" data-t="rdDotsH"></p>
+        <div class="seg" role="group">
+          <button type="button" id="rdHgbBtn" aria-pressed="false"><span data-t="rdHgb">Hemoglobin below 12</span></button>
+          <button type="button" id="rdModelBtn" aria-pressed="true"><span data-t="rdModel">HerTruth iron model</span></button>
+        </div>
+        <div class="dots" id="rdDots" aria-hidden="true"></div>
+        <p class="dots-count" id="rdCount" aria-live="polite"></p>
+        <p class="dots-legend"><span class="dl dl-f" data-t="rdFoundL">Found</span><span class="dl dl-m" data-t="rdMissedL">Missed</span></p>
+        <p class="fine" data-t="rdNote"></p>
+        <button type="button" class="btn btn--quiet" data-goto="t-clinic" data-t="rdLink">Explore the model</button>
+      </div>
     </div>
   </div></section>
+
 
   <section class="section"><div class="wrap">
     <ol class="flow">
@@ -440,6 +457,16 @@
     <figure class="pt-pic"><img data-src-from="table2" alt="A team member talking with a visitor at the foundation's booth" lang="en"><figcaption lang="en">Awareness booth</figcaption></figure>
   </div></section>
 
+  <section class="section section--tint follow-lang"><div class="wrap">
+    <div class="head"><p class="kicker" data-t="mfK">Myth or fact</p><h2 class="h-section" data-t="mfH">Tap a card to flip it</h2></div>
+    <div class="flips">
+      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf1q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf1a"></span></span></span></button>
+      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf2q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf2a"></span></span></span></button>
+      <button type="button" class="flip" aria-pressed="false" data-v="fact"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf3q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfFact"></span><span class="flip-a" data-t="mf3a"></span></span></span></button>
+      <button type="button" class="flip" aria-pressed="false" data-v="myth"><span class="flip-in"><span class="flip-f"><span class="flip-q" data-t="mf4q"></span><span class="flip-tap" data-t="mfTap"></span></span><span class="flip-b"><span class="flip-v" data-t="mfMyth"></span><span class="flip-a" data-t="mf4a"></span></span></span></button>
+    </div>
+  </div></section>
+
   <section class="section section--tint"><div class="wrap signs">
     <div class="signs-head">
       <p class="kicker" data-t="sgK">Quick self-check</p>
@@ -480,32 +507,6 @@
       </figure>
   </div></section>
 
-  <section class="section"><div class="wrap realdata">
-    <div class="head">
-      <p class="kicker" data-t="rdK">Built on real CDC data</p>
-      <h2 class="h-section" data-t="rdH"></h2>
-      <p data-t="rdP"></p>
-    </div>
-    <div class="rd-grid">
-      <dl class="funnel">
-        <div class="fn"><dt id="rdN1"></dt><dd data-t="rdC1l"></dd></div>
-        <div class="fn"><dt id="rdN2"></dt><dd data-t="rdC2l"></dd></div>
-        <div class="fn fn--hot"><dt id="rdN3"></dt><dd data-t="rdC3l"></dd></div>
-      </dl>
-      <div class="dots-card">
-        <p class="side-h" data-t="rdDotsH"></p>
-        <div class="seg" role="group">
-          <button type="button" id="rdHgbBtn" aria-pressed="false"><span data-t="rdHgb">Hemoglobin below 12</span></button>
-          <button type="button" id="rdModelBtn" aria-pressed="true"><span data-t="rdModel">HerTruth iron model</span></button>
-        </div>
-        <div class="dots" id="rdDots" aria-hidden="true"></div>
-        <p class="dots-count" id="rdCount" aria-live="polite"></p>
-        <p class="dots-legend"><span class="dl dl-f" data-t="rdFoundL">Found</span><span class="dl dl-m" data-t="rdMissedL">Missed</span></p>
-        <p class="fine" data-t="rdNote"></p>
-        <button type="button" class="btn btn--quiet" data-goto="t-clinic" data-t="rdLink">Explore the model</button>
-      </div>
-    </div>
-  </div></section>
 
 
   <section class="section"><div class="wrap faq-grid">

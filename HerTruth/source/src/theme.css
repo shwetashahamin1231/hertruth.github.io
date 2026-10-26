@@ -626,3 +626,26 @@ main.lang-in{animation:langIn .32s cubic-bezier(.2,.8,.2,1)}
 #p-find .page-top h1{color:var(--ink)}
 #p-find .page-top{background:var(--paper-2)}
 #p-find .pt-text{width:min(100%,720px)}
+
+/* ---------- pink banners (check, clinics, how it works, questions, find help): white title on a pink gradient,
+   a small photo shown whole beside it, every banner the same height. About keeps its full photo banner. ---------- */
+:is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top{background:linear-gradient(120deg,#9E2554 0%,#C8376B 52%,#D9507D 100%);border-bottom:0}
+:is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top::after{content:none}
+:is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top .wrap,
+:is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top .wrap:has(.pt-pic){display:flex;align-items:center;justify-content:center;gap:28px;min-height:0;height:200px;padding-block:20px}
+:is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top .pt-text{flex:1 1 auto;width:auto;max-width:760px;text-align:center}
+:is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top :is(h1,.kicker,.enonly){color:#fff;text-shadow:none}
+:is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top .kicker{opacity:.9}
+:is(#p-check,#p-clinic,#p-how,#p-faq) .page-top .pt-pic{position:static;inset:auto;flex:none;display:block;height:100%;max-width:38%;margin:0;padding:6px;background:rgba(255,255,255,.18);border-radius:18px}
+:is(#p-check,#p-clinic,#p-how,#p-faq) .page-top .pt-pic img{width:auto;height:100%;max-width:100%;aspect-ratio:auto;object-fit:contain;border-radius:13px;box-shadow:0 10px 24px -14px rgba(0,0,0,.5)}
+#p-find .page-top h1{color:#fff}
+#p-find .page-top .wrap{height:200px}
+@media (max-width:699px){
+  :is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top .wrap,
+  :is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top .wrap:has(.pt-pic){height:150px;gap:14px;padding-block:14px}
+  :is(#p-check,#p-clinic,#p-how,#p-faq,#p-find) .page-top h1{font-size:clamp(1.55rem,6.6vw,2.1rem)}
+  :is(#p-check,#p-clinic,#p-how,#p-faq) .page-top .pt-text{text-align:start}
+  :is(#p-check,#p-clinic,#p-how,#p-faq) .page-top .pt-pic{padding:4px;border-radius:14px}
+}
+#p-find .page-top .wrap:has(#fdRes){height:auto;flex-direction:column}
+#p-find .fd-res{width:min(100%,720px)}
